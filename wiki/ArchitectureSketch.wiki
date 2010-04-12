@@ -1,0 +1,90 @@
+#labels Architecture,Sketch
+= Architecture Sketch =
+== Structure ==
+=== I/O ===
+An I/O is important to be able to interact with the OS. Here's a list of what I/O devices we are going to use.
+  * Keyboard
+    * To be able to give commands to the OS.
+  * Console
+    * To see what we are writing and to get output from the OS.
+  * Maltaboard
+    * Output to the user which indicates that our OS is running.
+
+=== Scheduler ===
+Processes can have different priorities and to make higher prioritized processes get more CPU-power we need a process scheduler. The OS is should use Round-Robin as the main scheduler algorithm to minimize that a starvation would occur.
+  * Priority
+  * Round-Robin
+
+=== Process handling ===
+Another main part of the OS is the process handler. It takes care of all processes related stuff. It makes sure every process assigns a unique process ID and a program ID when it starts. It also takes care of any children's generated of a parent process. If any interrupt is raised the process handler takes care of it.
+  * Interrupt handler
+  * Parents
+  * Children
+  * Process ID
+  * Program ID
+
+=== Memory handling ===
+The OS should be in control of memory management. the OS will give some memory to the   program that will become a process. and reclaim it afterworlds. 
+  * Memory management unit
+  * Direct memory mapping
+                 
+=== User Program API ===
+Of course there must be some means to run user programs. We as system designers must        help them with some sort of library with interfaces. Documentation is also relevant for the user/programmer
+  * Libraries to include
+  * Documentation
+
+== Sequencing ==
+=== Start a process. ===
+When a program is started it has to be loaded in to program memory. When it has been loaded the program gets assigned the static program ID, and the process gets an unique process ID. After that, the process of that program, gets put in the ready queue waiting to be executed.
+  * Load to memory
+  * Assign program ID
+  * Assign unique process ID
+  * Add to Ready queue
+
+=== Start the OS ===
+When the "computer" is started the first peace of code that is run, is the bootstrap. It allocates different type of memory and starts the init process. The init process starts a couple of other process, that are needed to run the OS. 
+  * Starting Bootstrap
+  * Allocate a stack
+  * Start init()
+    * Start schedulers
+    * Start process handling
+    * Start stdIO
+
+=== Printing to the screen ===
+
+The action to print text to the screen is done by using the process that handels I/O to the screen.
+  * Send text to stdIn
+  * stdOut sends to screen
+
+=== Printing to Maltaboard ===
+The malataboard is a small unit that will be an indicator that the OS is running.
+
+=== Messaging ===
+There must be some means of communication between processes. We are thinking of perhaps some type of pipeline (fifo buffer/queue) with pointers to memory cells that contains the data to be passed on. for shorter messages the pipeline can serve the carrier it self. We do not want polled so we will use signals.
+ 
+Sending a message
+  * Put content in the shared allocated memory
+  * Send signal to receiver (parent/child)
+
+Receiving a message
+  * Receives signal
+  * Looks in shared allocated memory
+
+== State ==
+=== Process tables ===
+The OS must be able to handle and manage processes, such as start and kill them. To be able to do that we need to have some kind of table which consists of all running, waiting and ready processes.
+  * Active
+  * Ready
+  * Wait
+    * For input
+    * To start 
+  * Sleep
+
+=== Messages ===
+We have to provide a message queue, such as a FIFO-queue to make sure messages are delivered as the should. This is something that our OS have to handle.
+
+=== Exceptions ===
+An exception state is needed and exceptions must be handled by the OS to make sure we can continue work if a program would crash.
+
+=== Scheduler ===
+This might be the only active OS process we have. It should be in control of the CPU time among the active processes and handle them accordingly to their priority.
