@@ -1,0 +1,64 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This is the requirements of Kolsyrad
+
+
+= Details =
+
+*Process Handling*
+
+PH1 - The OS should be in total control of processes. And be some kind of overseer. 
+
+PH2 - 30 is the highest priority
+
+PH3 - a higher prioritized process may preempt a lower prioritized process
+in the last point we assume that lower prioritized processes can starve in order to give a higher prioritized process access to cpu
+
+PH4 - to be able to distinguise processes from each other they need to have unique ID's and for readability the need to have descriptive names.
+
+PH5 - in essence we assume we want a fork()-like command and a exec(). we also assume we should have a system library function that makes these two operations atomically.
+
+PH6 - in point 2 we interpret this that only parents can terminate a child. and all below the terminated process are also terminated.
+
+PH7 - we interpret this that we have a installed program ready to be run. This program executes as a process, with the predetermined ID (program id is not the same as process id). If a program exists with the same program ID, we will add a counter to the new program.
+
+PH8 - p1 only parents should know about it's children no other ways.  
+last point. we assume this means to implement this function in shell since separate processes can't know about other processes that not are their children.
+
+PH9 - our interpretation of leak is that memory is not returned when not used.
+
+PH10 - there will be an upper limit of processes allowed in the system
+
+*Input and Output*
+
+IO1 - we need a bash like terminal.
+
+IO2 - the serial port should be bidirectional. Both be able to input and output eg keyboard and/or display.
+
+IO3 - use some kind of stdIO as a text buffer with a lock mechanism.
+
+IO4 - we need some different queues ready, wait etc. a process waiting for user input has to be in the wait queue. 
+
+IO5 - the malta lcd is connected to a serial io port. eg we have no need for a graphic card. further will the console take the whole window of the display.
+
+*API*
+
+A1 - this has to be done to protect the system.
+
+A2 - no other exceptions than the internal mips exceptions should be used eg. no home made exceptions. 
+
+A3 - we need to create a document of what we have done and how to use the api.
+
+Other
+
+O1 - the os should allow interprocess comunication via shared memory if and only if both processes agree.
+
+O2 - see ph7
+
+O3 - the debug mode can be enabled via a flag. we might need some kind of trap to generate a signal that prints a message to the console.
+
+*User Programs*
+
+we need to create those programs accordingly to their description. Rather face forward description given.
