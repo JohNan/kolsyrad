@@ -5,6 +5,7 @@
  */
 #include "asm.h"
 #include "malta.h"
+#include "debug.h"
 
 static registers_t regs;
 
@@ -27,8 +28,6 @@ static void display_word(uint32_t word)
  */
 void kinit()
 {
-  char a[] = {'H','i',' ','d','u','d','e',',',' ',
-	      'w','h','a','t','\'','s',' ','u','p','?','\n', '\0'};
 
   /* Put '0' on the Malta display. */
   display_word(0);

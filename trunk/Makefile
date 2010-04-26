@@ -4,6 +4,8 @@
 
 SIMICS=/home/jone4151/simics-workspace 
 
+EXECUTABLES=$(addprefix bin/, boot_malta)
+
 # Object files for the examples
 OBJS_MALTA=boot_malta.o asm.o
 
@@ -21,7 +23,7 @@ MIPS_PREFIX=/it/sw/cross/mips-idt/bin/mips-idt-elf
 ARCH=-EL -G0 -mips32
 
 # Other gcc flags
-CFLAGS	+= -ggdb -Wall -Werror -I include
+CFLAGS	+= -ggdb -Wall -fno-builtin -I include
 
 # Compiler and linker commands
 CC=$(MIPS_PREFIX)-gcc
@@ -42,12 +44,17 @@ build/%.o: src/%.S
 all: boot_all
 
 # Build all examples
-boot_all: boot_malta
+boot_all: bin/boot_malta
 
 # Build the timer example
-bin/boot_malta: build/$(OBJS_MALTA)
+bin/boot_malta: $(addprefix build/, boot_malta.o asm.o)
 	$(LD) $(ARCH) -o $@ $^
 
 # clean: remove object files and emacs backup files
-clean:
-	rm -f *.o *~
+clean: 
+	pwd
+	rm -f build/*.o
+	rm -f include/*~ include/#* include/*#
+	rm -f src/*~ src/#* src/*#
+	rm -f scripts/*~ scripts/#* scripts/*#
+	rm -f ${EXECUTABLES}
