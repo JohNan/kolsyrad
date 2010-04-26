@@ -5,7 +5,7 @@
 SIMICS=/home/jone4151/simics-workspace 
 
 # Object files for the examples
-OBJS_TIMER=boot_malta.o asm.o
+OBJS_MALTA=boot_malta.o asm.o
 
 # Project directory
 PROJECT_DIR=/home/jone4151/OS/Proj/Ex
