@@ -1,3 +1,6 @@
+#ifndef MALTA_H
+#define MALTA_H
+
 #include <types.h>
 
 /* Display driver for 8 digit LED on Malta board       */
@@ -31,4 +34,6 @@ typedef struct
       uint8_t value;
       uint8_t pad[7];
   } asciipos[8];
-} malta_t
+} malta_t;
+
+#endif

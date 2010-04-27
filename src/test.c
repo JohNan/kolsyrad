@@ -2,7 +2,7 @@
 #include <malta.h>
 
 static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
-static volatile malta_t* const malta = (malta_t*) 0xbf000400;
+static volatile malta_t* const malta = (malta_t*) 0xbf000000;
 
 void tty_putc(char c) {
   // Poll until ready to transmit.
@@ -19,7 +19,7 @@ void tty_print_string(const char* text) {
   }
 }
 
-static void display_word(uint32_m word)
+static void display_word(uint32_t word)
 {
   int i;
   malta->ledbar.reg = 0xFF;

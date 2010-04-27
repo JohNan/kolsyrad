@@ -29,7 +29,7 @@ CFLAGS	+= -ggdb -Wall -fno-builtin -I include
 CC=$(MIPS_PREFIX)-gcc
 LD=$(MIPS_PREFIX)-ld -Ttext 80020000
 
-do_boot_malta: bin/boot_malta 
+boot_all: bin/boot 
 	./scripts/run.sh $(SIMICS) $<
 
 # Defines how object files (*.o) are created from C files (*.c)
@@ -47,7 +47,7 @@ all: boot_all
 boot_all: bin/boot
 
 # Build the timer example
-bin/boot: $(addprefix build/, test.o)
+bin/boot: $(addprefix build/, test.o boot.o)
 	$(LD) $(ARCH) -o $@ $^
 
 # clean: remove object files and emacs backup files

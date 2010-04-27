@@ -1,3 +1,6 @@
+#ifndef TEST_H
+#define TEST_H
+
 #include <types.h>
 
 typedef struct {
@@ -19,6 +22,6 @@ typedef struct {
     uint8_t temt : 1;  /* bit 6: Transmitter Empty            */
   } lsr;
   
-} tty_t
+} tty_t;
 
-
+#endif
