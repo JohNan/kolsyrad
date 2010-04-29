@@ -53,8 +53,9 @@ _start:
 	ori	t1, t1, 0x03    
 	sb	t1, 0x03(t0)
 
-	li	t0, 0xBf000008	# UART Base address
-	lb	t1, 0x01(t0)	# Line Status register
+	#Malta
+	li	t0, 0xBf000008
+	lb	t1, 0x01(t0)
 	ori	t1, t1, 0x01
 	sb	t1, 0x03(t0)
 	
