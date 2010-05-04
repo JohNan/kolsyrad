@@ -2,7 +2,10 @@
 
 # Path to Simics installation
 
-SIMICS=/home/jone4151/simics-workspace 
+SIMICS_J=/home/jone4151/simics-workspace 
+SIMICS_P=/home/pebo6223/simics-workspace 
+SIMICS_S=/home/stri1033/simics-workspace 
+SIMICS_K=/home/?/simics-workspace 
 
 EXECUTABLES=$(addprefix bin/, boot_malta)
 
@@ -29,8 +32,17 @@ CFLAGS	+= -ggdb -Wall -fno-builtin -I include
 CC=$(MIPS_PREFIX)-gcc
 LD=$(MIPS_PREFIX)-ld -Ttext 80020000
 
-boot_all: bin/boot 
-	./scripts/run.sh $(SIMICS) $<
+boot_j: bin/boot 
+	./scripts/run.sh $(SIMICS_J) $<
+	
+boot_p: bin/boot 
+	./scripts/run.sh $(SIMICS_P) $<
+
+boot_s: bin/boot 
+	./scripts/run.sh $(SIMICS_S) $<
+	
+boot_k: bin/boot 
+	./scripts/run.sh $(SIMICS_K) $<
 
 # Defines how object files (*.o) are created from C files (*.c)
 build/%.o: src/%.c
