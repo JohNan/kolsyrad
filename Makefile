@@ -59,9 +59,14 @@ all: boot_all
 boot_all: bin/boot
 
 # Build the timer example
-bin/boot: build/*.o
+bin/boot:  $(addprefix build/, device_handler.o process_handler.o scheduler.o  boot.o init.o)
 	$(LD) $(ARCH) -o $@ $^
+	
+#### Add dependency on headerfile of various tty.o files
 
+build/%.o: %.c include/%.h
+	$(CC) $(ARCH) $(CFLAGS)  -c $< -o $@	
+	
 # clean: remove object files and emacs backup files
 clean: 
 	pwd
