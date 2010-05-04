@@ -1,8 +1,7 @@
-#include <test.h>
+#include <init.h>
 #include <malta.h>
+#include <device_handler.c>
 
-static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
-static volatile malta_t* const malta = (malta_t*) 0xbf000000;
 
 void tty_putc(char c) {
   // Poll until ready to transmit.
