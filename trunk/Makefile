@@ -47,7 +47,7 @@ all: boot_all
 boot_all: bin/boot
 
 # Build the timer example
-bin/boot: $(addprefix build/, test.o boot.o)
+bin/boot: $(addprefix build/, %.o)
 	$(LD) $(ARCH) -o $@ $^
 
 # clean: remove object files and emacs backup files
