@@ -2,7 +2,7 @@
 #define TEST_H
 
 #include <types.h>
-
+//hej!
 typedef struct {
   uint8_t thr; /* 0x00: Transmitter Holding Register */
   uint8_t iir; /* 0x01: Interrupt Identity Register */
