@@ -21,9 +21,11 @@ void exit(void) {
 }
 
 // unblocks a process
+/*
 void unblock(void) {
 
 }
+*/
 
 // sets priority on processes
 void set_priority(void) {

@@ -1,5 +1,5 @@
-#ifndef TEST_H
-#define TEST_H
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
 #include <types.h>
 
