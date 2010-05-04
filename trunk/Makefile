@@ -26,7 +26,7 @@ MIPS_PREFIX=/it/sw/cross/mips-idt/bin/mips-idt-elf
 ARCH=-EL -G0 -mips32
 
 # Other gcc flags
-CFLAGS	+= -ggdb -Wall -fno-builtin -I include
+CFLAGS	+= -ggdb -Wall -fno-builtin -I include/
 
 # Compiler and linker commands
 CC=$(MIPS_PREFIX)-gcc
