@@ -1,7 +1,4 @@
 #include <init.h>
-#include <malta.h>
-#include <device_handler.c>
-
 
 void tty_putc(char c) {
   // Poll until ready to transmit.

@@ -2,6 +2,7 @@
 #define TEST_H
 
 #include <malta.h>
+#include <console.h>
 
 typedef struct {
 	short id; // Unique id of device
