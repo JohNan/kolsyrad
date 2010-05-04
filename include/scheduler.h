@@ -1,7 +1,7 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include <"process_handler.h">
+#include "process_handler.h"
 
 typedef struct {
 	pcb * first_ready; //a pointer to the first ready process' PCB. It will only change if the process is not longer
