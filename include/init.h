@@ -2,7 +2,7 @@
 #define INIT_H
 
 #include "device_handler.h"
+#include "mips4kc.h"
 
-void tty_putc(char c);
-
+void init();
 #endif

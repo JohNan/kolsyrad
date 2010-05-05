@@ -7,8 +7,29 @@ typedef struct {
   uint8_t thr; /* 0x00: Transmitter Holding Register */
   uint8_t iir; /* 0x01: Interrupt Identity Register */
   uint8_t fcr; /* 0x02: FIFO Control  Register */
-  uint8_t lcr; /* 0x03: Line Control  Register */
-  uint8_t mcr; /* 0x04: Modem Control  Register */
+
+  /* 0x03: Line Control  Register */
+
+  struct {
+       uint8_t wls0   : 1;  /* bit 0: Word Length Select Bit 0	*/
+       uint8_t wls1   : 1;  /* bit 1: Word Length Select Bit 1	*/
+       uint8_t stb   : 1;  /* bit 2: Number of Stop Bits	*/
+       uint8_t pen   : 1;  /* bit 3: Parity Enable	*/
+       uint8_t eps   : 1;  /* bit 4: Even Parity Select	*/
+       uint8_t sp : 1;  /* bit 5: Stick Parity */
+       uint8_t sb : 1;  /* bit 6: Set Break            */
+       uint8_t dlab : 1;  /* bit 7: Divisor Latch Access Bit            */
+     } lcr;
+
+  /* 0x04: Modem Control  Register */
+
+  struct {
+     uint8_t dtr   : 1;  /* bit 0: Data Terminal Ready	*/
+     uint8_t rts   : 1;  /* bit 1: Request to send	*/
+     uint8_t out1   : 1;  /* bit 2:	*/
+     uint8_t out2   : 1;  /* bit 3: Set to one to enable interrupts	*/
+     uint8_t loop   : 1;  /* bit 4:	*/
+   } mcr;
   
   /*  0x05: Line Status Register */
   
