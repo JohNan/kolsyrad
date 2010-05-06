@@ -35,6 +35,11 @@ typedef struct pcb_queues{
 	pcb * waiting; //a pointer to the first waiting process' PCB.
 } pcb_queues;
 
+typedef struct free_pcb{
+	pcb * first;
+	pcb * last;
+} free_pcb;
+
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
 void set_exec_image(void);
 
