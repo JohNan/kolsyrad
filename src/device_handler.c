@@ -10,7 +10,7 @@
 // Assignes a name to a connected devices memory allocation.
 
 void IO_device(short id, short owner, void* buffer_address){
-	Device* d = (Device*)524288;
+	Device* d;
 	d->id = id;
 	d->owner = owner;
 	d->buffer_address = buffer_address;

@@ -6,7 +6,7 @@ void set_exec_image(void) {
 }
 
 //creates an PCB for a new process returns -1 if fail else pidx
-void get_pcb(void){
+void get_pcb(void) {
 
 }
 
