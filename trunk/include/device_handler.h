@@ -3,10 +3,12 @@
 
 #include "malta.h"
 #include "console.h"
+#include "timer.h"
 #include "types.h"
 
 static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
+static volatile rtc_t* const rtc = (rtc_t*) 0xb8000070;
 
 typedef struct {
 	short id; // Unique id of device
