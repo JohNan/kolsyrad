@@ -8,9 +8,9 @@ void init() {
 	init_exc();
 
 
-	putCh('A');
+//	putCh('A');
 	putWord(7);
-	putStr("loha you ol' bag of scum!");
+//	putStr("loha you ol' bag of scum!");
 
   while (1) {};
 }
