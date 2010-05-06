@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "debug.h"
 #include "mips4kc.h"
+#include "device_handler.h"
 
 /*
  * Init the exception handler
