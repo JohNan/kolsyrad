@@ -9,4 +9,7 @@ typedef struct {
 	pcb * waiting; //a pointer to the first waiting process' PCB.
 } pcb_queues;
 
+void schedule();
+void add_to_pcb( pcb * newProcess );
+
 #endif
