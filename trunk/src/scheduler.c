@@ -3,7 +3,7 @@
 //===========================================
 // temp
 //===========================================
-/*
+
 typedef struct pcb{
 	short pid;
 	short progid;
@@ -26,7 +26,7 @@ typedef struct free_pcb{
 	pcb * first;
 	pcb * last;
 } free_pcb;
-*/
+
 //===========================================
 
 
@@ -36,7 +36,7 @@ free_pcb * S_FreePcb = 0;
 void * readip(void);
 void jumpip( void * );
 
-void add_before( pcb * source, pcb * target ){
+void S_add_before( pcb * source, pcb * target ){
 	source->next = target;
 	source->prev = target->prev;
 
@@ -46,7 +46,7 @@ void add_before( pcb * source, pcb * target ){
 }
 
 // reschedules all processes
-void schedule() {
+void S_schedule() {
 	// Variable declaration
 	void * pNextInstr = 0;
 	pcb * runPcb = 0;
@@ -71,44 +71,6 @@ void schedule() {
 
 	runPcb = S_PcbQueue->ready;
 
-	// Kollar om någon process i waiting kö vill köras igen
-	if( S_PcbQueue->waiting->flags == 1 ){
-		pcb * readyToRun = S_PcbQueue->waiting;
-		pcb * currentInLoop = S_PcbQueue->first_ready;
-
-		// Tar ut readyToRun ur waiting kör
-
-		readyToRun->next->prev = readyToRun->prev;
-		readyToRun->prev->next = readyToRun->next;
-		S_PcbQueue->waiting = readyToRun->next;
-
-		// Och lägger in den i kör kön
-
-		if( readyToRun->priority > currentInLoop->priority ){
-			add_before( readyToRun, currentInLoop );
-			S_PcbQueue->first_ready = readyToRun;
-			runPcb = readyToRun;
-		} else {
-			currentInLoop = currentInLoop->next;
-
-			int i = 1;
-			while( i ){
-				if( currentInLoop == queue->first_ready ){
-					add_before( readyToRun, currentInLoop );
-					i = 0;
-				} else if( readyToRun->priority > currentInLoop->priority ){
-					add_before( readyToRun, currentInLoop );
-					i = 0;
-				} else {
-					i++;
-					currentInLoop = currentInLoop->next;
-				}
-			}
-		}
-	} else {
-		S_PcbQueue->waiting = S_PcbQueue->waiting->next;
-	}
-
 	//=======================================================
 
 	// Här ska alla register laddas in med data och shit
@@ -117,8 +79,7 @@ void schedule() {
 
 	jumpip( runPcb->next_instr );
 }
-
-void add_new_pcb( pcb * toAdd ){
+void S_add_new_pcb( pcb * toAdd ){
 
 	pcb * currentInLoop = S_PcbQueue->first_ready;
 
@@ -142,50 +103,74 @@ void add_new_pcb( pcb * toAdd ){
 		}
 	}
 }
-
-void remove_pcb(){
-	pcb * first = S_PcbQueue->first_ready;
-	pcb * running = S_PcbQueue->ready;
-	pcb * toDelete = 0;
-	pcb * toRun = 0;
-	if( running == first ){
-		if( first->priority > first->next->priority ){
-			first->prev->next = first->next;
-			first->next->prev = first->prev;
-			toDelete = first;
-			first = first->next;
-			S_PcbQueue->first_ready = first;
-			toRun = first;
-		} else {
-			toDelete = running;
-			running->prev->next = running->next;
-			running->next->prev = running->prev;
-			S_PcbQueue->first_ready = first->next;
-			toRun = running->next;
-		}
-	} else {
-		toDelete = running;
-		running->prev->next = running->next;
-		running->next->prev = running->prev;
-		toRun = running->next;
-	}
-
-	toDelete->next = S_FreePcb->first;
-	toDelete->prev = S_FreePcb->last;
-
-	S_FreePcb->first->prev = toDelete;
-	S_FreePcb->last->next = toDelete;
-
-	// ladda alla register här
-
-	jumpip( toRun->next_instr );
-}
-
-void remove_pcb( pcb * removePcb );
 void S_set_pcb_queues( pcb_queues * queue ){
 	S_PcbQueue = queue;
 }
 void S_set_free_pcb( free_pcb * queue ){
 	S_FreePcb = queue;
 }
+void S_delete_pcb( pcb * toDelete ){
+	toDelete->next->prev = toDelete->prev;
+	toDelete->prev->next = toDelete->next;
 
+	S_FreePcb->first->prev = toDelete;
+	S_FreePcb->last->next = toDelete;
+
+	toDelete->next = S_FreePcb->first;
+	toDelete->prev = S_FreePcb->last;
+}
+void S_remove_active(){
+	pcb * first = S_PcbQueue->first_ready;
+	pcb * toDelete = S_PcbQueue->ready;
+	pcb * toRun = 0;
+
+	if( toDelete = first ){
+		toRun = toDelete->next;
+	} else {
+		if( toDelete->priority > toDelete->next->priority ){
+			toRun = S_PcbQueue->first_ready;
+		} else {
+			toRun = toDelete->next;
+		}
+	}
+	S_delete_pcb( toDelete );
+
+	// ladda register
+
+	jumpip( toRun->next_instr );
+}
+void S_remove_inactive( pcb * toDelete ){
+	pcb * first = S_PcbQueue->first_ready;
+
+	if( toDelete == first ){
+		S_PcbQueue->first_ready = first->next;
+	}
+	S_delete_pcb( toDelete );
+}
+void S_activate_pcb( pcb * toActivate ){
+	pcb * first = S_PcbQueue->first_ready;
+	pcb * inLoop = S_PcbQueue->first_ready->next;
+
+	toActivate->next->prev = toActivate->prev;
+	toActivate->prev->next = toActivate->next;
+
+	if( first->priority < toActivate->priority ){
+		S_PcbQueue->first_ready = toActivate;
+
+		S_add_before( toActivate, first );
+	} else {
+		int i = 1;
+		while( i ){
+			if( inLoop == first ){
+				S_add_before( toActivate, inLoop );
+				i = 0;
+			} else if( inLoop->priority > inLoop->next->priority ){
+				S_add_before( toActivate, inLoop->next );
+				i = 0;
+			}
+		}
+	}
+}
+void S_deactivate_pcb( pcb *toDeactivate){
+	// måste göras
+}
