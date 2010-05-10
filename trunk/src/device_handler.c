@@ -59,6 +59,7 @@ void unblock(void){
 void init_devices(){
 	//Set MCR Out2 to 1 to enable interrupts on the console.
 	tty->mcr.out2 = 1;
+	tty->ier.erbfi = 1;
 
 	// Set the UART word length to 8 bits.
 	// Set word length to 8 bits (two least significant bits to 1),
