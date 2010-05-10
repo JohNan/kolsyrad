@@ -47,7 +47,7 @@ void set_exec_image(void);
 void get_pcb(void);
 
 //creates an PCB for a new process returns -1 if fail else pid
-void free_pcb(void);
+void p_free_pcb();
 
 //terminates process either normaly or abnormaly
 void exit(void);
