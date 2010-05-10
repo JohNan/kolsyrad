@@ -28,8 +28,8 @@ void kexception() {
   kdebug_assert(cause.field.exc == 0);    /* External interrupt */
   kdebug_assert(cause.field.ip & 0x80);   /* Timer interrupt */
 
-  if(cause.field.ip & 0xA0){ /* Hardware interrupt */
-	 putWord(tty->thr);
+  if(cause.field.ip & 4){ /* Hardware interrupt (UART) */
+	 putWord(23);
   }
 
   /* Reload timer for another 100 ms (simulated time) */

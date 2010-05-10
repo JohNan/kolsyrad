@@ -5,7 +5,15 @@
 
 typedef struct {
   uint8_t thr; /* 0x00: Transmitter Holding Register */
-  uint8_t iir; /* 0x01: Interrupt Identity Register */
+
+  /* 0x01: Interrupt Enable Register */
+  struct {
+		uint8_t erbfi   : 1;  /* Enable Received Data Aviable Interrupt	*/
+		uint8_t etbei   : 1;
+		uint8_t elsi   : 1;
+		uint8_t edssi   : 1;
+  } ier;
+
   uint8_t fcr; /* 0x02: FIFO Control  Register */
 
   /* 0x03: Line Control  Register */
