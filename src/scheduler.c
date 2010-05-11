@@ -36,7 +36,7 @@ free_pcb * S_FreePcb = 0;
 void * readip(void);
 void jumpip( void * );
 
-void S_add_before( pcb * source, pcb * target ){
+void SP_add_before( pcb * source, pcb * target ){
 	source->next = target;
 	source->prev = target->prev;
 
@@ -84,17 +84,17 @@ void S_add_new_pcb( pcb * toAdd ){
 	pcb * currentInLoop = S_PcbQueue->first_ready;
 
 	if( toAdd->priority > currentInLoop->priority ){
-		add_before( toAdd, currentInLoop );
+		SP_add_before( toAdd, currentInLoop );
 	} else {
 		currentInLoop = currentInLoop->next;
 
 		int i = 1;
 		while( i ){
 			if( currentInLoop == queue->first_ready ){
-				add_before( readyToRun, currentInLoop );
+				SP_add_before( readyToRun, currentInLoop );
 				i = 0;
 			} else if( readyToRun->priority > currentInLoop->priority ){
-				add_before( readyToRun, currentInLoop );
+				SP_add_before( readyToRun, currentInLoop );
 				i = 0;
 			} else {
 				i++;
@@ -109,7 +109,7 @@ void S_set_pcb_queues( pcb_queues * queue ){
 void S_set_free_pcb( free_pcb * queue ){
 	S_FreePcb = queue;
 }
-void S_delete_pcb( pcb * toDelete ){
+void SP_delete_pcb( pcb * toDelete ){
 	toDelete->next->prev = toDelete->prev;
 	toDelete->prev->next = toDelete->next;
 
@@ -133,7 +133,7 @@ void S_remove_active(){
 			toRun = toDelete->next;
 		}
 	}
-	S_delete_pcb( toDelete );
+	SP_delete_pcb( toDelete );
 
 	// ladda register
 
@@ -145,7 +145,7 @@ void S_remove_inactive( pcb * toDelete ){
 	if( toDelete == first ){
 		S_PcbQueue->first_ready = first->next;
 	}
-	S_delete_pcb( toDelete );
+	SP_delete_pcb( toDelete );
 }
 void S_activate_pcb( pcb * toActivate ){
 	pcb * first = S_PcbQueue->first_ready;
@@ -157,20 +157,40 @@ void S_activate_pcb( pcb * toActivate ){
 	if( first->priority < toActivate->priority ){
 		S_PcbQueue->first_ready = toActivate;
 
-		S_add_before( toActivate, first );
+		SP_add_before( toActivate, first );
 	} else {
 		int i = 1;
 		while( i ){
 			if( inLoop == first ){
-				S_add_before( toActivate, inLoop );
+				SP_add_before( toActivate, inLoop );
 				i = 0;
 			} else if( inLoop->priority > inLoop->next->priority ){
-				S_add_before( toActivate, inLoop->next );
+				SP_add_before( toActivate, inLoop->next );
 				i = 0;
 			}
 		}
 	}
 }
+void SP_move_to_waiting( pcb * toMove ){
+	if( S_PcbQueue->waiting == 0 ){
+		toDeactivate->next = toDeactivate;
+		toDeactivate->prev = toDeactivate;
+
+		S_PcbQueue->waiting = toDeactivate;
+	} else {
+		toDeactivate->next = S_PcbQueue->waiting;
+		toDeactivate->prev = S_PcbQueue->waiting->prev;
+
+		S_PcbQueue->waiting->prev->next = toDeactivate;
+		S_PcbQueue->waiting->prev = toDeactivate;
+	}
+}
 void S_deactivate_pcb( pcb *toDeactivate){
-	// måste göras
+	pcb * first = S_PcbQueue->first_ready;
+	if( toDeactivate == first ){
+		S_PcbQueue->first_ready = first->next;
+		toDeactivate->prev->next = toDeactivate->next;
+		toDeactivate->next->prev = toDeactivate->prev;
+	}
+	SP_move_to_waiting( toDeactivate );
 }

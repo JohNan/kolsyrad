@@ -3,22 +3,43 @@
 
 #include "process_handler.h"
 
-/* Kommer att fixa så att man aldrig kommer att behöva ge
- * en pekare till pcb_queues eller free_pcb structerna.
- */
 pcb_queues * S_PcbQueue = 0;
 free_pcb * S_FreePcb = 0;
 
-void S_schedule( pcb_queues * queue );
-
-// Lägger till en ny pcb i pcb queues
-void S_add_new_pcb( pcb * toAdd, pcb_queues * queue );
+/*
+ * Jumps to next process in the running queue
+ */
+void S_schedule();
+/*
+ * Takes a pointer to a pcb and add it to the running queue
+ * at the right place
+ */
+void S_add_new_pcb( pcb * toAdd );
+/*
+ * Sets the pointer to the pcb queues
+ */
 void S_set_pcb_queues( pcb_queues * queue );
+/*
+ * Sets the pointer to the free pcb queue
+ */
 void S_set_free_pcb( free_pcb * queue );
+/*
+ * Removes the current running process pcb and moves it to
+ * to free pcb queue
+ */
 void S_remove_active();
+/*
+ * Removes a pcb from the running queue. Is used when
+ * a process terminates another process
+ */
 void S_remove_inactive( pcb * toDelete );
-// Ska alltid ligga i waiting kön
+/*
+ * Moves a waiting pcb to the active queue
+ */
 void S_activate_pcb( pcb * toActivate );
-// Ska alltid ligga i kör kön
+/*
+ * Moves a active pcb to the waiting queue
+ */
 void S_deactivate_pcb( pcb *toDeactivate);
+
 #endif
