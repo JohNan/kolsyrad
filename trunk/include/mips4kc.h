@@ -14,7 +14,19 @@ typedef union {
     uint32_t pad0 : 1; /* Bit 3:     Reserved */
     uint32_t um   : 1; /* Bit 4:     User Mode */
     uint32_t pad1 : 3; /* Bit 5-7:   Reserved */
-    uint32_t im   : 8; /* Bit 8-15:  Interrupt Mask */
+    uint32_t im	  : 8;  /* Bit 8-15:  Interrupt Mask */
+/*
+	struct {
+		uint32_t bit8 : 1;
+		uint32_t bit9 : 1;
+		uint32_t bit10 : 1;
+		uint32_t bit11 : 1;
+		uint32_t bit12 : 1;
+		uint32_t bit13 : 1;
+		uint32_t bit14 : 1;
+		uint32_t bit15 : 1;
+	} im;
+*/
     uint32_t pad2 : 3; /* Bit 16-18: Reserved */
     uint32_t nmi  : 1; /* Bit 19:    Indicates a Non-Maskable Interrupt */
     uint32_t sr   : 1; /* Bit 20:    Soft Reset */

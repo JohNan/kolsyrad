@@ -34,5 +34,6 @@ void IO_device(short id, short owner, void* buffer_address);
 
 void bfifo_put(struct bounded_fifo* bfifo, uint8_t ch);
 uint8_t bfifo_get(struct bounded_fifo* bfifo);
+void bfifo_back(struct bounded_fifo* bfifo);
 
 #endif
