@@ -7,6 +7,7 @@
 
 #include "device_handler.h"
 
+
 /* bfifo_put: Inserts a character at the end of the queue. */
 void bfifo_put(struct bounded_fifo* bfifo, uint8_t ch) {
   /* Make sure the 'bfifo' pointer is not 0. */
