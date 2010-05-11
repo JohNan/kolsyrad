@@ -18,6 +18,16 @@ void bfifo_put(struct bounded_fifo* bfifo, uint8_t ch) {
   }
 }
 
+/* bfifo_put: Inserts a character at the end of the queue. */
+void bfifo_back(struct bounded_fifo* bfifo) {
+  /* Make sure the 'bfifo' pointer is not 0. */
+  kdebug_assert(bfifo != 0);
+
+  if (bfifo->length < FIFO_SIZE) {
+	 bfifo->length--;
+  }
+}
+
 /* bfifo_get: Returns a character removed from the front of the queue. */
 uint8_t bfifo_get(struct bounded_fifo* bfifo)
 {
@@ -109,7 +119,7 @@ void init_devices(){
 
 	or.reg  = 0;
 	or.field.ie   = 1;   // Enable interrupts
-	or.field.im   = 4;   // Enable HW interrupt 0
+	or.field.im  = 4;   // Enable HW interrupt 0
 	or.field.cu0  = 1;   // Coprocessor 0 usable
 
 	kset_sr(and.reg, or.reg);
