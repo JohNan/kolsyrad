@@ -2,6 +2,32 @@
 
 static registers_t regs;
 
+/*
+ * tty interrupt code.
+ */
+void tty_interrupt(){
+ /* UART interrupt */
+	  if (tty->lsr.dr) {
+		/* Data ready: add character to buffer */
+		ch = tty->thr; /* rbr and thr is the same. */
+		bfifo_put(&bfifo, ch);
+		if (ch == '\r') {
+			bfifo_put(&bfifo, '\n');
+		}
+	  }
+	  if (bfifo.length > 0 && tty->lsr.thre) {
+		/* Transmitter idle: transmit buffered character */
+		tty->thr = bfifo_get(&bfifo);
+
+		/* Determine if we should be notified when transmitter becomes idle */
+		tty->ier.etbei = (bfifo.length > 0);
+	  }
+	  /* Acknowledge UART interrupt. */
+	  kset_cause(~0x1000, 0);
+	}
+}
+
+
 void init_exc() {
 
 	  /* Setup storage-area for saving registers on exception. */
@@ -28,9 +54,9 @@ void kexception() {
   kdebug_assert(cause.field.exc == 0);    /* External interrupt */
 
   /* Timer interrupt */
-  if(cause.field.exc == 0){
+  if(cause.field.ip & 0x80){
 	  /* Reload timer for another 100 ms (simulated time) */
-	  kload_timer(100 * timer_msec);
+	  kload_timer(10 * timer_msec);
 
 	  /* Icrease the number on the Malta display. */
 	  putWord(++i);
@@ -38,23 +64,7 @@ void kexception() {
 
   /* Hardware interrupt (tty) */
   if (cause.field.ip & 4) {
-      /* UART interrupt */
-      if (tty->lsr.dr) {
-        /* Data ready: add character to buffer */
-        ch = tty->thr; /* rbr and thr is the same. */
-        bfifo_put(&bfifo, ch);
-        if (ch == '\r') {
-			bfifo_put(&bfifo, '\n');
-        }
-      }
-      if (bfifo.length > 0 && tty->lsr.thre) {
-        /* Transmitter idle: transmit buffered character */
-        tty->thr = bfifo_get(&bfifo);
+	  tty_interrupt();
+  }
 
-        /* Determine if we should be notified when transmitter becomes idle */
-        tty->ier.etbei = (bfifo.length > 0);
-      }
-      /* Acknowledge UART interrupt. */
-      kset_cause(~0x1000, 0);
-    }
 }
