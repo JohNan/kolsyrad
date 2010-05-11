@@ -6,6 +6,7 @@
 #define WAITING 2
 
 #include "types.h"
+#include "registers.h"
 
 typedef struct pcb{
 	short pid;
@@ -13,7 +14,7 @@ typedef struct pcb{
 	uint8_t priority;
 	uint8_t state;
 	short flags;
-	int registrers_array[16];
+	registers_t registers;
 	struct pcb *next;
 	struct pcb *prev;
 	void * next_instr;
