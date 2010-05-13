@@ -20,6 +20,16 @@ typedef struct pcb{
 	void * next_instr;
 }pcb;
 
+#define MAX_PROCESS 20 // maximum number of processes
+#define MAX_PROGRAM 5 // maximum number of programs
+
+/* Process states */
+#define PS_FREE 0; // this PCB is free
+#define PS_START 1; // this process is being initialized by kernel
+#define PS_READY 2; // this process is ready to run
+#define PS_SLEEP 3; // this process is waiting for something
+#define PS_DEAD 4; // this process has finished execution
+
 typedef struct pib{  // Program information block
 	short progid; // Hold the program ID.
 	char pname[16]; // The human readable name of the program.
@@ -43,24 +53,27 @@ typedef struct free_pcb{
 
 void init_poc();
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
-void set_pcb_image(void);
+void set_pcb_image(pib *);
 
 //creates an PCB for a new process returns -1 if fail else pidx
-void get_pcb(void);
+int get_pcb(void);
 
-//creates an PCB for a new process returns -1 if fail else pid
-void p_free_pcb();
+//marks the given PCB as free and adds it to the free list
+void p_free_pcb(pcb *);
 
 //terminates process either normaly or abnormaly
-void exit(void);
+void exit(int);
 
 // unblocks a process
-void unblock();
+void unblock(pcb *);
 
 // sets priority on processes
-void set_priority(void);
+void set_priority(pcb *,int);
 
 // Returns a list of processes in any queue. Argument will decide what queues to return.
-void list_queue(void);
+pcb *list_queue(int);
+
+#define PL_READY 1
+#define PL_SLEEP 2
 
 #endif
