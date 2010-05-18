@@ -10,13 +10,19 @@
 bounded_fifo bfifo;
 bounded_fifo bfifo_out;
 
+Device d_tty = { .id = 1, .owner = -1, .buffer_address = &bfifo };
+Device d_malta = { .id = 2, .owner = -1, .buffer_address = NULL };
+
+
 // Assignes a name to a connected devices memory allocation.
 
-void IO_device(short id, short owner, void* buffer_address){
-	Device* d;
-	d->id = id;
-	d->owner = owner;
-	d->buffer_address = buffer_address;
+int IO_device(Device d, short pid){
+	if(d.owner == -1 ) {
+		d.owner = pid;
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
 void putWord(uint32_t word){
@@ -29,18 +35,27 @@ void putWord(uint32_t word){
 }
 
 /* Polled output to tty */
-void putCh(char c) {
+void putChP(char c) {
   // Poll until ready to transmit.
   while ( !tty-> lsr.thre ) {}
-
   // Write character to Transmitter Holding Register
   tty->thr = c;
+}
+
+/* Interrupt output to tty
+ * TODO: Add syscall functionality
+ */
+void putChI(char c) {
+	bfifo_put(&bfifo,c);
+	if (c == '\n') {
+		bfifo_put(&bfifo, '\r');
+	}
 }
 
 /* Outputs a string on tty, polled */
 void putStrP(const char* text) {
   while (text[0] != '\0') {
-   putCh(text[0]);
+   putChP(text[0]);
     ++text;
   }
 }
@@ -48,9 +63,10 @@ void putStrP(const char* text) {
 /* Outputs a string on tty, interrupt */
 void putStrI(const char* text) {
   while (text[0] != '\0') {
-	  bfifo_put(&bfifo,text[0]);
+	  bfifo_put(&bfifo, text[0]);
     ++text;
   }
+  putChI('\n');
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
@@ -61,6 +77,13 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
   if (bfifo->length < FIFO_SIZE) {
     bfifo->buf[(bfifo->length)++] = ch;
   }
+  if (tty->lsr.thre) {
+  		/* Transmitter idle: transmit buffered character */
+  		tty->thr = bfifo_get(bfifo);
+
+  		/* Determine if we should be notified when transmitter becomes idle */
+  		tty->ier.etbei = (bfifo->length > 0);
+  	 }
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
@@ -74,8 +97,7 @@ void bfifo_back(bounded_fifo* bfifo) {
 }
 
 /* bfifo_get: Returns a character removed from the front of the queue. */
-uint8_t bfifo_get(bounded_fifo* bfifo)
-{
+uint8_t bfifo_get(bounded_fifo* bfifo) {
   int i;
   uint8_t ch;
 
@@ -144,15 +166,18 @@ void tty_interrupt(){
 		/* Data ready: add character to buffer */
 		ch = tty->thr; /* rbr and thr is the same. */
 		bfifo_put(&bfifo, ch);
-		bfifo_put(&bfifo_out, ch);
+
+		/* Should be moved to shell program */
 		if (ch == '\r') {
-			bfifo_put(&bfifo, '\n');
-			tty_command(&bfifo_out);
-			bfifo_flush(&bfifo_out);
+				bfifo_put(&bfifo, '\n');
 		}
-		/*if (ch == '\b') {
-					bfifo_back(&bfifo);
-		}*/
+
+		if (ch == '\b') {
+				bfifo_put(&bfifo, ' ');
+				bfifo_put(&bfifo, '\b');
+		}
+
+
 	  }
 
 	  if (bfifo.length > 0 && tty->lsr.thre) {
@@ -164,13 +189,6 @@ void tty_interrupt(){
 	  }
 	  /* Acknowledge UART interrupt. */
 	  kset_cause(~0x1000, 0);
-}
-
-/*
- * Events that should happend every timer interrupt.
- */
-void device_timer(){
-	bfifo_flush(&bfifo);
 }
 
 void init_devices(){
@@ -202,5 +220,5 @@ void init_devices(){
 
 	kset_sr(and.reg, or.reg);
 
-	 putStrI("Device init done\r");
+	putStrI("Device init done");
 }
