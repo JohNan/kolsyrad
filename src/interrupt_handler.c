@@ -47,7 +47,10 @@ void kexception() {
 
 	  /* Icrease the number on the Malta display. */
 	  putWord(++i);
-	  device_timer();
+	 // device_timer();
+
+	  /* lets schedule! */
+	  S_schedule();
   }
 
   /* Hardware interrupt (tty) */
