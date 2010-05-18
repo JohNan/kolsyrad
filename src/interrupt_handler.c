@@ -2,35 +2,6 @@
 
 static registers_t regs;
 
-/*
- * tty interrupt code.
- */
-void tty_interrupt(){
-	uint8_t ch;
- /* UART interrupt */
-	  if (tty->lsr.dr) {
-		/* Data ready: add character to buffer */
-		ch = tty->thr; /* rbr and thr is the same. */
-		bfifo_put(&bfifo, ch);
-		if (ch == '\r') {
-			bfifo_put(&bfifo, '\n');
-		}
-		/*if (ch == '\b') {
-					bfifo_back(&bfifo);
-		}*/
-	  }
-	  if (bfifo.length > 0 && tty->lsr.thre) {
-		/* Transmitter idle: transmit buffered character */
-		tty->thr = bfifo_get(&bfifo);
-
-		/* Determine if we should be notified when transmitter becomes idle */
-		tty->ier.etbei = (bfifo.length > 0);
-	  }
-	  /* Acknowledge UART interrupt. */
-	  kset_cause(~0x1000, 0);
-}
-
-
 void init_exc() {
 	status_reg_t and, or;
 	/* Setup storage-area for saving registers on exception. */
@@ -76,6 +47,7 @@ void kexception() {
 
 	  /* Icrease the number on the Malta display. */
 	  putWord(++i);
+	  device_timer();
   }
 
   /* Hardware interrupt (tty) */

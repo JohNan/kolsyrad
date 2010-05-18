@@ -7,44 +7,8 @@
 
 #include "device_handler.h"
 
-
-/* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_put(struct bounded_fifo* bfifo, uint8_t ch) {
-  /* Make sure the 'bfifo' pointer is not 0. */
-  kdebug_assert(bfifo != 0);
-
-  if (bfifo->length < FIFO_SIZE) {
-    bfifo->buf[(bfifo->length)++] = ch;
-  }
-}
-
-/* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_back(struct bounded_fifo* bfifo) {
-  /* Make sure the 'bfifo' pointer is not 0. */
-  kdebug_assert(bfifo != 0);
-
-  if (bfifo->length < FIFO_SIZE) {
-	 bfifo->length--;
-  }
-}
-
-/* bfifo_get: Returns a character removed from the front of the queue. */
-uint8_t bfifo_get(struct bounded_fifo* bfifo)
-{
-  int i;
-  uint8_t ch;
-
-  /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
-  kdebug_assert(bfifo != 0);
-  kdebug_assert(bfifo->length > 0);
-
-  bfifo->length--;
-  ch = bfifo->buf[0];
-  for (i = 0; i < bfifo->length; i++) {
-    bfifo->buf[i] = bfifo->buf[i+1];
-  }
-  return ch;
-}
+bounded_fifo bfifo;
+bounded_fifo bfifo_out;
 
 // Assignes a name to a connected devices memory allocation.
 
@@ -64,6 +28,7 @@ void putWord(uint32_t word){
   }
 }
 
+/* Polled output to tty */
 void putCh(char c) {
   // Poll until ready to transmit.
   while ( !tty-> lsr.thre ) {}
@@ -72,15 +37,89 @@ void putCh(char c) {
   tty->thr = c;
 }
 
-void putStr(const char* text) {
+/* Outputs a string on tty, polled */
+void putStrP(const char* text) {
   while (text[0] != '\0') {
    putCh(text[0]);
     ++text;
   }
 }
 
-// Prints to stdOut and resets the buffer
-void buffer_flush(void){
+/* Outputs a string on tty, interrupt */
+void putStrI(const char* text) {
+  while (text[0] != '\0') {
+	  bfifo_put(&bfifo,text[0]);
+    ++text;
+  }
+}
+
+/* bfifo_put: Inserts a character at the end of the queue. */
+void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
+  /* Make sure the 'bfifo' pointer is not 0. */
+  kdebug_assert(bfifo != 0);
+
+  if (bfifo->length < FIFO_SIZE) {
+    bfifo->buf[(bfifo->length)++] = ch;
+  }
+}
+
+/* bfifo_put: Inserts a character at the end of the queue. */
+void bfifo_back(bounded_fifo* bfifo) {
+  /* Make sure the 'bfifo' pointer is not 0. */
+  kdebug_assert(bfifo != 0);
+
+  if (bfifo->length < FIFO_SIZE) {
+	 bfifo->length--;
+  }
+}
+
+/* bfifo_get: Returns a character removed from the front of the queue. */
+uint8_t bfifo_get(bounded_fifo* bfifo)
+{
+  int i;
+  uint8_t ch;
+
+  /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
+  kdebug_assert(bfifo != 0);
+  kdebug_assert(bfifo->length > 0);
+
+  bfifo->length--;
+  ch = bfifo->buf[0];
+  for (i = 0; i < bfifo->length; i++) {
+    bfifo->buf[i] = bfifo->buf[i+1];
+  }
+  return ch;
+}
+
+
+//Resets the buffer
+void bfifo_flush(bounded_fifo* bfifo)
+{
+  int i;
+
+  /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
+  kdebug_assert(bfifo != 0);
+ // kdebug_assert(bfifo->length > 0);
+
+  if (bfifo->length > 0) {
+
+  for (i = 0; i < bfifo->length; i++) {
+	  if (bfifo->length > 0 && tty->lsr.thre) {
+		  tty->thr = bfifo->buf[i];
+
+		  tty->ier.etbei = (bfifo->length > 0);
+	  }
+  }
+  bfifo->length = 0;
+
+  }
+}
+
+
+/*
+ * Looks for a command in buffer
+ */
+void tty_command(bounded_fifo* bfifo){
 
 }
 
@@ -94,6 +133,45 @@ void unblock(void){
 
 }
 */
+
+/*
+ * tty interrupt code.
+ */
+void tty_interrupt(){
+	uint8_t ch;
+ /* UART interrupt */
+	  if (tty->lsr.dr) {
+		/* Data ready: add character to buffer */
+		ch = tty->thr; /* rbr and thr is the same. */
+		bfifo_put(&bfifo, ch);
+		bfifo_put(&bfifo_out, ch);
+		if (ch == '\r') {
+			bfifo_put(&bfifo, '\n');
+			tty_command(&bfifo_out);
+			bfifo_flush(&bfifo_out);
+		}
+		/*if (ch == '\b') {
+					bfifo_back(&bfifo);
+		}*/
+	  }
+
+	  if (bfifo.length > 0 && tty->lsr.thre) {
+		/* Transmitter idle: transmit buffered character */
+		tty->thr = bfifo_get(&bfifo);
+
+		/* Determine if we should be notified when transmitter becomes idle */
+		tty->ier.etbei = (bfifo.length > 0);
+	  }
+	  /* Acknowledge UART interrupt. */
+	  kset_cause(~0x1000, 0);
+}
+
+/*
+ * Events that should happend every timer interrupt.
+ */
+void device_timer(){
+	bfifo_flush(&bfifo);
+}
 
 void init_devices(){
 
@@ -123,4 +201,6 @@ void init_devices(){
 	or.field.cu0  = 1;   // Coprocessor 0 usable
 
 	kset_sr(and.reg, or.reg);
+
+	 putStrI("Device init done\r");
 }
