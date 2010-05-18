@@ -5,8 +5,9 @@ free_pcb free_pcb_q;
 
 pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
-  /*{0, "hello", &hello},*/
+  {0, "hello", &hello},
 };
+uint8_t pstack[MAX_PROCESS][STACK_SIZE];
 
 void init_poc() {
   int i;
@@ -24,6 +25,8 @@ void init_poc() {
   pcbs[0].state = PS_FREE;
   pcbs[0].flags = 0;
   /* registers do not need init */
+  // except for SP
+  pcbs[0].registers.sp_reg = pstack[0];
   pcbs[0].next = &pcbs[1];
   pcbs[0].prev = &pcbs[MAX_PROCESS - 1];
   /* next_instr does not need init */
@@ -34,6 +37,7 @@ void init_poc() {
   pcbs[MAX_PROCESS - 1].state = PS_FREE;
   pcbs[MAX_PROCESS - 1].flags = 0;
   /* registers do not need init */
+  pcbs[MAX_PROCESS - 1].registers.sp_reg = pstack[MAX_PROCESS - 1];
   pcbs[MAX_PROCESS - 1].next = &pcbs[0];
   pcbs[MAX_PROCESS - 1].prev = &pcbs[MAX_PROCESS - 2];
   /* next_instr does not need init */
@@ -45,6 +49,7 @@ void init_poc() {
     pcbs[i].state = PS_FREE;
     pcbs[i].flags = 0;
     /* registers do not need init */
+    pcbs[i].registers.sp_reg = pstack[i];
     pcbs[i].next = &pcbs[i + 1];
     pcbs[i].prev = &pcbs[i - 1];
     /* next_instr does not need init */
@@ -54,6 +59,9 @@ void init_poc() {
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
 void set_exec_image(pib *newPIB) {
   (pcbq.ready) -> progid = newPIB -> progid;
+  __inline__ __asm__ {
+	  sw ra,newPIB->start_ptr
+  }
   /* need some inline asm code here to mess about with the stack frame
      so that when we return, execution continues at the starting point of
      new new program */
@@ -63,6 +71,13 @@ void set_exec_image(pib *newPIB) {
   */
 }
 
+// creates a new process with the same PIB
+int fork() {
+	int pid = get_pcb();
+	if(pid > -1) {
+		pcbs[pid]
+	}
+}
 //creates an PCB for a new process returns -1 if fail else pidx
 // note that the returned PCB is completely unlinked
 int get_pcb(void) {

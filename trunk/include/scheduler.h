@@ -3,9 +3,6 @@
 
 #include "process_handler.h"
 
-pcb_queues * S_PcbQueue = 0;
-free_pcb * S_FreePcb = 0;
-
 /*
  * Jumps to next process in the running queue
  */

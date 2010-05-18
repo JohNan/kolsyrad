@@ -22,6 +22,7 @@ typedef struct pcb{
 
 #define MAX_PROCESS 20 // maximum number of processes
 #define MAX_PROGRAM 5 // maximum number of programs
+#define STACK_SIZE 1024 // stack size for programs
 
 /* Process states */
 #define PS_FREE 0; // this PCB is free

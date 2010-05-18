@@ -1,37 +1,7 @@
 #include "scheduler.h"
 
-//===========================================
-// temporar
-//===========================================
-
-typedef struct pcb{
-	short pid;
-	short progid;
-	uint8_t priority;
-	uint8_t state;
-	short flags;
-	int registrers_array[16];
-	struct pcb *next;
-	struct pcb *prev;
-	void * next_instr;
-}pcb;
-
-typedef struct pcb_queues{
-	pcb * first_ready; //a pointer to the first ready process' PCB. It will only change if the process is not longer
-	pcb * ready; //a pointer to the currently runnning process' PCB. It will walk through all process of highest current priority when scheduling.
-	pcb * waiting; //a pointer to the first waiting process' PCB.
-} pcb_queues;
-
-typedef struct free_pcb{
-	pcb * first;
-	pcb * last;
-} free_pcb;
-
-//===========================================
-
-
-pcb_queues * S_PcbQueue = 0;
-free_pcb * S_FreePcb = 0;
+extern pcb_queues pcbq;
+extern free_pcb free_pcb_q;
 
 void * readip(void);
 void jumpip( void * );
@@ -54,7 +24,7 @@ void S_schedule() {
 
 
 	pNextInstr = readip();
-	currentPcb = S_PcbQueue->ready;
+	currentPcb = pcbq->ready;
 	currentPcb->next_instr = pNextInstr;
 
 	//=======================================================
@@ -64,12 +34,12 @@ void S_schedule() {
 	//=======================================================
 
 	if( currentPcb->next->priority < currentPcb->priority ){
-		S_PcbQueue->ready = S_PcbQueue->first_ready;
+		pcbq.ready = pcbq.first_ready;
 	} else {
-		S_PcbQueue->ready = currentPcb->next;
+		pcbq.ready = currentPcb->next;
 	}
 
-	runPcb = S_PcbQueue->ready;
+	runPcb = pcbq.ready;
 
 	//=======================================================
 
@@ -77,11 +47,13 @@ void S_schedule() {
 
 	//=======================================================
 
-	jumpip( runPcb->next_instr );
+	kset_registers(&runPcb.registers);
+
+	//jumpip( runPcb->next_instr );
 }
 void S_add_new_pcb( pcb * toAdd ){
 
-	pcb * currentInLoop = S_PcbQueue->first_ready;
+	pcb * currentInLoop = pcbq.first_ready;
 
 	if( toAdd->priority > currentInLoop->priority ){
 		SP_add_before( toAdd, currentInLoop );
@@ -104,31 +76,31 @@ void S_add_new_pcb( pcb * toAdd ){
 	}
 }
 void S_set_pcb_queues( pcb_queues * queue ){
-	S_PcbQueue = queue;
+	pcbq = queue;
 }
 void S_set_free_pcb( free_pcb * queue ){
-	S_FreePcb = queue;
+	free_pcb_q = queue;
 }
 void SP_delete_pcb( pcb * toDelete ){
 	toDelete->next->prev = toDelete->prev;
 	toDelete->prev->next = toDelete->next;
 
-	S_FreePcb->first->prev = toDelete;
-	S_FreePcb->last->next = toDelete;
+	free_pcb_q.first->prev = toDelete;
+	free_pcb_q.last->next = toDelete;
 
-	toDelete->next = S_FreePcb->first;
-	toDelete->prev = S_FreePcb->last;
+	toDelete->next = free_pcb_q.first;
+	toDelete->prev = free_pcb_q.last;
 }
 void S_remove_active(){
-	pcb * first = S_PcbQueue->first_ready;
-	pcb * toDelete = S_PcbQueue->ready;
+	pcb * first = pcbq.first_ready;
+	pcb * toDelete = pcbq.ready;
 	pcb * toRun = 0;
 
 	if( toDelete = first ){
 		toRun = toDelete->next;
 	} else {
 		if( toDelete->priority > toDelete->next->priority ){
-			toRun = S_PcbQueue->first_ready;
+			toRun = pcbq.first_ready;
 		} else {
 			toRun = toDelete->next;
 		}
@@ -140,22 +112,22 @@ void S_remove_active(){
 	jumpip( toRun->next_instr );
 }
 void S_remove_inactive( pcb * toDelete ){
-	pcb * first = S_PcbQueue->first_ready;
+	pcb * first = pcbq.first_ready;
 
 	if( toDelete == first ){
-		S_PcbQueue->first_ready = first->next;
+		pcbq.first_ready = first->next;
 	}
 	SP_delete_pcb( toDelete );
 }
 void S_activate_pcb( pcb * toActivate ){
-	pcb * first = S_PcbQueue->first_ready;
-	pcb * inLoop = S_PcbQueue->first_ready->next;
+	pcb * first = pcbq.first_ready;
+	pcb * inLoop = pcbq.first_ready->next;
 
 	toActivate->next->prev = toActivate->prev;
 	toActivate->prev->next = toActivate->next;
 
 	if( first->priority < toActivate->priority ){
-		S_PcbQueue->first_ready = toActivate;
+		pcbq.first_ready = toActivate;
 
 		SP_add_before( toActivate, first );
 	} else {
@@ -172,23 +144,23 @@ void S_activate_pcb( pcb * toActivate ){
 	}
 }
 void SP_move_to_waiting( pcb * toMove ){
-	if( S_PcbQueue->waiting == 0 ){
+	if( pcbq.waiting == 0 ){
 		toDeactivate->next = toDeactivate;
 		toDeactivate->prev = toDeactivate;
 
-		S_PcbQueue->waiting = toDeactivate;
+		pcbq.waiting = toDeactivate;
 	} else {
-		toDeactivate->next = S_PcbQueue->waiting;
-		toDeactivate->prev = S_PcbQueue->waiting->prev;
+		toDeactivate->next = pcbq.waiting;
+		toDeactivate->prev = pcbq.waiting->prev;
 
-		S_PcbQueue->waiting->prev->next = toDeactivate;
-		S_PcbQueue->waiting->prev = toDeactivate;
+		pcbq.waiting->prev->next = toDeactivate;
+		pcbq.waiting->prev = toDeactivate;
 	}
 }
 void S_deactivate_pcb( pcb *toDeactivate){
-	pcb * first = S_PcbQueue->first_ready;
+	pcb * first = pcbq.first_ready;
 	if( toDeactivate == first ){
-		S_PcbQueue->first_ready = first->next;
+		pcbq.first_ready = first->next;
 		toDeactivate->prev->next = toDeactivate->next;
 		toDeactivate->next->prev = toDeactivate->prev;
 	}

@@ -18,7 +18,4 @@ typedef struct
     uint32_t gp_reg;    /* offset 116 */
 } registers_t;          /* size   120 */
 
-registers_t copy_usr_reg();
-void paste_usr_reg( registers_t * reg );
-
 #endif
