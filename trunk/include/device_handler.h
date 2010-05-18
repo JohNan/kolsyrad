@@ -12,7 +12,7 @@ static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 static volatile rtc_t* const rtc = (rtc_t*) 0xb8000070;
 
-#define FIFO_SIZE 8
+#define FIFO_SIZE 32
 
 typedef struct {
 	short id; // Unique id of device
@@ -21,19 +21,23 @@ typedef struct {
 } Device;
 
 /* A simple FIFO queue of bounded size. */
-struct bounded_fifo {
+typedef struct {
   uint8_t  buf[FIFO_SIZE];
   uint32_t length;
-} bfifo;
+} bounded_fifo;
 
 void init_devices();
-void putStr(const char* text);
+void putStrP(const char* text);
+void putStrI(const char* text);
 void putCh(char c);
 void putWord(uint32_t word);
 void IO_device(short id, short owner, void* buffer_address);
 
-void bfifo_put(struct bounded_fifo* bfifo, uint8_t ch);
-uint8_t bfifo_get(struct bounded_fifo* bfifo);
-void bfifo_back(struct bounded_fifo* bfifo);
+void device_timer();
+
+void bfifo_put(bounded_fifo* bfifo, uint8_t ch);
+uint8_t bfifo_get(bounded_fifo* bfifo);
+void bfifo_flush(bounded_fifo* bfifo);
+void bfifo_back(bounded_fifo* bfifo);
 
 #endif
