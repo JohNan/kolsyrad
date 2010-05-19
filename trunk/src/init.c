@@ -13,10 +13,10 @@ void init() {
 	init_poc();
 
 	ini = pcbs;
-	ini.pib = pibs;
-	ini.state = PS_READY;
+	ini->progid = pibs[0].progid;
+	ini->state = PS_READY;
 	pcbq.first_ready = pcbq.ready = ini;
-	kset_registers(&ini.registers);
+	kset_registers(&ini->registers);
 	free_pcb_q.first = ini->next;
 
 	// now we just wait for an exception to occur and start scheduling

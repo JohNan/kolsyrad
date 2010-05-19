@@ -1,9 +1,9 @@
 
 	.text
 
-_readip:
+readip:
 	mov	-4(sp),ip
 	ret
 
-_jumpip:
+jumpip:
 	j (sp)

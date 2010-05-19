@@ -17,8 +17,8 @@ void init_poc() {
     pcbq.ready =
     pcbq.waiting = NULL;
 
-  free_pcb_q.first = pcbs[0];
-  free_pcb_q.last = pcbs[MAX_PROCESS - 1];
+  free_pcb_q.first = &pcbs[0];
+  free_pcb_q.last = &pcbs[MAX_PROCESS - 1];
 
   pcbs[0].pid = 0;
   pcbs[0].progid = -1;
@@ -27,7 +27,7 @@ void init_poc() {
   pcbs[0].flags = 0;
   /* registers do not need init */
   // except for SP
-  pcbs[0].registers.sp_reg = pstack[0];
+  pcbs[0].registers.sp_reg = (uint32_t) &pstack[0];
   pcbs[0].next = &pcbs[1];
   pcbs[0].prev = &pcbs[MAX_PROCESS - 1];
   /* next_instr does not need init */
@@ -38,7 +38,7 @@ void init_poc() {
   pcbs[MAX_PROCESS - 1].state = PS_FREE;
   pcbs[MAX_PROCESS - 1].flags = 0;
   /* registers do not need init */
-  pcbs[MAX_PROCESS - 1].registers.sp_reg = pstack[MAX_PROCESS - 1];
+  pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS - 1];
   pcbs[MAX_PROCESS - 1].next = &pcbs[0];
   pcbs[MAX_PROCESS - 1].prev = &pcbs[MAX_PROCESS - 2];
   /* next_instr does not need init */
@@ -50,19 +50,24 @@ void init_poc() {
     pcbs[i].state = PS_FREE;
     pcbs[i].flags = 0;
     /* registers do not need init */
-    pcbs[i].registers.sp_reg = pstack[i];
+    pcbs[i].registers.sp_reg = (uint32_t) &pstack[i];
     pcbs[i].next = &pcbs[i + 1];
     pcbs[i].prev = &pcbs[i - 1];
     /* next_instr does not need init */
   }
 }
 
+// get PID of current running process
+int get_pid() {
+  return pcbq.ready->pid;
+}
+
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
 void set_exec_image(pib *newPIB) {
   (pcbq.ready) -> progid = newPIB -> progid;
-  __inline__ __asm__ {
+  /*__inline__ __asm__ {
 	  sw ra,newPIB->start_ptr
-  }
+	  }*/
   /* need some inline asm code here to mess about with the stack frame
      so that when we return, execution continues at the starting point of
      new new program */
@@ -74,11 +79,13 @@ void set_exec_image(pib *newPIB) {
 
 // creates a new process with the same PIB
 int fork() {
-	int pid = get_pcb();
-	if(pid > -1) {
-		pcbs[pid]
-	}
+  int pid = get_pcb();
+  if(pid > -1) {
+    //pcbs[pid]
+  }
+  return pid;
 }
+
 //creates an PCB for a new process returns -1 if fail else pidx
 // note that the returned PCB is completely unlinked
 int get_pcb(void) {
@@ -87,7 +94,7 @@ int get_pcb(void) {
   if(free_pcb_q.first == NULL)
     return -1;
   p = free_pcb_q.first;
-  p->state = PS_INIT;
+  p->state = PS_START;
   free_pcb_q.first = p -> next;
   p->prev = p->next = NULL;
   return p->pid;
