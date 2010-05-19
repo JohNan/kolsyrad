@@ -95,6 +95,7 @@ void S_remove_active(){
 	pcb * first = pcbq.first_ready;
 	pcb * toDelete = pcbq.ready;
 	pcb * toRun = 0;
+	toDelete->flags = 2;
 
 	if( toDelete = first ){
 		toRun = toDelete->next;
@@ -122,6 +123,8 @@ void S_remove_inactive( pcb * toDelete ){
 void S_activate_pcb( pcb * toActivate ){
 	pcb * first = pcbq.first_ready;
 	pcb * inLoop = pcbq.first_ready->next;
+
+	toActivate->flags = 1;
 
 	toActivate->next->prev = toActivate->prev;
 	toActivate->prev->next = toActivate->next;
@@ -158,6 +161,7 @@ void SP_move_to_waiting( pcb * toMove ){
 	}
 }
 void S_deactivate_pcb( pcb *toDeactivate){
+	toDeactivate->flags = 2;
 	pcb * first = pcbq.first_ready;
 	if( toDeactivate == first ){
 		pcbq.first_ready = first->next;
