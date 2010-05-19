@@ -52,6 +52,12 @@ typedef struct free_pcb{
 	pcb * last;
 } free_pcb;
 
+// global variables, defined in process_handler.c
+extern pcb pcbs[];
+extern pib pibs[];
+extern pcb_queues pcbq;
+extern free_pcb free_pcb_q;
+
 void init_poc();
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
 void set_pcb_image(pib *);

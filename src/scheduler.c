@@ -1,10 +1,5 @@
 #include "scheduler.h"
-
-extern pcb_queues pcbq;
-extern free_pcb free_pcb_q;
-
-void * readip(void);
-void jumpip( void * );
+#include "process_handler.h"
 
 void SP_add_before( pcb * source, pcb * target ){
 	source->next = target;
@@ -22,9 +17,8 @@ void S_schedule() {
 	pcb * runPcb = 0;
 	pcb * currentPcb = 0;
 
-
 	pNextInstr = readip();
-	currentPcb = pcbq->ready;
+	currentPcb = pcbq.ready;
 	currentPcb->next_instr = pNextInstr;
 
 	//=======================================================
@@ -47,7 +41,7 @@ void S_schedule() {
 
 	//=======================================================
 
-	kset_registers(&runPcb.registers);
+	kset_registers(&runPcb->registers);
 
 	//jumpip( runPcb->next_instr );
 }
@@ -62,11 +56,11 @@ void S_add_new_pcb( pcb * toAdd ){
 
 		int i = 1;
 		while( i ){
-			if( currentInLoop == queue->first_ready ){
-				SP_add_before( readyToRun, currentInLoop );
+			if( currentInLoop == pcbq.first_ready ){
+				SP_add_before( toAdd, currentInLoop );
 				i = 0;
-			} else if( readyToRun->priority > currentInLoop->priority ){
-				SP_add_before( readyToRun, currentInLoop );
+			} else if( toAdd->priority > currentInLoop->priority ){
+				SP_add_before( toAdd, currentInLoop );
 				i = 0;
 			} else {
 				i++;
@@ -75,12 +69,14 @@ void S_add_new_pcb( pcb * toAdd ){
 		}
 	}
 }
+/* what purpose do these two functions serve?
 void S_set_pcb_queues( pcb_queues * queue ){
 	pcbq = queue;
 }
 void S_set_free_pcb( free_pcb * queue ){
 	free_pcb_q = queue;
 }
+*/
 void SP_delete_pcb( pcb * toDelete ){
 	toDelete->next->prev = toDelete->prev;
 	toDelete->prev->next = toDelete->next;
@@ -97,7 +93,7 @@ void S_remove_active(){
 	pcb * toRun = 0;
 	toDelete->flags = 2;
 
-	if( toDelete = first ){
+	if( toDelete == first ){
 		toRun = toDelete->next;
 	} else {
 		if( toDelete->priority > toDelete->next->priority ){
@@ -147,17 +143,21 @@ void S_activate_pcb( pcb * toActivate ){
 	}
 }
 void SP_move_to_waiting( pcb * toMove ){
-	if( pcbq.waiting == 0 ){
-		toDeactivate->next = toDeactivate;
-		toDeactivate->prev = toDeactivate;
+	if( pcbq.waiting == NULL ){
+		toMove->next =
+		  toMove->prev = NULL;
 
-		pcbq.waiting = toDeactivate;
+		pcbq.waiting = toMove;
 	} else {
-		toDeactivate->next = pcbq.waiting;
-		toDeactivate->prev = pcbq.waiting->prev;
+		toMove->next = pcbq.waiting;
+		toMove->prev = pcbq.waiting->prev;
 
-		pcbq.waiting->prev->next = toDeactivate;
-		pcbq.waiting->prev = toDeactivate;
+		pcbq.waiting->prev->next = toMove;
+		pcbq.waiting->prev = toMove;
+		/* clever move Stefan!
+		   we add the new PCB to the end of the list
+		   even though it looks like we put it at the head
+		*/
 	}
 }
 void S_deactivate_pcb( pcb *toDeactivate){
