@@ -17,11 +17,11 @@ void S_schedule();
  * Takes a pointer to a pcb and add it to the running queue
  * at the right place
  */
-void S_add_new_pcb( pcb * toAdd );
+void S_add_new_pcb(pcb *toAdd );
 /*
  * Sets the pointer to the pcb queues
  */
-void S_set_pcb_queues( pcb_queues * queue );
+void S_set_pcb_queues(pcb_queues *queue );
 /*
  * Sets the pointer to the free pcb queue
  */

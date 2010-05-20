@@ -9,7 +9,6 @@
 
 #include "structs/registers.h"
 
-#include "scheduler.h"
 #include "user_prog.h"
 
 typedef struct pcb{
