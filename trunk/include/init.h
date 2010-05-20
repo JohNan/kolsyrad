@@ -8,11 +8,12 @@
 
 #include "structs.h"
 
-#include "_boot.h"
+#include "scheduler.h"
+#include "process_handler.h"
 #include "device_handler.h"
 #include "interrupt_handler.h"
-#include "process_handler.h"
-#include "scheduler.h"
+#include "_boot.h"
 
 void init();
+void ksyscall_handler(registers_t* reg);
 #endif
