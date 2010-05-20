@@ -3,7 +3,8 @@
 
 #include "other/asm.h"
 #include "other/types.h"
-#include "other/registers.h"
+
+#include "structs/registers.h"
 
 #include "device_handler.h"
 #include "process_handler.h"

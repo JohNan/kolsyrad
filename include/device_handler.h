@@ -2,9 +2,9 @@
 #define TEST_H
 
 #include "other/debug.h"
-#include "other/mips4kc.h"
 #include "other/types.h"
 
+#include "structs/mips4kc.h"
 #include "structs/malta.h"
 #include "structs/console.h"
 
