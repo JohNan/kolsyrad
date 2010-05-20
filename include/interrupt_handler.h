@@ -3,7 +3,8 @@
 
 #include "other/asm.h"
 #include "other/debug.h"
-#include "other/mips4kc.h"
+
+#include "structs/mips4kc.h"
 
 #include "init.h"
 #include "device_handler.h"
