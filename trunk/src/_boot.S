@@ -44,6 +44,9 @@ kernel_boot_stack_high_limit:
 	.globl  kget_registers
 	.globl  kexception
 	.globl	kdebug_magic_break
+	.globl 	syscall_putStrI
+	.globl 	kputStrI
+	.globl 	ksyscall_handler
 
 # -------------------------------------------------------------------------
 # Set cpu status register
@@ -234,6 +237,32 @@ exception_handler:
 	.set at
 	.set reorder
 
+
+	# my_system_call:
+	#   A user mode interface to the kernel mode function
+	#   'kmy_system_call'.
+	#
+syscall_putStrI:
+	la v0,kputStrI	# Load adress of syscall implementation in v0.
+	syscall			# Enter kernel mode by 'syscall' exception.
+	jr ra			# Back in user mode, return to caller
+
+	# syscall_handler:
+	#   Enables argument passing for up
+	#   to four parameters of a system call.
+	#
+	# Input:
+	#   a0 - Pointer to saved registers.
+	#
+ksyscall_handler:
+	addi	v0, a0, 0	# Move a0 into v0.
+	lw	a0, REG_A0(v0)	# Load saved a0 (argument 1) into a0.
+	lw	a1, REG_A1(v0)	# Load saved a1 (argument 2) into a1.
+	lw	a2, REG_A2(v0)	# Load saved a2 (argument 3) into a2.
+	lw	a3, REG_A3(v0)	# Load saved a3 (argument 4) into a3.
+	lw	v0, REG_V0(v0)	# Load saved v0 (implementation) into v0.
+
+	jr	v0		# Jump to system call implementation.
 #------------ Borrowed from example files. ------------------END
 
 		

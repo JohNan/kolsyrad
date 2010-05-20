@@ -7,10 +7,10 @@
 
 #include "device_handler.h"
 
-bounded_fifo bfifo;
-bounded_fifo bfifo_out;
+bounded_fifo bfifoOut;
+bounded_fifo bfifoDebug;
 
-Device d_tty = { .id = 1, .owner = -1, .buffer_address = &bfifo };
+Device d_tty = { .id = 1, .owner = -1, .buffer_address = &bfifoOut };
 Device d_malta = { .id = 2, .owner = -1, .buffer_address = NULL };
 
 
@@ -46,9 +46,9 @@ void putChP(char c) {
  * TODO: Add syscall functionality
  */
 void putChI(char c) {
-	bfifo_put(&bfifo,c);
+	bfifo_put(&bfifoOut,c);
 	if (c == '\n') {
-		bfifo_put(&bfifo, '\r');
+		bfifo_put(&bfifoOut, '\r');
 	}
 }
 
@@ -60,13 +60,59 @@ void putStrP(const char* text) {
   }
 }
 
-/* Outputs a string on tty, interrupt */
 void putStrI(const char* text) {
+	syscall_putStrI(text);
+}
+/* Outputs a string on tty, interrupt */
+void kputStrI(const char* text) {
   while (text[0] != '\0') {
-	  bfifo_put(&bfifo, text[0]);
+	  bfifo_put(&bfifoOut, text[0]);
     ++text;
   }
   putChI('\n');
+}
+
+/* DEBUG - Outputs a string on tty, interrupt */
+void DputStrI(const char* text) {
+  while (text[0] != '\0') {
+	 Dbfifo_put(&bfifoDebug, text[0]);
+    ++text;
+  }
+  putChI('\n');
+}
+
+/* bfifo_put: Inserts a character at the end of the queue. */
+void Dbfifo_put(bounded_fifo* bfifo, uint8_t ch) {
+  /* Make sure the 'bfifo' pointer is not 0. */
+  kdebug_assert(bfifo != 0);
+
+  if (bfifo->length < FIFO_SIZE) {
+    bfifo->buf[(bfifo->length)++] = ch;
+  }
+  if (tty->lsr.thre) {
+  		/* Transmitter idle: transmit buffered character */
+  		tty->thr = Dbfifo_get(bfifo);
+
+  		/* Determine if we should be notified when transmitter becomes idle */
+  		tty->ier.etbei = (bfifo->length > 0);
+  	 }
+}
+
+/* bfifo_get: Returns a character removed from the front of the queue. */
+uint8_t Dbfifo_get(bounded_fifo* bfifo) {
+  int i;
+  uint8_t ch;
+
+  /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
+  kdebug_assert(bfifo != 0);
+  kdebug_assert(bfifo->length > 0);
+
+  bfifo->length--;
+  ch = bfifo->buf[0];
+  for (i = 0; i < bfifo->length; i++) {
+    bfifo->buf[i] = bfifo->buf[i+1];
+  }
+  return ch;
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
@@ -84,16 +130,6 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
   		/* Determine if we should be notified when transmitter becomes idle */
   		tty->ier.etbei = (bfifo->length > 0);
   	 }
-}
-
-/* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_back(bounded_fifo* bfifo) {
-  /* Make sure the 'bfifo' pointer is not 0. */
-  kdebug_assert(bfifo != 0);
-
-  if (bfifo->length < FIFO_SIZE) {
-	 bfifo->length--;
-  }
 }
 
 /* bfifo_get: Returns a character removed from the front of the queue. */
@@ -121,7 +157,7 @@ void bfifo_flush(bounded_fifo* bfifo)
 
   /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
   kdebug_assert(bfifo != 0);
- // kdebug_assert(bfifo->length > 0);
+  kdebug_assert(bfifo->length > 0);
 
   if (bfifo->length > 0) {
 
@@ -165,27 +201,27 @@ void tty_interrupt(){
 	  if (tty->lsr.dr) {
 		/* Data ready: add character to buffer */
 		ch = tty->thr; /* rbr and thr is the same. */
-		bfifo_put(&bfifo, ch);
+		bfifo_put(&bfifoOut, ch);
 
 		/* Should be moved to shell program */
 		if (ch == '\r') {
-				bfifo_put(&bfifo, '\n');
+				bfifo_put(&bfifoOut, '\n');
 		}
 
 		if (ch == '\b') {
-				bfifo_put(&bfifo, ' ');
-				bfifo_put(&bfifo, '\b');
+				bfifo_put(&bfifoOut, ' ');
+				bfifo_put(&bfifoOut, '\b');
 		}
 
 
 	  }
 
-	  if (bfifo.length > 0 && tty->lsr.thre) {
+	  if (bfifoOut.length > 0 && tty->lsr.thre) {
 		/* Transmitter idle: transmit buffered character */
-		tty->thr = bfifo_get(&bfifo);
+		tty->thr = bfifo_get(&bfifoOut);
 
 		/* Determine if we should be notified when transmitter becomes idle */
-		tty->ier.etbei = (bfifo.length > 0);
+		tty->ier.etbei = (bfifoOut.length > 0);
 	  }
 	  /* Acknowledge UART interrupt. */
 	  kset_cause(~0x1000, 0);
@@ -195,7 +231,7 @@ void init_devices(){
 
 	status_reg_t and, or;
 	// Set fifo-length
-	bfifo.length = 0;
+	bfifoOut.length = 0;
 
 	//Set MCR Out2 to 1 to enable interrupts on the console.
 	tty->mcr.out2 = 1;

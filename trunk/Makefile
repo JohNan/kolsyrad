@@ -59,7 +59,7 @@ all: boot_all
 boot_all: bin/boot
 
 # Build the timer example
-bin/boot:  $(addprefix build/, debug.o user_prog.o interrupt_handler.o device_handler.o process_handler.o scheduler.o _boot.o init.o)
+bin/boot:  $(addprefix build/, stdlib.o debug.o user_prog.o interrupt_handler.o device_handler.o process_handler.o scheduler.o init.o _boot.o)
 	$(LD) $(ARCH) -o $@ $^
 	
 #### Add dependency on headerfile of various tty.o files

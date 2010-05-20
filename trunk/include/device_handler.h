@@ -40,6 +40,17 @@ void tty_interrupt();
 void bfifo_put(bounded_fifo* bfifo, uint8_t ch);
 uint8_t bfifo_get(bounded_fifo* bfifo);
 void bfifo_flush(bounded_fifo* bfifo);
-void bfifo_back(bounded_fifo* bfifo);
+
+/*
+ * Syscalls
+ */
+void kputStrI(const char* text);
+
+/*
+ * Debug print functions
+ */
+void DputChI(char c);
+void Dbfifo_put(bounded_fifo* bfifo, uint8_t ch);
+uint8_t Dbfifo_get(bounded_fifo* bfifo);
 
 #endif

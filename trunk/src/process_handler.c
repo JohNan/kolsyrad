@@ -6,7 +6,7 @@ free_pcb free_pcb_q;
 
 pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
-  {0, "hello", &hello},
+  {0, "hello", (int)&hello},
 };
 uint8_t pstack[MAX_PROCESS][STACK_SIZE];
 
@@ -55,6 +55,8 @@ void init_poc() {
     pcbs[i].prev = &pcbs[i - 1];
     /* next_instr does not need init */
   }
+
+  putStrI("Process init done");
 }
 
 // get PID of current running process
@@ -170,3 +172,4 @@ pcb *list_queue(int what) {
   }
   return NULL;
 }
+
