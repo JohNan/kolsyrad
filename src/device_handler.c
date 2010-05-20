@@ -53,18 +53,18 @@ void putChI(char c) {
 }
 
 /* Outputs a string on tty, polled */
-void putStrP(const char* text) {
+void putStrP(char* text) {
   while (text[0] != '\0') {
    putChP(text[0]);
     ++text;
   }
 }
 
-void putStrI(const char* text) {
+void putStrI(char* text) {
 	syscall_putStrI(text);
 }
 /* Outputs a string on tty, interrupt */
-void kputStrI(const char* text) {
+void kputStrI(char* text) {
   while (text[0] != '\0') {
 	  bfifo_put(&bfifoOut, text[0]);
     ++text;
@@ -73,7 +73,7 @@ void kputStrI(const char* text) {
 }
 
 /* DEBUG - Outputs a string on tty, interrupt */
-void DputStrI(const char* text) {
+void DputStrI(char* text) {
   while (text[0] != '\0') {
 	 Dbfifo_put(&bfifoDebug, text[0]);
     ++text;

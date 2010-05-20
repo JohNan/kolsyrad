@@ -1,7 +1,4 @@
-
-#include "asm.h"
 #include "debug.h"
-#include "device_handler.h"
 
 #ifndef NDEBUG
 void kdebug_putc(char c)
