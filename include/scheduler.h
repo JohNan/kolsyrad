@@ -7,7 +7,7 @@
 #include "structs/registers.h"
 
 #include "device_handler.h"
-#include "process_handler.h"
+#include "structs.h"
 
 /*
  * Jumps to next process in the running queue

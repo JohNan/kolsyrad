@@ -4,7 +4,11 @@
 #include "other/asm.h"
 #include "other/types.h"
 #include "other/stdlib.h"
+#include "other/debug.h"
 
+#include "structs.h"
+
+#include "_boot.h"
 #include "device_handler.h"
 #include "interrupt_handler.h"
 #include "process_handler.h"

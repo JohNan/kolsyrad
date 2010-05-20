@@ -8,22 +8,14 @@
 #include "structs/malta.h"
 #include "structs/console.h"
 
+#include "structs.h"
+
 static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 
 #define FIFO_SIZE 32
 
-typedef struct {
-	short id; // Unique id of device
-	short owner; // PID of owning process or -1 if device is free.
-	void * buffer_address; // Pointer to static assigned buffer space or NULL if device does not have a buffer.
-} Device;
 
-/* A simple FIFO queue of bounded size. */
-typedef struct {
-  uint8_t  buf[FIFO_SIZE];
-  uint32_t length;
-} bounded_fifo;
 
 void init_devices();
 void putStrP(char* text);
@@ -44,6 +36,8 @@ void bfifo_flush(bounded_fifo* bfifo);
 
 void putStrI(char* text);
 void kputStrI(char* text);
+
+void bfifo_putStr(bounded_fifo* bfifo, uint32_t ch);
 
 void DputChI(char c);
 void Dbfifo_put(bounded_fifo* bfifo, uint8_t ch);
