@@ -1,8 +1,9 @@
 #include "init.h"
 #include "process_handler.h"
 
+extern Device d_tty;
+
 void init() {
-	pcb *ini;
 
 	//init devices.
 	init_devices();
@@ -10,6 +11,7 @@ void init() {
 	//init exceptions
 	init_exc();
 
+	pcb *ini;
 	init_poc();
 
 	ini = pcbs;
@@ -22,10 +24,9 @@ void init() {
 	// now we just wait for an exception to occur and start scheduling
 
 
-
-//	putCh('A');
-	putWord(7);
-//	putStr("loha you ol' bag of scum!");
+	if(IO_device(d_tty,234)){
+		putStrI("Device successfully locked to PID 234");
+	}
 
   while (1) {};
 }
