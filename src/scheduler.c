@@ -1,6 +1,7 @@
 #include "scheduler.h"
-#include "process_handler.h"
 
+extern pcb_queues pcbq;
+extern free_pcb free_pcb_q;
 
 void SP_add_before( pcb * source, pcb * target ){
 	source->next = target;
@@ -13,28 +14,40 @@ void SP_add_before( pcb * source, pcb * target ){
 
 // reschedules all processes
 void S_schedule() {
+
+//	putStrI("Scheduler: started.");
+
 	// Variable declaration
-//	void * pNextInstr = 0;
+	//	void * pNextInstr = 0;
 	pcb * runPcb = 0;
 	pcb * currentPcb = 0;
 
+//	putStrI("Scheduler: Declared variables done.");
+
 //	pNextInstr = readip();
-	currentPcb = pcbq.ready;
-//	currentPcb->next_instr = pNextInstr;
 
-	if( currentPcb->next->priority < currentPcb->priority ){
-		pcbq.ready = pcbq.first_ready;
+	if(pcbq.ready != NULL){
+		currentPcb = pcbq.ready;
+
+		if( currentPcb->next->priority < currentPcb->priority ){
+			pcbq.ready = pcbq.first_ready;
+		} else {
+			pcbq.ready = currentPcb->next;
+		}
+
+		runPcb = pcbq.ready;
+
+
+		/*
+		 * Load the new process register
+		 */
+		kset_registers(&(runPcb->registers));
+
+		DputStrI("Scheduler: Registers set.");
+
 	} else {
-		pcbq.ready = currentPcb->next;
+		DputStrI("Scheduler: ERROR");
 	}
-
-	runPcb = pcbq.ready;
-
-	/*
-	 * Load the new process register
-	 */
-	kset_registers(&runPcb->registers);
-
 	/*
 	 * Next instruction will automagically be set when loading registers.
 	 * EPC cointains the adress where the process last got interrupted.
@@ -42,27 +55,32 @@ void S_schedule() {
 	//jumpip( runPcb->next_instr );
 }
 void S_add_new_pcb( pcb * toAdd ){
+	if( pcbq.first_ready != NULL ) {
+		pcb * currentInLoop = pcbq.first_ready;
 
-	pcb * currentInLoop = pcbq.first_ready;
+		if( toAdd->priority > currentInLoop->priority ){
+			SP_add_before( toAdd, currentInLoop );
+		} else {
+			currentInLoop = currentInLoop->next;
 
-	if( toAdd->priority > currentInLoop->priority ){
-		SP_add_before( toAdd, currentInLoop );
-	} else {
-		currentInLoop = currentInLoop->next;
-
-		int i = 1;
-		while( i ){
-			if( currentInLoop == pcbq.first_ready ){
-				SP_add_before( toAdd, currentInLoop );
-				i = 0;
-			} else if( toAdd->priority > currentInLoop->priority ){
-				SP_add_before( toAdd, currentInLoop );
-				i = 0;
-			} else {
-				i++;
-				currentInLoop = currentInLoop->next;
+			int i = 1;
+			while( i ){
+				if( currentInLoop == pcbq.first_ready ){
+					SP_add_before( toAdd, currentInLoop );
+					i = 0;
+				} else if( toAdd->priority > currentInLoop->priority ){
+					SP_add_before( toAdd, currentInLoop );
+					i = 0;
+				} else {
+					i++;
+					currentInLoop = currentInLoop->next;
+				}
 			}
 		}
+	} else {
+		pcbq.first_ready = pcbq.ready = toAdd;
+		toAdd->next = toAdd;
+		toAdd->prev = toAdd;
 	}
 }
 /* what purpose do these two functions serve?
@@ -103,7 +121,7 @@ void S_remove_active(){
 	/*
 	 * Load the new process register
 	 */
-	kset_registers(&toRun->registers);
+	kset_registers(&(toRun->registers));
 
 	/*
 	 * Next instruction will automagically be set when loading registers.

@@ -35,29 +35,46 @@ void init_exc() {
  *   have been saved.
  */
 void kexception() {
-  static int i = 0;
+  registers_t* reg;
   cause_reg_t cause;
-
   /* Make sure that we are here because of a timer interrupt. */
   cause.reg = kget_cause();
-  kdebug_assert(cause.field.exc == 0);    /* External interrupt */
 
-  /* Timer interrupt */
-  if(cause.field.ip & 0x80){
+  /*
+   * DEBUG
+   */
+  /*
+  tmp = cause.field.exc;
+  putWord(tmp);
+  */
+
+//  kdebug_assert(cause.field.exc == 0);    /* External interrupt */
+
+  if (cause.field.ip & 4) { /* Hardware interrupt (tty) */
+  	  tty_interrupt();
+  } else if(cause.field.exc == 0){ /* Timer interrupt */
 	  /* Reload timer for another 100 ms (simulated time) */
 	  kload_timer(10 * timer_msec);
 
 	  /* Icrease the number on the Malta display. */
 	  putWord(++i);
-	 // device_timer();
+	  // device_timer();
 
 	  /* lets schedule! */
-	 // S_schedule();
-  }
+	  S_schedule();
+  } else if(cause.field.exc == 8) { /* Syscall exception */
+	  putWord(42);
+	  /* Get pointer to stored registers. */
+	  reg = kget_registers();
 
-  /* Hardware interrupt (tty) */
-  else if (cause.field.ip & 4) {
-	  tty_interrupt();
+	  /* Return from exception to instruction following syscall. */
+	  reg->epc_reg += 4;
+
+	  /* Handle the system call (see syscall.S). */
+	  ksyscall_handler(reg);
+
+	  /* Acknowledge syscall exception. */
+	  kset_cause(~0x60, 0);
   }
 
 }

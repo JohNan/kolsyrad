@@ -34,7 +34,7 @@ typedef struct pcb{
 typedef struct pib{  // Program information block
 	short progid; // Hold the program ID.
 	char pname[16]; // The human readable name of the program.
-	void * start_ptr; // A pointer to the entry point of the program
+	int start_ptr; // A pointer to the entry point of the program
 }pib;
 
 typedef struct proc_handler{

@@ -1,5 +1,6 @@
 #include "user_prog.h"
 
 void hello(){
-	putStrI("Hello world.");
+	putWord(37);
+	//putStrI("Hello world.");
 }

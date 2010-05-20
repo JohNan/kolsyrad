@@ -1,7 +1,11 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
+#include "device_handler.h"
 #include "process_handler.h"
+#include "asm.h"
+#include "types.h"
+#include "registers.h"
 
 /*
  * Jumps to next process in the running queue
