@@ -19,5 +19,4 @@ void kset_registers(registers_t* regs);
 registers_t* kget_registers();
 void kdebug_magic_break();
 
-
 #endif

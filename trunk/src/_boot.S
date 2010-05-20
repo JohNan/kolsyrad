@@ -2,9 +2,9 @@
 #  asm.S
 # -------------------------------------------------------------------------
 
-#include <regdef.h>
-#include <cp0_regdef.h>
-#include "asm_regs.h"
+#include "other/regdef.h"
+#include "other/cp0_regdef.h"
+#include "other/asm_regs.h"
 	
 # -------------------------------------------------------------------------
 # Data segment
@@ -45,7 +45,6 @@ kernel_boot_stack_high_limit:
 	.globl  kexception
 	.globl	kdebug_magic_break
 	.globl 	syscall_putStrI
-	.globl 	kputStrI
 	.globl 	ksyscall_handler
 
 # -------------------------------------------------------------------------

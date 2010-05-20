@@ -5,8 +5,12 @@
 #define RUNNING 1
 #define WAITING 2
 
-#include "types.h"
-#include "registers.h"
+#include "other/types.h"
+
+#include "structs/registers.h"
+
+#include "scheduler.h"
+#include "user_prog.h"
 
 typedef struct pcb{
 	short pid;

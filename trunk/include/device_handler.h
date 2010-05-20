@@ -1,18 +1,15 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include "asm.h"
-#include "malta.h"
-#include "console.h"
-#include "timer.h"
-#include "types.h"
-#include "debug.h"
-#include "mips4kc.h"
+#include "other/debug.h"
+#include "other/mips4kc.h"
+#include "other/types.h"
 
+#include "structs/malta.h"
+#include "structs/console.h"
 
 static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
-static volatile rtc_t* const rtc = (rtc_t*) 0xb8000070;
 
 #define FIFO_SIZE 32
 
@@ -29,8 +26,8 @@ typedef struct {
 } bounded_fifo;
 
 void init_devices();
-void putStrP(const char* text);
-void putStrI(const char* text);
+void putStrP(char* text);
+
 void putChP(char c);
 void putChI(char c);
 void putWord(uint32_t word);
@@ -42,13 +39,12 @@ uint8_t bfifo_get(bounded_fifo* bfifo);
 void bfifo_flush(bounded_fifo* bfifo);
 
 /*
- * Syscalls
- */
-void kputStrI(const char* text);
-
-/*
  * Debug print functions
  */
+
+void putStrI(char* text);
+void kputStrI(char* text);
+
 void DputChI(char c);
 void Dbfifo_put(bounded_fifo* bfifo, uint8_t ch);
 uint8_t Dbfifo_get(bounded_fifo* bfifo);

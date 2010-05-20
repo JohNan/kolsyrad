@@ -1,6 +1,4 @@
 #include "init.h"
-#include "process_handler.h"
-#include "stdlib.h"
 
 extern Device d_tty;
 
