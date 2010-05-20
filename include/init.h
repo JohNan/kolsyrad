@@ -11,10 +11,4 @@
 #include "scheduler.h"
 
 void init();
-/*
- * Syscalls
- */
-void ksyscall_handler(registers_t* reg);
-void syscall_kputStrI(char* text);
-
 #endif
