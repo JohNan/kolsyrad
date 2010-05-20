@@ -1,6 +1,8 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#include "device_handler.h"
+
 /* Only for debug purposes:
  * Your OS should work when NDEBUG is defined.
  */
