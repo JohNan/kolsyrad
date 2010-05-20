@@ -7,6 +7,7 @@
 #include "structs/mips4kc.h"
 
 #include "device_handler.h"
+#include "scheduler.h"
 
 /*
  * Init the exception handler

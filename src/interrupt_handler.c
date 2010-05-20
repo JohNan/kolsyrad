@@ -27,7 +27,7 @@ void init_exc() {
 
 	kset_sr(and.reg, or.reg);
 
-	putStrI("Exception init done");
+	//putStrP("Exception init done");
 }
 
 /* kexception:
@@ -58,22 +58,20 @@ void kexception() {
 	  kload_timer(10 * timer_msec);
 
 	  /* Icrease the number on the Malta display. */
-	  putWord(++i);
+	  kputWord(++i);
 	  // device_timer();
 
 	  /* lets schedule! */
 	  S_schedule();
   } else if(cause.field.exc == 8) { /* Syscall exception */
-	  putWord(42);
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();
-
-	  /* Return from exception to instruction following syscall. */
-	  	  reg->epc_reg += 4;
 
 	  /* Handle the system call (see syscall.S). */
 	  ksyscall_handler(reg);
 
+	  /* Return from exception to instruction following syscall. */
+	  reg->epc_reg += 4;
 
 	  /* Acknowledge syscall exception. */
 	  kset_cause(~0x60, 0);

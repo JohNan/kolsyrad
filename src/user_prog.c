@@ -2,5 +2,5 @@
 
 void hello(){
 	putWord(37);
-	//putStrI("Hello world.");
+	putStrI("Hello world.");
 }

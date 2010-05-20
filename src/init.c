@@ -16,7 +16,7 @@ void init() {
 	ini->progid = pibs[0].progid;
 	ini->state = PS_READY;
 	ini->registers.epc_reg = pibs[0].start_ptr;
-	ini->registers.ra_reg = (int)&exit;
+	ini->registers.ra_reg = pibs[0].start_ptr; //(int)&exit;
 	S_add_new_pcb(ini);
 
 	//init devices.
@@ -28,8 +28,7 @@ void init() {
 
 	// now we just wait for an exception to occur and start scheduling
 
-
-	putStrI("Init done.");
+	//putStrI("Init done.");
 
   while (1) {};
 }
