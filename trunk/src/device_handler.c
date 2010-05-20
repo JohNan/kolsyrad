@@ -25,13 +25,17 @@ int IO_device(Device d, short pid){
 	}
 }
 
-void putWord(uint32_t word){
+void kputWord(uint32_t word){
   int i;
   malta->ledbar.reg = 0xFF;
   for (i = 7; i >= 0; --i) {
     malta->asciipos[i].value = '0' + word % 10;
     word /= 10;
   }
+}
+
+void putWord(uint32_t word){
+	syscall_putWord(word);
 }
 
 /* Polled output to tty */
@@ -60,9 +64,6 @@ void putStrP(char* text) {
   }
 }
 
-void putStrI(char* text) {
-	syscall_putStr(text);
-}
 /* Outputs a string on tty, interrupt */
 void kputStrI(char* text) {
   while (text[0] != '\0') {
@@ -70,6 +71,10 @@ void kputStrI(char* text) {
     ++text;
   }
   putChI('\n');
+}
+
+void putStrI(char* text) {
+	syscall_putStrI(text);
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
@@ -93,7 +98,7 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
 void bfifo_putStr(bounded_fifo* bfifo, uint32_t ch) {
 	char *c = (char*)ch;
 	while (c[0] != '\0') {
-		bfifo_put(&bfifoOut, c[0]);
+		bfifo_put(bfifo, c[0]);
 	}
 }
 
@@ -221,5 +226,5 @@ void init_devices(){
 
 	kset_sr(and.reg, or.reg);
 
-	putStrI("Device init done");
+	//putStrP("Device init done");
 }
