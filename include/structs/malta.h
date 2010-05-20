@@ -1,7 +1,7 @@
 #ifndef MALTA_H
 #define MALTA_H
 
-#include <types.h>
+#include "other/types.h"
 
 /* Display driver for 8 digit LED on Malta board       */
 /* (See pages 14-16 of the Malta board's User's Guide) */

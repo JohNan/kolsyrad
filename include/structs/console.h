@@ -1,7 +1,7 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <types.h>
+#include "other/types.h"
 
 typedef struct {
   uint8_t thr; /* 0x00: Transmitter Holding Register */
