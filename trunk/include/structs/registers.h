@@ -2,7 +2,7 @@
 #ifndef REGISTERS_H
 #define REGISTERS_H
 
-#include "types.h"
+#include "other/types.h"
 
 typedef struct
 {

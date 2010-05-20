@@ -1,7 +1,7 @@
 #ifndef __STDLIB__
 #define __STDLIB__
 
-#include "types.h"
+#include "other/types.h"
 
 typedef unsigned int size_t;
 

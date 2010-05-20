@@ -2,7 +2,7 @@
 #ifndef MIPS4KC_H
 #define MIPS4KC_H
 
-#include "types.h"
+#include "other/types.h"
 
 /* status register */
 typedef union {

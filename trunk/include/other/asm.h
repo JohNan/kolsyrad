@@ -2,8 +2,8 @@
 #ifndef ASM_H
 #define ASM_H
 
-#include "types.h"
-#include "registers.h"
+#include "other/types.h"
+#include "other/registers.h"
 
 /* Timer 67MHz (?) */
 static const int timer_usec = 67;
