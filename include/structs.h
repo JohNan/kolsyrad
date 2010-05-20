@@ -1,6 +1,12 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+#include "other/types.h"
+#include "structs/registers.h"
+
+#define FIFO_SIZE 32
+#define PROC_COUNT 30
+
 /*
  * device
  */

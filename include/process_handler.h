@@ -1,6 +1,5 @@
 #ifndef PROCESS_HANDLER_H
 #define PROCESS_HANDLER_H
-#define PROC_COUNT 30
 
 #define RUNNING 1
 #define WAITING 2
