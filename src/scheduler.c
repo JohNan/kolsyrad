@@ -14,13 +14,13 @@ void SP_add_before( pcb * source, pcb * target ){
 // reschedules all processes
 void S_schedule() {
 	// Variable declaration
-	void * pNextInstr = 0;
+//	void * pNextInstr = 0;
 	pcb * runPcb = 0;
 	pcb * currentPcb = 0;
 
-	pNextInstr = readip();
+//	pNextInstr = readip();
 	currentPcb = pcbq.ready;
-	currentPcb->next_instr = pNextInstr;
+//	currentPcb->next_instr = pNextInstr;
 
 	if( currentPcb->next->priority < currentPcb->priority ){
 		pcbq.ready = pcbq.first_ready;
