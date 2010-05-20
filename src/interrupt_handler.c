@@ -26,6 +26,8 @@ void init_exc() {
 	or.field.cu0  = 1;   // Coprocessor 0 usable
 
 	kset_sr(and.reg, or.reg);
+
+	putStrI("Exception init done");
 }
 
 /* kexception:
@@ -50,7 +52,7 @@ void kexception() {
 	 // device_timer();
 
 	  /* lets schedule! */
-	  S_schedule();
+	 // S_schedule();
   }
 
   /* Hardware interrupt (tty) */

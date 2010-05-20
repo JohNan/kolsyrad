@@ -1,6 +1,7 @@
 #include "scheduler.h"
 #include "process_handler.h"
 
+
 void SP_add_before( pcb * source, pcb * target ){
 	source->next = target;
 	source->prev = target->prev;
@@ -21,12 +22,6 @@ void S_schedule() {
 	currentPcb = pcbq.ready;
 	currentPcb->next_instr = pNextInstr;
 
-	//=======================================================
-
-	// Här ska alla register sparas ner
-
-	//=======================================================
-
 	if( currentPcb->next->priority < currentPcb->priority ){
 		pcbq.ready = pcbq.first_ready;
 	} else {
@@ -35,14 +30,15 @@ void S_schedule() {
 
 	runPcb = pcbq.ready;
 
-	//=======================================================
-
-	// Här ska alla register laddas in med data och shit
-
-	//=======================================================
-
+	/*
+	 * Load the new process register
+	 */
 	kset_registers(&runPcb->registers);
 
+	/*
+	 * Next instruction will automagically be set when loading registers.
+	 * EPC cointains the adress where the process last got interrupted.
+	 */
 	//jumpip( runPcb->next_instr );
 }
 void S_add_new_pcb( pcb * toAdd ){
@@ -104,9 +100,16 @@ void S_remove_active(){
 	}
 	SP_delete_pcb( toDelete );
 
-	// ladda register
+	/*
+	 * Load the new process register
+	 */
+	kset_registers(&toRun->registers);
 
-	jumpip( toRun->next_instr );
+	/*
+	 * Next instruction will automagically be set when loading registers.
+	 * EPC cointains the adress where the process last got interrupted.
+	 */
+	// jumpip( toRun->next_instr );
 }
 void S_remove_inactive( pcb * toDelete ){
 	pcb * first = pcbq.first_ready;
