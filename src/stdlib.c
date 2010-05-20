@@ -1,4 +1,4 @@
-#include "stdlib.h"
+#include "other/stdlib.h"
 
 char *itoa(int n, char *s, int b) {
         static char digits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
