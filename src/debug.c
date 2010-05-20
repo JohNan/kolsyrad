@@ -1,4 +1,4 @@
-#include "debug.h"
+#include "other/debug.h"
 
 #ifndef NDEBUG
 void kdebug_putc(char c)
