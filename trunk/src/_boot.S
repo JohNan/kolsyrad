@@ -10,7 +10,7 @@
 # Data segment
 # -------------------------------------------------------------------------
 
-#define	KERNEL_BOOT_STACK_SIZE		0x4000
+#define	KERNEL_BOOT_STACK_SIZE		0x50000
 
 		.data
 
@@ -44,7 +44,7 @@ kernel_boot_stack_high_limit:
 	.globl  kget_registers
 	.globl  kexception
 	.globl	kdebug_magic_break
-	.globl 	syscall_putStrI
+	.globl 	syscall_putStr
 	.globl 	ksyscall_handler
 
 # -------------------------------------------------------------------------
@@ -241,8 +241,8 @@ exception_handler:
 	#   A user mode interface to the kernel mode function
 	#   'kmy_system_call'.
 	#
-syscall_putStrI:
-	la v0,kputStrI	# Load adress of syscall implementation in v0.
+syscall_putStr:
+	la v0,bfifo_putStr	# Load adress of syscall implementation in v0.
 	syscall			# Enter kernel mode by 'syscall' exception.
 	jr ra			# Back in user mode, return to caller
 
@@ -262,6 +262,20 @@ ksyscall_handler:
 	lw	v0, REG_V0(v0)	# Load saved v0 (implementation) into v0.
 
 	jr	v0		# Jump to system call implementation.
+
+copyloop:
+	lw v0,(t0)		#copy one word at a time
+	sw v0, (t1)
+	addu t0, 4
+	addu t1, 4
+	subu t2, 4
+	bgez t2, copyloop
+
+	la gp, 0x80000000
+
+	jr	ra
+
+
 #------------ Borrowed from example files. ------------------END
 
 		
@@ -277,15 +291,7 @@ _start:
 	la t1, 0xa0000180
 	subu t2, t2, t0	#calculate length of handler
 
-copyloop:
-	lw v0,(t0)		#copy one word at a time
-	sw v0, (t1)
-	addu t0, 4
-	addu t1, 4
-	subu t2, 4
-	bgez t2, copyloop
-
-	la gp, 0x80000000
 	la	sp, kernel_boot_stack_high_limit
+
 	j  init
 

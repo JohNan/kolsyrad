@@ -38,9 +38,9 @@ typedef struct {
      uint8_t out2   : 1;  /* bit 3: Set to one to enable interrupts	*/
      uint8_t loop   : 1;  /* bit 4:	*/
    } mcr;
-  
+
   /*  0x05: Line Status Register */
-  
+
   struct {
     uint8_t dr   : 1;  /* bit 0: Data Ready                   */
     uint8_t oe   : 1;  /* bit 1: Overrun Error                */
@@ -50,7 +50,7 @@ typedef struct {
     uint8_t thre : 1;  /* bit 5: Transmitter Holding Register */
     uint8_t temt : 1;  /* bit 6: Transmitter Empty            */
   } lsr;
-  
+
 } tty_t;
 
 #endif
