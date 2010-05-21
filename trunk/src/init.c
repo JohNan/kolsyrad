@@ -38,7 +38,7 @@ void init() {
 
 	// now we just wait for an exception to occur and start scheduling
 
-	kputStrI("Init done.");
+	DputStr("Init done.");
 	//putStrP("Init done.");
 
   while (1) {};
