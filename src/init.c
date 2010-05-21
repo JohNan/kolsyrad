@@ -3,7 +3,7 @@
 extern Device d_tty;
 
 void init() {
-	pcb *ini;
+	pcb *ini, *ini2;
 
 
 	//init devices.
@@ -27,6 +27,13 @@ void init() {
 	ini->registers.epc_reg = pibs[0].start_ptr;
 	ini->registers.ra_reg = (int)&exit;
 	S_add_new_pcb(ini);
+
+	ini2 = pcbs;
+	ini2->progid = pibs[1].progid;
+	ini2->state = PS_READY;
+	ini2->registers.epc_reg = pibs[1].start_ptr;
+	ini2->registers.ra_reg = (int)&exit;
+	S_add_new_pcb(ini2);
 
 
 	// now we just wait for an exception to occur and start scheduling

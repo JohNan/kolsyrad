@@ -5,7 +5,7 @@ free_pcb free_pcb_q;
 
 pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
-  {0, "hello", (int)&hello},
+  {0, "hello", (int)&hello}, {1, "goodbye", (int)&goodbye},
 };
 uint8_t pstack[MAX_PROCESS][STACK_SIZE];
 

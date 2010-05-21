@@ -4,4 +4,5 @@
 #include "device_handler.h"
 
 void hello();
+void goodbye();
 #endif
