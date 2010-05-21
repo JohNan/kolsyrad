@@ -21,14 +21,14 @@ void init() {
 */
 	init_poc();
 
-	ini = pcbs;
+	ini = pcbs[0];
 	ini->progid = pibs[0].progid;
 	ini->state = PS_READY;
 	ini->registers.epc_reg = pibs[0].start_ptr;
 	ini->registers.ra_reg = (int)&exit;
 	S_add_new_pcb(ini);
 
-	ini2 = pcbs;
+	ini2 = pcbs[1];
 	ini2->progid = pibs[1].progid;
 	ini2->state = PS_READY;
 	ini2->registers.epc_reg = pibs[1].start_ptr;

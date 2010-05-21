@@ -50,6 +50,9 @@ void set_priority(pcb *,int);
 // Returns a list of processes in any queue. Argument will decide what queues to return.
 pcb *list_queue(int);
 
+// Make a process
+pcb * make_process( int pibsNr, int prio );
+
 #define PL_READY 1
 #define PL_SLEEP 2
 

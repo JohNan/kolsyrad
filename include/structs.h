@@ -34,7 +34,6 @@ typedef struct pcb{
 	registers_t registers;
 	struct pcb *next;
 	struct pcb *prev;
-	void * next_instr;
 }pcb;
 
 typedef struct pib{  // Program information block
