@@ -58,7 +58,7 @@ void kexception() {
 	  kload_timer(10 * timer_msec);
 
 	  /* Icrease the number on the Malta display. */
-	  kputWord(++i);
+	  DputMalta(++i);
 	  // device_timer();
 
 	  /* lets schedule! */

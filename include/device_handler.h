@@ -15,30 +15,27 @@
 static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 
-void init_devices();
-void putStrP(char* text);
-
-void putChP(char c);
-void putChI(char c);
-void putWord(uint32_t word);
+void init_devices();;
 int IO_device(Device, short);
 void tty_interrupt();
 
-void bfifo_put(bounded_fifo* bfifo, uint8_t ch);
+void putCh(char c);
+void putStr(char* text);
+void putMalta(uint32_t word);
+
+void bfifo_put(bounded_fifo* bfifo, char ch);
+void bfifo_putStr(bounded_fifo* bfifo, char* ch);
 uint8_t bfifo_get(bounded_fifo* bfifo);
+
 void bfifo_flush(bounded_fifo* bfifo);
 
 /*
  * Debug print functions
+ * Polled
  */
+void DputCh(char c);
+void DputStr(char* text);
+void DputMalta(uint32_t word);
 
-void putStrI(char* text);
-void kputStrI(char* text);
-
-void bfifo_putStr(bounded_fifo* bfifo, char* ch);
-
-void DputChI(char c);
-void Dbfifo_put(bounded_fifo* bfifo, uint8_t ch);
-uint8_t Dbfifo_get(bounded_fifo* bfifo);
 
 #endif

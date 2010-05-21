@@ -44,8 +44,9 @@ kernel_boot_stack_high_limit:
 	.globl  kget_registers
 	.globl  kexception
 	.globl	kdebug_magic_break
-	.globl 	syscall_putWord
-	.globl	syscall_putStrI
+	.globl 	syscall_putMalta
+	.globl	syscall_putStr
+	.globl	syscall_putC
 	.globl 	ksyscall_handler
 
 # -------------------------------------------------------------------------
@@ -242,13 +243,19 @@ exception_handler:
 	#   A user mode interface to the kernel mode function
 	#   'kmy_system_call'.
 	#
-syscall_putWord:
-	la v0,kputWord	# Load adress of syscall implementation in v0.
+syscall_putMalta:
+	la v0,DputMalta	# Load adress of syscall implementation in v0.
 	syscall			# Enter kernel mode by 'syscall' exception.
 	jr ra			# Back in user mode, return to caller
-syscall_putStrI:
-	la v0,bfifo_putStr	# Load adress of syscall implementation in v0.
-	syscall			# Enter kernel mode by 'syscall' exception.
+
+syscall_putStr:
+	la v0,bfifo_putStr
+	syscall
+	jr ra
+
+syscall_putC:
+	la v0,bfifo_put
+	syscall
 	jr ra
 
 	# syscall_handler:

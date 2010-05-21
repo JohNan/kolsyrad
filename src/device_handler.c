@@ -25,7 +25,31 @@ int IO_device(Device d, short pid){
 	}
 }
 
-void kputWord(uint32_t word){
+/*
+ * Interrupt output to tty
+ * Using syscall
+ */
+
+void putMalta(uint32_t word){
+	syscall_putMalta(word);
+}
+
+void putCh(char c) {
+	syscall_putC(&bfifoOut,c);
+	if (c == '\n') {
+		syscall_putC(&bfifoOut, '\r');
+	}
+}
+
+void putStr(char* text) {
+	syscall_putStr(&bfifoOut, text);
+}
+
+/*
+ * Debug prints.
+ * Polled
+ */
+void DputMalta(uint32_t word){
   int i;
   malta->ledbar.reg = 0xFF;
   for (i = 7; i >= 0; --i) {
@@ -34,51 +58,23 @@ void kputWord(uint32_t word){
   }
 }
 
-void putWord(uint32_t word){
-	syscall_putWord(word);
-}
-
 /* Polled output to tty */
-void putChP(char c) {
-  // Poll until ready to transmit.
-  while ( !tty-> lsr.thre ) {}
-  // Write character to Transmitter Holding Register
-  tty->thr = c;
-}
-
-/* Interrupt output to tty
- * TODO: Add syscall functionality
- */
-void putChI(char c) {
-	bfifo_put(&bfifoOut,c);
-	if (c == '\n') {
-		bfifo_put(&bfifoOut, '\r');
-	}
+void DputCh(char c) {
+	while ( !tty-> lsr.thre ) {}
+	tty->thr = c;
 }
 
 /* Outputs a string on tty, polled */
-void putStrP(char* text) {
-  while (text[0] != '\0') {
-   putChP(text[0]);
-    ++text;
+void DputStr(char* text) {
+	while (text[0] != '\0') {
+		DputCh(text[0]);
+		++text;
   }
 }
 
-/* Outputs a string on tty, interrupt */
-void kputStrI(char* text) {
-  while (text[0] != '\0') {
-	  bfifo_put(&bfifoOut, text[0]);
-    ++text;
-  }
-  putChI('\n');
-}
-
-void putStrI(char* text) {
-	syscall_putStrI(&bfifoOut, text);
-}
 
 /* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
+void bfifo_put(bounded_fifo* bfifo, char ch) {
   /* Make sure the 'bfifo' pointer is not 0. */
   kdebug_assert(bfifo != 0);
 
@@ -96,8 +92,20 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
 
 /* bfifo_put: Inserts a character at the end of the queue. */
 void bfifo_putStr(bounded_fifo* bfifo, char* ch) {
+	/* Make sure the 'bfifo' pointer is not 0. */
+	  kdebug_assert(bfifo != 0);
+
 	while (ch[0] != '\0') {
-		bfifo_put(bfifo, ch[0]);
+		 if (bfifo->length < FIFO_SIZE) {
+		    bfifo->buf[(bfifo->length)++] = ch[0];
+		  }
+		  if (tty->lsr.thre) {
+		  		/* Transmitter idle: transmit buffered character */
+		  		tty->thr = bfifo_get(bfifo);
+
+		  		/* Determine if we should be notified when transmitter becomes idle */
+		  		tty->ier.etbei = (bfifo->length > 0);
+		  }
 	}
 }
 
@@ -225,5 +233,5 @@ void init_devices(){
 
 	kset_sr(and.reg, or.reg);
 
-	kputStrI("Device init done");
+	DputStr("Device init done");
 }
