@@ -5,6 +5,6 @@
 
 void ksyscall_handler(registers_t* reg);
 void syscall_putWord(uint32_t word);
-void syscall_putStrI(char* text);
+void syscall_putStrI(bounded_fifo* bfifo, uint32_t ch);
 
 #endif

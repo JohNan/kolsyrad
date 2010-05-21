@@ -6,6 +6,13 @@ void init() {
 	pcb *ini;
 	init_poc();
 
+	//init devices.
+	init_devices();
+
+	//init exceptions
+	init_exc();
+
+
 /*	char tmp[8];
 	tmp[8] = '\0';
 	//itoa(pibs[0].start_ptr,tmp,10);
@@ -19,16 +26,11 @@ void init() {
 	ini->registers.ra_reg = pibs[0].start_ptr; //(int)&exit;
 	S_add_new_pcb(ini);
 
-	//init devices.
-	init_devices();
-
-	//init exceptions
-	init_exc();
-
 
 	// now we just wait for an exception to occur and start scheduling
 
-	//putStrI("Init done.");
+	kputStrI("Init done.");
+	//putStrP("Init done.");
 
   while (1) {};
 }

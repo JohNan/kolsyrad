@@ -247,7 +247,7 @@ syscall_putWord:
 	syscall			# Enter kernel mode by 'syscall' exception.
 	jr ra			# Back in user mode, return to caller
 syscall_putStrI:
-	la v0,kputStrI	# Load adress of syscall implementation in v0.
+	la v0,bfifo_putStr	# Load adress of syscall implementation in v0.
 	syscall			# Enter kernel mode by 'syscall' exception.
 	jr ra
 
