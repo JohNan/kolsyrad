@@ -43,11 +43,13 @@ void S_schedule() {
 		 */
 		kset_registers(&(runPcb->registers));
 
-		//DputStrI("Scheduler: Registers set.");
+
 
 	} else {
 		//DputStrI("Scheduler: ERROR");
 	}
+
+	putStrP("Scheduler: Done.");
 	/*
 	 * Next instruction will automagically be set when loading registers.
 	 * EPC cointains the adress where the process last got interrupted.

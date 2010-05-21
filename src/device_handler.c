@@ -74,7 +74,7 @@ void kputStrI(char* text) {
 }
 
 void putStrI(char* text) {
-	syscall_putStrI(text);
+	syscall_putStrI(&bfifoOut, text);
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
