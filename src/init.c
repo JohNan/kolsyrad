@@ -5,12 +5,8 @@ extern Device d_tty;
 void init() {
 	pcb *ini, *ini2;
 
-
 	//init devices.
 	init_devices();
-
-	//init exceptions
-	init_exc();
 
 
 /*	char tmp[8];
@@ -21,25 +17,19 @@ void init() {
 */
 	init_poc();
 
-	ini = pcbs[0];
-	ini->progid = pibs[0].progid;
-	ini->state = PS_READY;
-	ini->registers.epc_reg = pibs[0].start_ptr;
-	ini->registers.ra_reg = (int)&exit;
-	S_add_new_pcb(ini);
+	ini = make_process(1,25);
+	DputCh((char)ini->pid);
 
-	ini2 = pcbs[1];
-	ini2->progid = pibs[1].progid;
-	ini2->state = PS_READY;
-	ini2->registers.epc_reg = pibs[1].start_ptr;
-	ini2->registers.ra_reg = (int)&exit;
-	S_add_new_pcb(ini2);
-
+	ini2 = make_process(0,25);
+	DputCh((char)ini->pid);
 
 	// now we just wait for an exception to occur and start scheduling
 
 	DputStr("Init done.");
 	//putStrP("Init done.");
+
+	//init exceptions
+	init_exc();
 
   while (1) {};
 }

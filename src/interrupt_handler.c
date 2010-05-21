@@ -55,20 +55,21 @@ void kexception() {
   	  tty_interrupt();
   } else if(cause.field.exc == 0){ /* Timer interrupt */
 	  /* Reload timer for another 100 ms (simulated time) */
-	  kload_timer(10 * timer_msec);
+	  kload_timer(1 * timer_msec);
 
 	  /* Icrease the number on the Malta display. */
-	  DputMalta(++i);
+	  // DputMalta(++i);
 	  // device_timer();
 
 	  /* lets schedule! */
 	  S_schedule();
+
   } else if(cause.field.exc == 8) { /* Syscall exception */
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();
 
 	  /* Return from exception to instruction following syscall. */
-	  	  reg->epc_reg += 4;
+	  reg->epc_reg += 4;
 
 	  /* Handle the system call (see syscall.S). */
 	  ksyscall_handler(reg);
