@@ -10,8 +10,8 @@
 bounded_fifo bfifoOut;
 bounded_fifo bfifoDebug;
 
-Device d_tty = { .id = 1, .owner = -1, .buffer_address = &bfifoOut };
-Device d_malta = { .id = 2, .owner = -1, .buffer_address = NULL };
+Device d_tty = { 1, -1, &bfifoOut };
+Device d_malta = { 2, -1,NULL };
 
 
 // Assignes a name to a connected devices memory allocation.
@@ -70,6 +70,7 @@ void DputStr(char* text) {
 		DputCh(text[0]);
 		++text;
   }
+	DputCh('\n');
 }
 
 

@@ -116,7 +116,7 @@ void p_free_pcb(pcb *p) {
 
 //terminates process either normaly or abnormaly
 // currently, exit status is ignored
-void exit(int i) {
+void exit() {
   pcb *me = pcbq.ready;
   me->state = PS_DEAD;
 
@@ -137,6 +137,10 @@ void exit(int i) {
   pcbq.ready = me->next;
   me->prev = me->next = NULL;
   p_free_pcb(me);
+
+  DputStr("Process ");
+  DputStr(me->pid);
+  DputStr("died.");
 }
 
 // unblocks a process
@@ -176,13 +180,12 @@ pcb * make_process( int pibsNr, int prio ){
 	pcb * free = free_pcb_q.first;
 	free_pcb_q.first->prev->next = free_pcb_q.first->next;
 	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
-	free_pcb_q.first =
 
 	free->progid = pibs[pibsNr].progid;
 	free->state = PS_READY;
 	free->registers.epc_reg = pibs[pibsNr].start_ptr;
 	//TODO: ska ändras så att exit körs via syscall
-	free->registers.ra_reg = (int)&exit;
+	free->registers.ra_reg = (int)&syscall_exit;
 	free->priority = prio;
 
 	S_add_new_pcb( free );

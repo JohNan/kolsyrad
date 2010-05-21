@@ -8,6 +8,7 @@
 
 #include "structs/registers.h"
 
+#include "scheduler.h"
 #include "structs.h"
 #include "user_prog.h"
 
@@ -39,7 +40,7 @@ int get_pcb(void);
 void p_free_pcb(pcb *);
 
 //terminates process either normaly or abnormaly
-void exit(int);
+void exit();
 
 // unblocks a process
 void unblock(pcb *);

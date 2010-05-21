@@ -1,9 +1,19 @@
 #include "user_prog.h"
 
 void hello(){
-	putStr("Hello world.");
+	static int i = 0;
+	DputStr("Hello world.");
+	while(i < 10000){
+		putMalta(i++);
+	}
+	DputStr("H: Counting done.");
 }
 
 void goodbye(){
-	putStr("Goodbye world.");
+	static int i = 0;
+	DputStr("Goodbye world.");
+	while(i < 10000){
+		putMalta(i++);
+	}
+	DputStr("G: Counting done.");
 }

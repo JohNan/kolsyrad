@@ -37,16 +37,18 @@ void S_schedule() {
 
 		runPcb = pcbq.ready;
 
+		DputCh('0'+(char)(runPcb->pid));
 
 		/*
 		 * Load the new process register
 		 */
 		kset_registers(&(runPcb->registers));
 
+		DputStr("Scheduler: Ready");
 
 
 	} else {
-		//DputStrI("Scheduler: ERROR");
+		//DputStr("Scheduler: ERROR");
 	}
 
 	/*
@@ -60,6 +62,9 @@ void S_add_new_pcb( pcb * toAdd ){
 		pcb * currentInLoop = pcbq.first_ready;
 
 		if( toAdd->priority > currentInLoop->priority ){
+
+
+
 			SP_add_before( toAdd, currentInLoop );
 		} else {
 			currentInLoop = currentInLoop->next;
@@ -79,7 +84,7 @@ void S_add_new_pcb( pcb * toAdd ){
 			}
 		}
 	} else {
-		pcbq.first_ready = pcbq.ready = toAdd;
+		pcbq.ready = pcbq.first_ready = toAdd;
 		toAdd->next = toAdd;
 		toAdd->prev = toAdd;
 	}
