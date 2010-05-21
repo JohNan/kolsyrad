@@ -35,7 +35,7 @@ void bfifo_flush(bounded_fifo* bfifo);
 void putStrI(char* text);
 void kputStrI(char* text);
 
-void bfifo_putStr(bounded_fifo* bfifo, uint32_t ch);
+void bfifo_putStr(bounded_fifo* bfifo, uint8_t ch);
 
 void DputChI(char c);
 void Dbfifo_put(bounded_fifo* bfifo, uint8_t ch);

@@ -268,18 +268,6 @@ ksyscall_handler:
 
 	jr	v0		# Jump to system call implementation.
 
-copyloop:
-	lw v0,(t0)		#copy one word at a time
-	sw v0, (t1)
-	addu t0, 4
-	addu t1, 4
-	subu t2, 4
-	bgez t2, copyloop
-
-	la gp, 0x80000000
-
-	jr	ra
-
 
 #------------ Borrowed from example files. ------------------END
 
@@ -296,6 +284,15 @@ _start:
 	la t1, 0xa0000180
 	subu t2, t2, t0	#calculate length of handler
 
+copyloop:
+	lw v0,(t0)		#copy one word at a time
+	sw v0, (t1)
+	addu t0, 4
+	addu t1, 4
+	subu t2, 4
+	bgez t2, copyloop
+
+	la gp, 0x80000000
 	la	sp, kernel_boot_stack_high_limit
 
 	j  init

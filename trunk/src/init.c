@@ -4,7 +4,7 @@ extern Device d_tty;
 
 void init() {
 	pcb *ini;
-	init_poc();
+
 
 	//init devices.
 	init_devices();
@@ -19,11 +19,13 @@ void init() {
 	itoa(0x008c2001,tmp,10);
 	putStrI(tmp);
 */
+	init_poc();
+
 	ini = pcbs;
 	ini->progid = pibs[0].progid;
 	ini->state = PS_READY;
 	ini->registers.epc_reg = pibs[0].start_ptr;
-	ini->registers.ra_reg = pibs[0].start_ptr; //(int)&exit;
+	ini->registers.ra_reg = (int)&exit;
 	S_add_new_pcb(ini);
 
 

@@ -67,11 +67,12 @@ void kexception() {
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();
 
+	  /* Return from exception to instruction following syscall. */
+	  	  reg->epc_reg += 4;
+
 	  /* Handle the system call (see syscall.S). */
 	  ksyscall_handler(reg);
 
-	  /* Return from exception to instruction following syscall. */
-	  reg->epc_reg += 4;
 
 	  /* Acknowledge syscall exception. */
 	  kset_cause(~0x60, 0);

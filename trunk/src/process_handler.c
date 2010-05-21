@@ -55,7 +55,7 @@ void init_poc() {
     /* next_instr does not need init */
   }
 
-  //putStrP("Process init done");
+  kputStrI("Process init done");
 }
 
 // get PID of current running process
