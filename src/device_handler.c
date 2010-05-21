@@ -95,7 +95,7 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_putStr(bounded_fifo* bfifo, uint32_t ch) {
+void bfifo_putStr(bounded_fifo* bfifo, uint8_t ch) {
 	char *c = (char*)ch;
 	while (c[0] != '\0') {
 		bfifo_put(bfifo, c[0]);
@@ -226,5 +226,5 @@ void init_devices(){
 
 	kset_sr(and.reg, or.reg);
 
-	//putStrP("Device init done");
+	kputStrI("Device init done");
 }
