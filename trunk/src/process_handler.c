@@ -55,7 +55,7 @@ void init_poc() {
     /* next_instr does not need init */
   }
 
-  kputStrI("Process init done");
+  DputStr("Process init done");
 }
 
 // get PID of current running process
@@ -172,3 +172,20 @@ pcb *list_queue(int what) {
   return NULL;
 }
 
+pcb * make_process( int pibsNr, int prio ){
+	pcb * free = free_pcb_q.first;
+	free_pcb_q.first->prev->next = free_pcb_q.first->next;
+	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
+	free_pcb_q.first =
+
+	free->progid = pibs[pibsNr].progid;
+	free->state = PS_READY;
+	free->registers.epc_reg = pibs[pibsNr].start_ptr;
+	//TODO: ska ändras så att exit körs via syscall
+	free->registers.ra_reg = (int)&exit;
+	free->priority = prio;
+
+	S_add_new_pcb( free );
+
+	return free;
+}
