@@ -3,6 +3,7 @@
 
 #include "other/asm.h"
 #include "other/types.h"
+#include "other/stdlib.h"
 
 #include "structs/registers.h"
 

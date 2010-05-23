@@ -139,7 +139,7 @@ void exit() {
   p_free_pcb(me);
 
   DputStr("Process ");
-  DputStr(me->pid);
+
   DputStr("died.");
 }
 
@@ -176,19 +176,37 @@ pcb *list_queue(int what) {
   return NULL;
 }
 
-pcb * make_process( int pibsNr, int prio ){
+int make_process( int pibsNr, int prio ){
+	int i = get_pcb();
+	pcb *newPcb = &pcbs[i];
+
+	free_pcb_q.first->prev->next = free_pcb_q.first->next;
+	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
+
+	newPcb->progid = pibs[pibsNr].progid;
+	newPcb->state = PS_READY;
+	newPcb->registers.epc_reg = pibs[pibsNr].start_ptr;
+	newPcb->registers.ra_reg = (int)&syscall_exit;
+	newPcb->priority = prio;
+	S_add_new_pcb( newPcb );
+	return newPcb->pid;
+
+
+
+/*
 	pcb * free = free_pcb_q.first;
 	free_pcb_q.first->prev->next = free_pcb_q.first->next;
 	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
 
+
 	free->progid = pibs[pibsNr].progid;
 	free->state = PS_READY;
 	free->registers.epc_reg = pibs[pibsNr].start_ptr;
-	//TODO: ska ändras så att exit körs via syscall
 	free->registers.ra_reg = (int)&syscall_exit;
 	free->priority = prio;
 
 	S_add_new_pcb( free );
 
 	return free;
+*/
 }

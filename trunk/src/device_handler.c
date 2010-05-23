@@ -61,7 +61,11 @@ void DputMalta(uint32_t word){
 /* Polled output to tty */
 void DputCh(char c) {
 	while ( !tty-> lsr.thre ) {}
-	tty->thr = c;
+		tty->thr = c;
+	if(c == '\n') {
+		while ( !tty-> lsr.thre ) {}
+				tty->thr = '\r';
+	}
 }
 
 /* Outputs a string on tty, polled */
@@ -69,7 +73,7 @@ void DputStr(char* text) {
 	while (text[0] != '\0') {
 		DputCh(text[0]);
 		++text;
-  }
+	}
 	DputCh('\n');
 }
 
@@ -107,6 +111,19 @@ void bfifo_putStr(bounded_fifo* bfifo, char* ch) {
 		  		/* Determine if we should be notified when transmitter becomes idle */
 		  		tty->ier.etbei = (bfifo->length > 0);
 		  }
+		  if (ch[0] == '\n') {
+			  if (bfifo->length < FIFO_SIZE) {
+				bfifo->buf[(bfifo->length)++] = '\r';
+			  }
+			  if (tty->lsr.thre) {
+					/* Transmitter idle: transmit buffered character */
+					tty->thr = bfifo_get(bfifo);
+
+					/* Determine if we should be notified when transmitter becomes idle */
+					tty->ier.etbei = (bfifo->length > 0);
+			  }
+		  }
+		  ++ch;
 	}
 }
 
