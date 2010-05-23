@@ -3,6 +3,8 @@
 extern pcb_queues pcbq;
 extern free_pcb free_pcb_q;
 
+pcb * currentPcb = NULL;
+
 void SP_add_before( pcb * source, pcb * target ){
 	source->next = target;
 	source->prev = target->prev;
@@ -18,44 +20,40 @@ void S_schedule() {
 //	putStrI("Scheduler: started.");
 
 	// Variable declaration
-	//	void * pNextInstr = 0;
 	pcb * runPcb = 0;
-	pcb * currentPcb = 0;
 
-//	putStrI("Scheduler: Declared variables done.");
-
-//	pNextInstr = readip();
-
-	if(pcbq.ready != NULL){
-		currentPcb = pcbq.ready;
-
-		if( currentPcb->next->priority < currentPcb->priority ){
-			pcbq.ready = pcbq.first_ready;
+	if(currentPcb != NULL){
+/*
+		if( currentPcb->priority > currentPcb->next->priority ){
+			runPcb = currentPcb;
 		} else {
-			pcbq.ready = currentPcb->next;
+			runPcb = currentPcb->next;
+			currentPcb = currentPcb->next;
 		}
+*
+		runPcb = pcbq.ready->next;
+*/
 
-		runPcb = pcbq.ready;
-
-		DputCh('0'+(char)(runPcb->pid));
-
+		runPcb = currentPcb->next;
+		currentPcb = runPcb;
+	/*	char tmp[8];
+		tmp[8] = '\0';
+		itoa(pcbq.ready->pid,tmp,10);
+		DputStr(tmp); */
 		/*
 		 * Load the new process register
 		 */
 		kset_registers(&(runPcb->registers));
 
-		DputStr("Scheduler: Ready");
+	//	DputStr("Scheduler: Ready");
 
 
 	} else {
-		//DputStr("Scheduler: ERROR");
+		DputStr("Scheduler: ERROR");
 	}
 
-	/*
-	 * Next instruction will automagically be set when loading registers.
-	 * EPC cointains the adress where the process last got interrupted.
-	 */
-	//jumpip( runPcb->next_instr );
+	kload_timer(10 * timer_msec);
+
 }
 void S_add_new_pcb( pcb * toAdd ){
 	if( pcbq.first_ready != NULL ) {
@@ -63,19 +61,30 @@ void S_add_new_pcb( pcb * toAdd ){
 
 		if( toAdd->priority > currentInLoop->priority ){
 
+			toAdd->next = currentInLoop;
+			toAdd->prev = currentInLoop->prev;
+			currentInLoop->prev = toAdd;
 
+			pcbq.first_ready = toAdd;
 
-			SP_add_before( toAdd, currentInLoop );
+			//SP_add_before( toAdd, currentInLoop );
 		} else {
 			currentInLoop = currentInLoop->next;
 
 			int i = 1;
 			while( i ){
-				if( currentInLoop == pcbq.first_ready ){
-					SP_add_before( toAdd, currentInLoop );
+				if( toAdd->priority > currentInLoop->priority ){
+
+					toAdd->prev = currentInLoop->prev;
+					toAdd->next = currentInLoop;
+					currentInLoop->prev->next = toAdd;
 					i = 0;
-				} else if( toAdd->priority > currentInLoop->priority ){
-					SP_add_before( toAdd, currentInLoop );
+				}else if( currentInLoop == pcbq.first_ready ){
+					//SP_add_before( toAdd, currentInLoop );
+					toAdd->next = currentInLoop;
+					toAdd->prev = currentInLoop->prev;
+					currentInLoop->prev->next = toAdd;
+					currentInLoop->prev = toAdd;
 					i = 0;
 				} else {
 					i++;
@@ -84,7 +93,8 @@ void S_add_new_pcb( pcb * toAdd ){
 			}
 		}
 	} else {
-		pcbq.ready = pcbq.first_ready = toAdd;
+		currentPcb = pcbq.ready = toAdd;
+		pcbq.first_ready = toAdd;
 		toAdd->next = toAdd;
 		toAdd->prev = toAdd;
 	}

@@ -3,26 +3,29 @@
 extern Device d_tty;
 
 void init() {
-	pcb *ini, *ini2;
-
+	int i;
 	//init devices.
 	init_devices();
 
 
-/*	char tmp[8];
+	char tmp[8];
 	tmp[8] = '\0';
-	//itoa(pibs[0].start_ptr,tmp,10);
-	itoa(0x008c2001,tmp,10);
-	putStrI(tmp);
-*/
+
 	init_poc();
 
-	ini = make_process(1,25);
-	DputCh((char)ini->pid);
+	i = make_process(1,25);
+	if(i != -1){
+		DputStr("First process created.");
+		itoa(i,tmp,10);
+		DputStr(tmp);
+	}
+	i = make_process(0,25);
+	if(i != -1){
+		DputStr("Second process created.");
+		itoa(i,tmp,10);
+		DputStr(tmp);
 
-	ini2 = make_process(0,25);
-	DputCh((char)ini->pid);
-
+	}
 	// now we just wait for an exception to occur and start scheduling
 
 	DputStr("Init done.");

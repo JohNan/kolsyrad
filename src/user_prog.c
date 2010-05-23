@@ -2,18 +2,24 @@
 
 void hello(){
 	static int i = 0;
-	DputStr("Hello world.");
-	while(i < 10000){
-		putMalta(i++);
+	putStr("Hello world.");
+	while(i < 2000){
+		//putMalta(i++);
+		if(i % 600 == 0) {
+			putStr("Hello world.\n");
+		}
 	}
-	DputStr("H: Counting done.");
+	putStr("H: Counting done.");
 }
 
 void goodbye(){
 	static int i = 0;
-	DputStr("Goodbye world.");
-	while(i < 10000){
-		putMalta(i++);
+	putStr("Goodbye world.");
+	while(i < 2000){
+		//putMalta(i++);
+		if(i % 600 == 0) {
+			putStr("Goodbye world.\n");
+		}
 	}
-	DputStr("G: Counting done.");
+	putStr("G: Counting done.");
 }

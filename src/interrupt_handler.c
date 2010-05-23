@@ -35,7 +35,7 @@ void init_exc() {
  *   have been saved.
  */
 void kexception() {
-  static int i = 0;
+  //static int i = 0;
   registers_t* reg;
   cause_reg_t cause;
   /* Make sure that we are here because of a timer interrupt. */
@@ -55,11 +55,10 @@ void kexception() {
   	  tty_interrupt();
   } else if(cause.field.exc == 0){ /* Timer interrupt */
 	  /* Reload timer for another 100 ms (simulated time) */
-	  kload_timer(1 * timer_msec);
+	//  kload_timer(1 * timer_msec);
 
 	  /* Icrease the number on the Malta display. */
 	  // DputMalta(++i);
-	  // device_timer();
 
 	  /* lets schedule! */
 	  S_schedule();
