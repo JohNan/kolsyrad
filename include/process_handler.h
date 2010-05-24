@@ -26,15 +26,13 @@
 // global variables, defined in process_handler.c
 extern pcb pcbs[];
 extern pib pibs[];
-extern pcb_queues pcbq;
-extern free_pcb free_pcb_q;
 
 void init_poc();
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
 void set_pcb_image(pib *);
 
 //creates an PCB for a new process returns -1 if fail else pidx
-int get_pcb(void);
+pcb *get_pcb(void);
 
 //marks the given PCB as free and adds it to the free list
 void p_free_pcb(pcb *);
