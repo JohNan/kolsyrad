@@ -5,4 +5,5 @@
 
 void hello();
 void goodbye();
+void smile();
 #endif

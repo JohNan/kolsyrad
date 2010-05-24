@@ -49,19 +49,21 @@ void kexception() {
   putWord(tmp);
   */
 
-//  kdebug_assert(cause.field.exc == 0);    /* External interrupt */
+  //kdebug_assert(cause.field.exc == 0);    /* External interrupt */
 
   if (cause.field.ip & 4) { /* Hardware interrupt (tty) */
   	  tty_interrupt();
   } else if(cause.field.exc == 0){ /* Timer interrupt */
 	  /* Reload timer for another 100 ms (simulated time) */
-	//  kload_timer(1 * timer_msec);
+
 
 	  /* Icrease the number on the Malta display. */
 	  // DputMalta(++i);
 
 	  /* lets schedule! */
 	  S_schedule();
+
+	  kload_timer(1 * timer_msec);
 
   } else if(cause.field.exc == 8) { /* Syscall exception */
 	  /* Get pointer to stored registers. */

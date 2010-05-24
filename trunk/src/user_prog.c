@@ -1,25 +1,38 @@
 #include "user_prog.h"
 
 void hello(){
-	static int i = 0;
-	putStr("Hello world.");
+	int i = 0;
+	DputStr("Hello world.");
 	while(i < 2000){
 		//putMalta(i++);
-		if(i % 600 == 0) {
-			putStr("Hello world.\n");
+		if(i % 1000 == 0) {
+			putStr("Goodbye world.\n");
 		}
+		i++;
 	}
-	putStr("H: Counting done.");
+	DputStr("H: Counting done.");
 }
 
 void goodbye(){
-	static int i = 0;
-	putStr("Goodbye world.");
-	while(i < 2000){
+	//int i = 0;
+	DputStr("Goodbye world.");
+/*	while(i < 2000){
 		//putMalta(i++);
-		if(i % 600 == 0) {
+		if(i % 1000 == 0) {
 			putStr("Goodbye world.\n");
 		}
-	}
-	putStr("G: Counting done.");
+	}*/
+	DputStr("G: Counting done.");
+}
+
+void smile(){
+	//int i = 0;
+	DputStr("Smile.");
+	/*while(i < 2000){
+		//putMalta(i++);
+		if(i % 1000 == 0) {
+			putStr("Smile.\n");
+		}
+	}*/
+	DputStr("S: Smile.");
 }

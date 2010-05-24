@@ -1,7 +1,5 @@
 #include "process_handler.h"
 
-free_pcb free_pcb_q;
-
 pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
   {0, "hello", (int)&hello},
@@ -119,30 +117,30 @@ void p_free_pcb(pcb *p) {
 //terminates process either normaly or abnormaly
 // currently, exit status is ignored
 void exit() {
-  pcb *me = pcbq.ready;
+	DputStr("------EXIT------");
+	syscall_exit();
+	/*  pcb *me = pcbq.ready;
   me->state = PS_DEAD;
-
+*/
   /* TODO: check if this PID has any devices, and free them if so */
-
+/*
   if(pcbq.first_ready == me)
     pcbq.first_ready = me -> next;
-
+*/
   /* unlink us from the ready queue */
-  if(me->prev != NULL)
+/*  if(me->prev != NULL)
     me->prev->next = me->next;
   if(me->next != NULL)
-    me->next->prev = me->prev;
+    me->next->prev = me->prev; */
 
   /* if we in the future wish to keep a terminated process as
      zombie until someone checks its exit state, the code below
      should be changed */
-  pcbq.ready = me->next;
+/*  pcbq.ready = me->next;
   me->prev = me->next = NULL;
   p_free_pcb(me);
-
-  DputStr("Process ");
-
-  DputStr("died.");
+*/
+	DputStr("------Died------");
   while(1){}
 }
 
@@ -185,7 +183,7 @@ int make_process( int pibsNr, int prio ){
 	newPcb->progid = pibs[pibsNr].progid;
 	newPcb->state = PS_READY;
 	newPcb->registers.epc_reg = pibs[pibsNr].start_ptr;
-	newPcb->registers.ra_reg = (int)&syscall_exit;
+	newPcb->registers.ra_reg = (int)&exit;
 	newPcb->priority = prio;
 	S_add_new_pcb( newPcb );
 //	S_schedule();
@@ -201,7 +199,7 @@ int make_process( int pibsNr, int prio ){
 	free->progid = pibs[pibsNr].progid;
 	free->state = PS_READY;
 	free->registers.epc_reg = pibs[pibsNr].start_ptr;
-	free->registers.ra_reg = (int)&syscall_exit;
+	free->registers.ra_reg = (int)&exit;
 	free->priority = prio;
 
 	S_add_new_pcb( free );

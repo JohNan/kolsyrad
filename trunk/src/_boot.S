@@ -245,7 +245,7 @@ exception_handler:
 	#   'kmy_system_call'.
 	#
 syscall_exit:
-	la v0,exit
+	la v0,S_remove_active
 	syscall
 	jr ra
 
