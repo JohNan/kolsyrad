@@ -17,11 +17,11 @@ void init() {
 	init_poc();
 	init_scheduler(&pcbq, &free_pcb_q);
 
-	i = make_process(1,25);
+	i = make_process(0,25);
 	if(i != -1){
 		DputStr("First process created.");
 	}
-/*	i = make_process(0,25);
+/*	i = make_process(1,25);
 	if(i != -1){
 		DputStr("Second process created.");
 	}
