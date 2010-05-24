@@ -80,33 +80,34 @@ void DputStr(char* text) {
 
 /* bfifo_put: Inserts a character at the end of the queue. */
 void bfifo_put(bounded_fifo* bfifo, char ch) {
-  /* Make sure the 'bfifo' pointer is not 0. */
-  kdebug_assert(bfifo != 0);
+	/* Make sure the 'bfifo' pointer is not 0. */
 
-  if (bfifo->length < FIFO_SIZE) {
-    bfifo->buf[(bfifo->length)++] = ch;
-  }
-  if (tty->lsr.thre) {
-  		/* Transmitter idle: transmit buffered character */
+	kdebug_assert(bfifo != 0);
 
+	bfifo->length = 0;
+
+	if (bfifo->length < FIFO_SIZE) {
+		bfifo->buf[(bfifo->length)++] = ch;
+	}
+	if (tty->lsr.thre) {
+		/* Transmitter idle: transmit buffered character */
 		tty->thr = bfifo_get(bfifo);
-
-  		/* Determine if we should be notified when transmitter becomes idle */
-  		tty->ier.etbei = (bfifo->length > 0);
-  	 }
+		/* Determine if we should be notified when transmitter becomes idle */
+		tty->ier.etbei = (bfifo->length > 0);
+	}
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
 void bfifo_putStr(bounded_fifo* bfifo, char* ch) {
 	/* Make sure the 'bfifo' pointer is not 0. */
 	  kdebug_assert(bfifo != 0);
-
-	while (ch[0] != '\0') {
-		bfifo_put(bfifo,ch[0]);
-		if(ch[0] == '\n') {
-			bfifo_put(bfifo,'\r');
+	//while (ch[0] != '\0') {
+	  while( ch[0] != '\0' ){
+		  bfifo_put( bfifo,ch[0] );
+		if( ch[0] == '\n' ) {
+			bfifo_put( bfifo,'\r' );
 		}
-		++ch;
+		ch++;
 	}
 }
 
@@ -114,13 +115,14 @@ void bfifo_putStr(bounded_fifo* bfifo, char* ch) {
 uint8_t bfifo_get(bounded_fifo* bfifo) {
   int i;
   uint8_t ch;
-
   /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
   kdebug_assert(bfifo != 0);
   kdebug_assert(bfifo->length > 0);
 
   bfifo->length--;
   ch = bfifo->buf[0];
+
+  // Here bfifo->length goes nuts
   for (i = 0; i < bfifo->length; i++) {
     bfifo->buf[i] = bfifo->buf[i+1];
   }

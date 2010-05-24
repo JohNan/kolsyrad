@@ -2,12 +2,7 @@
 
 void hello(){
 	int i = 0;
-	DputStr("Hello world.");
-	while(i < 3){
-			DputStr("Hello!");
-		i++;
-	}
-	DputStr("H: Counting done.");
+	putStr( "Det FUNKAR!!!" );
 }
 
 void goodbye(){
