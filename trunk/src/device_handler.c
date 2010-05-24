@@ -88,7 +88,8 @@ void bfifo_put(bounded_fifo* bfifo, char ch) {
   }
   if (tty->lsr.thre) {
   		/* Transmitter idle: transmit buffered character */
-  		tty->thr = bfifo_get(bfifo);
+
+		tty->thr = bfifo_get(bfifo);
 
   		/* Determine if we should be notified when transmitter becomes idle */
   		tty->ier.etbei = (bfifo->length > 0);
@@ -101,29 +102,11 @@ void bfifo_putStr(bounded_fifo* bfifo, char* ch) {
 	  kdebug_assert(bfifo != 0);
 
 	while (ch[0] != '\0') {
-		 if (bfifo->length < FIFO_SIZE) {
-		    bfifo->buf[(bfifo->length)++] = ch[0];
-		  }
-		  if (tty->lsr.thre) {
-		  		/* Transmitter idle: transmit buffered character */
-		  		tty->thr = bfifo_get(bfifo);
-
-		  		/* Determine if we should be notified when transmitter becomes idle */
-		  		tty->ier.etbei = (bfifo->length > 0);
-		  }
-		  if (ch[0] == '\n') {
-			  if (bfifo->length < FIFO_SIZE) {
-				bfifo->buf[(bfifo->length)++] = '\r';
-			  }
-			  if (tty->lsr.thre) {
-					/* Transmitter idle: transmit buffered character */
-					tty->thr = bfifo_get(bfifo);
-
-					/* Determine if we should be notified when transmitter becomes idle */
-					tty->ier.etbei = (bfifo->length > 0);
-			  }
-		  }
-		  ++ch;
+		bfifo_put(bfifo,ch[0]);
+		if(ch[0] == '\n') {
+			bfifo_put(bfifo,'\r');
+		}
+		++ch;
 	}
 }
 

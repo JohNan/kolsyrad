@@ -3,11 +3,8 @@
 void hello(){
 	int i = 0;
 	DputStr("Hello world.");
-	while(i < 2000){
-		//putMalta(i++);
-		if(i % 1000 == 0) {
-			putStr("Goodbye world.\n");
-		}
+	while(i < 3){
+			DputStr("Hello!");
 		i++;
 	}
 	DputStr("H: Counting done.");
