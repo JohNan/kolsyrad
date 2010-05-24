@@ -1,11 +1,12 @@
 #include "process_handler.h"
 
-pcb_queues pcbq;
 free_pcb free_pcb_q;
 
 pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
-  {0, "hello", (int)&hello}, {1, "goodbye", (int)&goodbye},
+  {0, "hello", (int)&hello},
+  {1, "goodbye", (int)&goodbye},
+  {2, "smile", (int)&smile},
 };
 uint8_t pstack[MAX_PROCESS][STACK_SIZE];
 
@@ -79,6 +80,7 @@ void set_exec_image(pib *newPIB) {
 }
 
 // creates a new process with the same PIB
+/*
 int fork() {
   int pid = get_pcb();
   if(pid > -1) {
@@ -86,19 +88,19 @@ int fork() {
   }
   return pid;
 }
-
+*/
 //creates an PCB for a new process returns -1 if fail else pidx
 // note that the returned PCB is completely unlinked
-int get_pcb(void) {
+pcb *get_pcb(void) {
   pcb *p;
 
-  if(free_pcb_q.first == NULL)
-    return -1;
+ /* if(free_pcb_q.first == NULL)
+    return -1; */
   p = free_pcb_q.first;
   p->state = PS_START;
   free_pcb_q.first = p -> next;
   p->prev = p->next = NULL;
-  return p->pid;
+  return p;
 }
 
 //marks the given PCB as free and adds it to the free list
@@ -141,6 +143,7 @@ void exit() {
   DputStr("Process ");
 
   DputStr("died.");
+  while(1){}
 }
 
 // unblocks a process
@@ -177,11 +180,7 @@ pcb *list_queue(int what) {
 }
 
 int make_process( int pibsNr, int prio ){
-	int i = get_pcb();
-	pcb *newPcb = &pcbs[i];
-
-	free_pcb_q.first->prev->next = free_pcb_q.first->next;
-	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
+	pcb *newPcb = get_pcb();
 
 	newPcb->progid = pibs[pibsNr].progid;
 	newPcb->state = PS_READY;
@@ -189,6 +188,7 @@ int make_process( int pibsNr, int prio ){
 	newPcb->registers.ra_reg = (int)&syscall_exit;
 	newPcb->priority = prio;
 	S_add_new_pcb( newPcb );
+//	S_schedule();
 	return newPcb->pid;
 
 
@@ -197,7 +197,6 @@ int make_process( int pibsNr, int prio ){
 	pcb * free = free_pcb_q.first;
 	free_pcb_q.first->prev->next = free_pcb_q.first->next;
 	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
-
 
 	free->progid = pibs[pibsNr].progid;
 	free->state = PS_READY;
