@@ -7,18 +7,15 @@
 
 #include "device_handler.h"
 
-bounded_fifo bfifoOut;
-bounded_fifo bfifoDebug;
-
 Device d_tty = { 1, -1, &bfifoOut };
-Device d_malta = { 2, -1,NULL };
+Device d_malta = { 2, -1, NULL };
 
 
 // Assignes a name to a connected devices memory allocation.
 
-int IO_device(Device d, short pid){
+int IO_device(Device d){
 	if(d.owner == -1 ) {
-		d.owner = pid;
+		d.owner = 1;
 		return 1;
 	} else {
 		return 0;
@@ -42,7 +39,19 @@ void putCh(char c) {
 }
 
 void putStr(char* text) {
-	syscall_putStr(&bfifoOut, text);
+	if(d_tty.owner == -1){
+		if(IO_device(d_tty)){
+			syscall_putStr(&bfifoOut, text);
+			d_tty.owner = -1;
+		}
+	} else {
+		while(d_tty.owner == -1){}
+		if(IO_device(d_tty)){
+			syscall_putStr(&bfifoOut, text);
+			d_tty.owner = -1;
+		}
+	}
+	DputStr("putStr - done");
 }
 
 /*
@@ -79,14 +88,15 @@ void DputStr(char* text) {
 
 
 /* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_put(bounded_fifo* bfifo, char ch) {
+void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
 	/* Make sure the 'bfifo' pointer is not 0. */
 
 	kdebug_assert(bfifo != 0);
 
-	bfifo->length = 0;
-
 	if (bfifo->length < FIFO_SIZE) {
+		bfifo->buf[(bfifo->length)++] = ch;
+	} else {
+		bfifo->length = 0;
 		bfifo->buf[(bfifo->length)++] = ch;
 	}
 	if (tty->lsr.thre) {
@@ -98,10 +108,8 @@ void bfifo_put(bounded_fifo* bfifo, char ch) {
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_putStr(bounded_fifo* bfifo, char* ch) {
-	/* Make sure the 'bfifo' pointer is not 0. */
-	  kdebug_assert(bfifo != 0);
-	//while (ch[0] != '\0') {
+void bfifo_putStr(bounded_fifo* bfifo, uint32_t c) {
+	char* ch = (char*)c;
 	  while( ch[0] != '\0' ){
 		  bfifo_put( bfifo,ch[0] );
 		if( ch[0] == '\n' ) {
@@ -109,12 +117,14 @@ void bfifo_putStr(bounded_fifo* bfifo, char* ch) {
 		}
 		ch++;
 	}
+	  bfifo->length = 0;
 }
 
 /* bfifo_get: Returns a character removed from the front of the queue. */
 uint8_t bfifo_get(bounded_fifo* bfifo) {
   int i;
   uint8_t ch;
+
   /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
   kdebug_assert(bfifo != 0);
   kdebug_assert(bfifo->length > 0);
@@ -153,59 +163,11 @@ void bfifo_flush(bounded_fifo* bfifo)
   }
 }
 
-
-/*
- * Looks for a command in buffer
- */
-void tty_command(bounded_fifo* bfifo){
-
-}
-
 // stops a process from running
 void block(void){
 
 }
-/*
-// starts a stopped process
-void unblock(void){
 
-}
-*/
-
-/*
- * tty interrupt code.
- */
-void tty_interrupt(){
-	uint8_t ch;
- /* UART interrupt */
-	  if (tty->lsr.dr) {
-		/* Data ready: add character to buffer */
-		ch = tty->thr; /* rbr and thr is the same. */
-		bfifo_put(&bfifoOut, ch);
-
-		/* Should be moved to shell program */
-		if (ch == '\r') {
-				bfifo_put(&bfifoOut, '\n');
-		}
-
-		if (ch == '\b') {
-				bfifo_put(&bfifoOut, ' ');
-				bfifo_put(&bfifoOut, '\b');
-		}
-
-
-	  }
-
-	  if (bfifoOut.length > 0 && tty->lsr.thre) {
-		/* Transmitter idle: transmit buffered character */
-		tty->thr = bfifo_get(&bfifoOut);
-
-		/* Determine if we should be notified when transmitter becomes idle */
-		tty->ier.etbei = (bfifoOut.length > 0);
-	  }
-	  /* Acknowledge UART interrupt. */
-	  kset_cause(~0x1000, 0);
-}
 
 void init_devices(){
 
