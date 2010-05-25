@@ -9,9 +9,16 @@ void S_schedule(){
 		DputStr("------SCHEMA-NULL------");
 		//Do nothing
 	} else {
+
+		DputStr("------SCHEMA-READY-PID------");
+		printPid( S_pcbQ->ready );
+
 		kset_registers( &( S_pcbQ->ready->registers ) );
 
 		S_pcbQ->ready = S_pcbQ->ready->next;
+
+		DputStr("------SCHEMA-READY-NEXT-PID------");
+		printPid( S_pcbQ->ready );
 
 	}
 }
@@ -36,12 +43,17 @@ void S_remove_active(){
 	pcb * current = NULL;
 	current = S_pcbQ->ready->prev;
 
-	DputCh( S_pcbQ->ready->pid );
-
 	char temp[10];
-	itoa( S_pcbQ->magic, temp, 10 );
-	temp[9] = '\0';
-	DputStr( temp );
+		itoa( S_pcbQ->magic, temp, 10 );
+		temp[9] = '\0';
+		DputStr( temp );
+
+	DputStr("------REMOVE-READY-PID------");
+	printPid( S_pcbQ->ready );
+
+	DputStr("------REMOVE-READY-PREV-PID------");
+	printPid( S_pcbQ->ready->prev );
+
 
 	if( S_pcbQ->ready == S_pcbQ->ready->prev ){
 		DputStr( "------REMOVE-Fisk------" );

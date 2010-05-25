@@ -19,7 +19,7 @@ void init() {
 	if(i != -1){
 		DputStr("First process created.");
 	}
-	/*i = make_process(1,25);
+	i = make_process(1,25);
 	if(i != -1){
 		DputStr("Second process created.");
 	}
@@ -27,22 +27,20 @@ void init() {
 		if(i != -1){
 		DputStr("Third process created.");
 
-	}*/
-/*
+	}
+
 	for(i=0;i<3;i++){
 		DputStr("---Process---");
 		DputStr("PID: ");
-		itoa(pcbs[i].pid,tmp,10);
-		DputStr(tmp);
+		printPid(&pcbs[i]);
 		DputStr("Next: ");
-		itoa(pcbs[i].next->pid,tmp2,10);
+		printPid(pcbs[i].next);
 		DputStr(tmp2);
 		DputStr("Prev: ");
-		itoa(pcbs[i].prev->pid,tmp,10);
+		printPid(pcbs[i].next);
 		DputStr(tmp);
 		DputStr("---end---");
 	}
-*/
 
 	// now we just wait for an exception to occur and start scheduling
 

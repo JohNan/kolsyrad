@@ -2,6 +2,7 @@
 #define API_H
 
 #include "device_handler.h"
+#include "process_handler.h"
 #include "other/stdlib.h"
 #include "other/types.h"
 #include "structs.h"

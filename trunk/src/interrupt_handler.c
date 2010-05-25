@@ -91,7 +91,7 @@ void kexception() {
 	  /* lets schedule! */
 	  S_schedule();
 
-	  kload_timer(1 * timer_msec);
+	  kload_timer(100 * timer_msec);
 
   } else if(cause.field.exc == 8) { /* Syscall exception */
 	  /* Get pointer to stored registers. */
