@@ -18,7 +18,7 @@ void printS( char * str ){
 void printNln( int num ){
 	char temp[13];
 	itoa( num, temp, 10 );
-	println( temp );
+	printSln( temp );
 }
 
 void printCln( char ch ){
@@ -27,6 +27,7 @@ void printCln( char ch ){
 }
 void printSln( char * str ){
 	int i;
+	char *temp = str;
 	for( i = 0; str[i] != '\0'; i++ ){
 
 	}
@@ -40,52 +41,52 @@ void printP(){
 	pcb * temp = list_queue( 1 );
 
 	if( temp != NULL ){
-		println( "Active processes" );
-		println( "----------------" );
-		print( temp->pid );
-		print( "\t" );
-		print( temp->progid );
-		print( "\t" );
-		print( temp->priority );
-		print( "\t" );
-		println( temp->state );
+		printSln( "Active processes" );
+		printSln( "----------------" );
+		printN( temp->pid );
+		printS( "\t" );
+		printN( temp->progid );
+		printS( "\t" );
+		printN( temp->priority );
+		printS( "\t" );
+		printNln( temp->state );
 
 		for( temp++; temp != list_queue( 1 ); temp++ ){
-			print( temp->pid );
-			print( "\t" );
-			print( temp->progid );
-			print( "\t" );
-			print( temp->priority );
-			print( "\t" );
-			println( temp->state );
+			printN( temp->pid );
+			printS( "\t" );
+			printN( temp->progid );
+			printS( "\t" );
+			printN( temp->priority );
+			printS( "\t" );
+			printCln( temp->state );
 		}
 
-		println( "-----------------------" );
-		println( "End of active processes\n" );
+		printSln( "-----------------------" );
+		printSln( "End of active processes\n" );
 	}
 	temp = list_queue( 2 );
 
 	if( temp != NULL ){
-		println( "Waiting processes" );
-		println( "-----------------" );
-		print( temp->pid );
-		print( "\t" );
-		print( temp->progid );
-		print( "\t" );
-		print( temp->priority );
-		print( "\t" );
-		println( temp->state );
+		printSln( "Waiting processes" );
+		printSln( "-----------------" );
+		printN( temp->pid );
+		printS( "\t" );
+		printN( temp->progid );
+		printS( "\t" );
+		printN( temp->priority );
+		printS( "\t" );
+		printNln( temp->state );
 
 		for( temp++; temp != list_queue( 1 ); temp++ ){
-			print( temp->pid );
-			print( "\t" );
-			print( temp->progid );
-			print( "\t" );
-			print( temp->priority );
-			print( "\t" );
-			println( temp->state );
+			printN( temp->pid );
+			printS( "\t" );
+			printN( temp->progid );
+			printS( "\t" );
+			printN( temp->priority );
+			printS( "\t" );
+			printNln( temp->state );
 		}
-		println( "------------------------" );
-		println( "End of waiting processes" );
+		printSln( "------------------------" );
+		printSln( "End of waiting processes" );
 	}
 }

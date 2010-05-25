@@ -34,6 +34,11 @@ void S_add_new_pcb( pcb * toAdd ){
 void S_remove_active(){
 	DputStr("------REMOVE------");
 	pcb * current = S_pcbQ->ready->prev;
+
+	char temp[13];
+	itoa( S_pcbQ->ready->prev->pid, temp, 10 );
+	DputStr( temp );
+
 	if( S_pcbQ->ready == S_pcbQ->ready->prev ){
 		S_pcbQ->ready->next = S_freeQ->first;
 		S_freeQ->first = S_pcbQ->ready;
@@ -41,6 +46,7 @@ void S_remove_active(){
 		S_pcbQ->ready = NULL;
 		S_pcbQ->first_ready = NULL;
 	} else if( current == S_pcbQ->first_ready ){
+		DputStr("------REMOVE-ELSE-L44------");
 		current->prev->next = current->next;
 		current->next->prev = current->prev;
 
