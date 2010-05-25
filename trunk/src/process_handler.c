@@ -5,6 +5,7 @@ pib pibs[MAX_PROGRAM] = {
   {0, "hello", (int)&hello},
   {1, "goodbye", (int)&goodbye},
   {2, "smile", (int)&smile},
+  {3, "kjell", (int)&kjell}
 };
 uint8_t pstack[MAX_PROCESS][STACK_SIZE];
 
