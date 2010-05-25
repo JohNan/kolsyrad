@@ -1,9 +1,11 @@
 #include "init.h"
+static registers_t regs;
 
 void init() {
-	int i;
 	//init devices.
 	init_devices();
+
+	kset_registers(&regs);
 
 	//init exceptions
 	init_exc();
@@ -12,7 +14,7 @@ void init() {
 	init_poc();
 
 	//init scheduler
-	init_scheduler(&pcbq, &free_pcb_q);
+	init_scheduler(&pcbq, &free_pcb_q, &regs);
 
 	/*
 	 * Skit

@@ -130,6 +130,82 @@ kdebug_magic_break:
 	li	zero,0	# This is the simics magic break instruction for MIPS
 	jr	ra
 
+
+	# my_system_call:
+	#   A user mode interface to the kernel mode function
+	#   'kmy_system_call'.
+	#
+syscall_exit:
+	la v0,S_remove_active
+	syscall
+	jr ra
+
+syscall_putMalta:
+	la v0,DputMalta	# Load adress of syscall implementation in v0.
+	syscall			# Enter kernel mode by 'syscall' exception.
+	jr ra			# Back in user mode, return to caller
+
+syscall_putStr:
+	la v0,bfifo_putStr
+	syscall
+	jr ra
+
+syscall_putC:
+	la v0,bfifo_put
+	syscall
+	jr ra
+
+syscall_newp:
+	la v0,make_process
+	syscall
+	jr ra
+
+	# syscall_handler:
+	#   Enables argument passing for up
+	#   to four parameters of a system call.
+	#
+	# Input:
+	#   a0 - Pointer to saved registers.
+	#
+ksyscall_handler:
+	addi	v0, a0, 0	# Move a0 into v0.
+	lw	a0, REG_A0(v0)	# Load saved a0 (argument 1) into a0.
+	lw	a1, REG_A1(v0)	# Load saved a1 (argument 2) into a1.
+	lw	a2, REG_A2(v0)	# Load saved a2 (argument 3) into a2.
+	lw	a3, REG_A3(v0)	# Load saved a3 (argument 4) into a3.
+	lw	v0, REG_V0(v0)	# Load saved v0 (implementation) into v0.
+
+	jr	v0		# Jump to system call implementation.
+
+
+#------------ Borrowed from example files. ------------------END
+
+
+# -------------------------------------------------------------------------
+# Startup code
+	#    This is where the system boots from
+#     1. Load the stackpointer 'sp' with top of initial stack.
+# -------------------------------------------------------------------------
+
+_start:
+	la t0, exceptstub
+	la t2, exceptstubend
+	la t1, 0xa0000180
+	subu t2, t2, t0	#calculate length of handler
+
+copyloop:
+	lw v0,(t0)		#copy one word at a time
+	sw v0, (t1)
+	addu t0, 4
+	addu t1, 4
+	subu t2, 4
+	bgez t2, copyloop
+
+	la gp, 0x80000000
+	la	sp, kernel_boot_stack_high_limit
+
+	j  init
+
 # -------------------------------------------------------------------------
 # On exception: jump to exception handler.
 # This stub is copied to the exception handler address 0xa0000180,
@@ -243,80 +319,4 @@ exception_handler:
 	eret
 	.set at
 	.set reorder
-
-
-	# my_system_call:
-	#   A user mode interface to the kernel mode function
-	#   'kmy_system_call'.
-	#
-syscall_exit:
-	la v0,S_remove_active
-	syscall
-	jr ra
-
-syscall_putMalta:
-	la v0,DputMalta	# Load adress of syscall implementation in v0.
-	syscall			# Enter kernel mode by 'syscall' exception.
-	jr ra			# Back in user mode, return to caller
-
-syscall_putStr:
-	la v0,bfifo_putStr
-	syscall
-	jr ra
-
-syscall_putC:
-	la v0,bfifo_put
-	syscall
-	jr ra
-
-syscall_newp:
-	la v0,make_process
-	syscall
-	jr ra
-
-	# syscall_handler:
-	#   Enables argument passing for up
-	#   to four parameters of a system call.
-	#
-	# Input:
-	#   a0 - Pointer to saved registers.
-	#
-ksyscall_handler:
-	addi	v0, a0, 0	# Move a0 into v0.
-	lw	a0, REG_A0(v0)	# Load saved a0 (argument 1) into a0.
-	lw	a1, REG_A1(v0)	# Load saved a1 (argument 2) into a1.
-	lw	a2, REG_A2(v0)	# Load saved a2 (argument 3) into a2.
-	lw	a3, REG_A3(v0)	# Load saved a3 (argument 4) into a3.
-	lw	v0, REG_V0(v0)	# Load saved v0 (implementation) into v0.
-
-	jr	v0		# Jump to system call implementation.
-
-
-#------------ Borrowed from example files. ------------------END
-
-		
-# -------------------------------------------------------------------------
-# Startup code
-	#    This is where the system boots from
-#     1. Load the stackpointer 'sp' with top of initial stack.
-# -------------------------------------------------------------------------
-
-_start:
-	la t0, exceptstub
-	la t2, exceptstubend
-	la t1, 0xa0000180
-	subu t2, t2, t0	#calculate length of handler
-
-copyloop:
-	lw v0,(t0)		#copy one word at a time
-	sw v0, (t1)
-	addu t0, 4
-	addu t1, 4
-	subu t2, 4
-	bgez t2, copyloop
-
-	la gp, 0x80000000
-	la	sp, kernel_boot_stack_high_limit
-
-	j  init
 

@@ -56,8 +56,6 @@ void init_poc() {
     pcbs[i].prev = &pcbs[i - 1];
     /* next_instr does not need init */
   }
-
-  DputStr("Process init done");
 }
 
 // get PID of current running process
@@ -120,7 +118,6 @@ void p_free_pcb(pcb *p) {
 //terminates process either normaly or abnormaly
 // currently, exit status is ignored
 void exit() {
-	DputStr("------EXIT------");
 	syscall_exit();
 	//S_remove_active();
 	/*  pcb *me = pcbq.ready;
@@ -144,7 +141,6 @@ void exit() {
   me->prev = me->next = NULL;
   p_free_pcb(me);
 */
-	DputStr("------Died------");
   while(1){}
 }
 
@@ -192,22 +188,4 @@ void make_process( int pibsNr, int prio ){
 	S_add_new_pcb( newPcb );
 //	S_schedule();
 	//return newPcb->pid;
-
-
-
-/*
-	pcb * free = free_pcb_q.first;
-	free_pcb_q.first->prev->next = free_pcb_q.first->next;
-	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
-
-	free->progid = pibs[pibsNr].progid;
-	free->state = PS_READY;
-	free->registers.epc_reg = pibs[pibsNr].start_ptr;
-	free->registers.ra_reg = (int)&exit;
-	free->priority = prio;
-
-	S_add_new_pcb( free );
-
-	return free;
-*/
 }
