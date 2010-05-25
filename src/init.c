@@ -1,31 +1,29 @@
 #include "init.h"
-static registers_t regs;
 
 void init() {
-	//init devices.
-	init_devices();
+        int i;
+        //init devices.
+        init_devices();
 
-	kset_registers(&regs);
+        //init exceptions
+        init_exc();
 
-	//init exceptions
-	init_exc();
+        //init processes
+        init_poc();
 
-	//init processes
-	init_poc();
+        //init scheduler
+        init_scheduler(&pcbq, &free_pcb_q);
 
-	//init scheduler
-	init_scheduler(&pcbq, &free_pcb_q, &regs);
+        /*
+         * Skit
+         */
+        make_process(0,25);
+        // now we just wait for an exception to occur and start scheduling
 
-	/*
-	 * Skit
-	 */
-	make_process(0,25);
-	// now we just wait for an exception to occur and start scheduling
+        DputStr("Init done.");
+        //putStrP("Init done.");
 
-	DputStr("Init done.");
-	//putStrP("Init done.");
-
-	enableTimer();
+        enableTimer();
 
   while (1) {};
 }

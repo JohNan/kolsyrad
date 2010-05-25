@@ -2,17 +2,13 @@
 
 pcb_queues * S_pcbQ;
 free_pcb * S_freeQ;
-registers_t *regSpace;
 
 void S_schedule(){
 
 	if( S_pcbQ->first_ready == NULL ){
 		//Do nothing
 	} else {
-		copyRegisters(&(S_pcbQ->ready->prev->registers), regSpace);
-
-		copyRegisters(regSpace, &(S_pcbQ->ready->registers));
-		//kset_registers( &( S_pcbQ->ready->registers ) );
+		kset_registers( &( S_pcbQ->ready->registers ) );
 
 		S_pcbQ->ready = S_pcbQ->ready->next;
 
@@ -74,9 +70,8 @@ void S_remove_active(){
 
 }
 
-void init_scheduler(pcb_queues * p1, free_pcb * p2, registers_t *regs){
+void init_scheduler(pcb_queues * p1, free_pcb * p2){
 	S_pcbQ = p1;
 	S_freeQ = p2;
-	regSpace = regs;
 }
 

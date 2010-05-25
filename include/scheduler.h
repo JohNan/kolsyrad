@@ -5,8 +5,6 @@
 #include "other/types.h"
 #include "other/stdlib.h"
 
-#include "structs/registers.h"
-
 #include "device_handler.h"
 #include "structs.h"
 
@@ -29,7 +27,6 @@ void S_remove_active();
  */
 void S_activate_pcb( pcb * toActivate );
 
-void init_scheduler(pcb_queues * p1, free_pcb * p2, registers_t *regs);
-void copyRegisters(registers_t *target, registers_t *source);
+void init_scheduler(pcb_queues * p1, free_pcb * p2);
 
 #endif
