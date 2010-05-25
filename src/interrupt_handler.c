@@ -35,7 +35,7 @@ void init_exc() {
  *   have been saved.
  */
 void kexception() {
-  //static int i = 0;
+
   registers_t* reg;
   cause_reg_t cause;
   /* Make sure that we are here because of a timer interrupt. */
@@ -52,7 +52,35 @@ void kexception() {
   //kdebug_assert(cause.field.exc == 0);    /* External interrupt */
 
   if (cause.field.ip & 4) { /* Hardware interrupt (tty) */
-  	  tty_interrupt();
+	  uint8_t ch;
+	   /* UART interrupt */
+	  	  if (tty->lsr.dr) {
+	  		/* Data ready: add character to buffer */
+	  		ch = tty->thr; /* rbr and thr is the same. */
+	  		bfifo_put(&bfifoOut, ch);
+
+	  		/* Should be moved to shell program */
+	  		if (ch == '\r') {
+	  				bfifo_put(&bfifoOut, '\n');
+	  		}
+
+	  		if (ch == '\b') {
+	  				bfifo_put(&bfifoOut, ' ');
+	  				bfifo_put(&bfifoOut, '\b');
+	  		}
+
+
+	  	  }
+
+	  	  if (bfifoOut.length > 0 && tty->lsr.thre) {
+	  		/* Transmitter idle: transmit buffered character */
+	  		tty->thr = bfifo_get(&bfifoOut);
+
+	  		/* Determine if we should be notified when transmitter becomes idle */
+	  		tty->ier.etbei = (bfifoOut.length > 0);
+	  	  }
+	  	  /* Acknowledge UART interrupt. */
+	  	  kset_cause(~0x1000, 0);
   } else if(cause.field.exc == 0){ /* Timer interrupt */
 	  /* Reload timer for another 100 ms (simulated time) */
 
@@ -69,12 +97,11 @@ void kexception() {
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();
 
-	  /* Return from exception to instruction following syscall. */
-	  reg->epc_reg += 4;
-
 	  /* Handle the system call (see syscall.S). */
 	  ksyscall_handler(reg);
 
+	  /* Return from exception to instruction following syscall. */
+	  reg->epc_reg += 4;
 
 	  /* Acknowledge syscall exception. */
 	  kset_cause(~0x60, 0);

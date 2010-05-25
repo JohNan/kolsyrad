@@ -4,6 +4,7 @@ pcb_queues * S_pcbQ;
 free_pcb * S_freeQ;
 
 void S_schedule(){
+	DputStr("------SCHEMA------");
 	if( S_pcbQ->first_ready == NULL ){
 		//Do nothing
 	} else {

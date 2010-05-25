@@ -11,6 +11,7 @@
 # -------------------------------------------------------------------------
 
 #define	KERNEL_BOOT_STACK_SIZE		0x50000
+#define	EXCN_STACK_SIZE		0x8000
 
 		.data
 
@@ -22,6 +23,9 @@ kernel_boot_stack_low_limit:
 	.align 2
         .space  KERNEL_BOOT_STACK_SIZE
 kernel_boot_stack_high_limit:
+
+	.space	EXCN_STACK_SIZE
+excn_stack:
 
 
 			
@@ -193,7 +197,7 @@ exception_handler:
 	sw k1, REG_EPC(k0)
 	.set reorder
 
-	la sp, kernel_boot_stack_high_limit
+	la sp, excn_stack-32
 	jal kexception
 
 	lw k0, excn_regs(zero)

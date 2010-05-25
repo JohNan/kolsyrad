@@ -4,7 +4,7 @@
 #include "other/types.h"
 #include "structs/registers.h"
 
-#define FIFO_SIZE 32
+#define FIFO_SIZE 8
 #define PROC_COUNT 30
 
 /*
@@ -21,6 +21,8 @@ typedef struct {
   uint8_t  buf[FIFO_SIZE];
   uint32_t length;
 } bounded_fifo;
+
+bounded_fifo bfifoOut;
 
 /*
  * process

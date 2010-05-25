@@ -1,7 +1,5 @@
 #include "init.h"
 
-extern Device d_tty;
-
 void init() {
 	int i;
 	//init devices.
@@ -21,16 +19,16 @@ void init() {
 	if(i != -1){
 		DputStr("First process created.");
 	}
-/*	i = make_process(1,25);
+	i = make_process(1,25);
 	if(i != -1){
 		DputStr("Second process created.");
 	}
-	i = make_process(2,25);
+	i = make_process(3,25);
 		if(i != -1){
 		DputStr("Third process created.");
 
 	}
-
+/*
 	for(i=0;i<3;i++){
 		DputStr("---Process---");
 		DputStr("PID: ");
