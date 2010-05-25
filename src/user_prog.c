@@ -5,6 +5,13 @@ void hello(){
 	putStr( "Det FUNKAR!!!" );
 }
 
+void kjell(){
+	while(1){
+		putStr("§kolsyrad > ");
+	}
+
+}
+
 void goodbye(){
 	//int i = 0;
 	DputStr("Goodbye world.");
