@@ -6,6 +6,8 @@
 #include "other/stdlib.h"
 #include "other/debug.h"
 
+#include "structs/registers.h"
+
 #include "structs.h"
 
 #include "scheduler.h"

@@ -30,5 +30,6 @@ void S_remove_active();
 void S_activate_pcb( pcb * toActivate );
 
 void init_scheduler(pcb_queues * p1, free_pcb * p2);
+void copyRegisters(registers_t *target, registers_t *source, registers_t *regs)
 
 #endif
