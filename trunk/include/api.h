@@ -7,6 +7,7 @@
 #include "other/types.h"
 #include "structs.h"
 
+void new_p( int pibsNr, int prio );
 void printN( int num );
 void printC( char ch );
 void printS( char * str );

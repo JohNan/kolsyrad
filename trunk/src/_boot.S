@@ -52,6 +52,7 @@ excn_stack:
 	.globl 	syscall_putMalta
 	.globl	syscall_putStr
 	.globl	syscall_putC
+	.globl	syscall_newp
 	.globl 	ksyscall_handler
 
 # -------------------------------------------------------------------------
@@ -265,6 +266,11 @@ syscall_putStr:
 
 syscall_putC:
 	la v0,bfifo_put
+	syscall
+	jr ra
+
+syscall_newp:
+	la v0,make_process
 	syscall
 	jr ra
 

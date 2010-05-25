@@ -3,7 +3,14 @@
 void hello(){
 	//int i = 0;
 	//putCh('P');
-	DputStr( "Det FUNKAR!!!" );
+	new_p(1,25);
+	DputStr("First process created.");
+
+	new_p(2,25);
+	DputStr("Second process created.");
+
+	new_p(3,25);
+	DputStr("Third process created.");
 }
 
 void kjell(){

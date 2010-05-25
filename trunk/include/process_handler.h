@@ -50,7 +50,7 @@ void set_priority(pcb *,int);
 pcb *list_queue(int);
 
 // Make a process
-int make_process( int pibsNr, int prio );
+void make_process( int pibsNr, int prio );
 
 #define PL_READY 1
 #define PL_SLEEP 2
