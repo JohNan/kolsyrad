@@ -22,6 +22,13 @@ int IO_device(Device d){
 	}
 }
 
+void printPid(pcb * p){
+	char tmp[8];
+	tmp[7] = '\0';
+	itoa(p->pid,tmp,10);
+	DputStr(tmp);
+}
+
 /*
  * Interrupt output to tty
  * Using syscall

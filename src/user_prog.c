@@ -8,7 +8,7 @@ void hello(){
 
 void kjell(){
 	while(1){
-		putStr("§kolsyrad > ");
+		DputStr("§kolsyrad > ");
 	}
 
 }

@@ -122,6 +122,7 @@ void p_free_pcb(pcb *p) {
 void exit() {
 	DputStr("------EXIT------");
 	syscall_exit();
+	//S_remove_active();
 	/*  pcb *me = pcbq.ready;
   me->state = PS_DEAD;
 */
