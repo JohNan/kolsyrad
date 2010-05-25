@@ -6,6 +6,7 @@ free_pcb * S_freeQ;
 void S_schedule(){
 	DputStr("------SCHEMA------");
 	if( S_pcbQ->first_ready == NULL ){
+		DputStr("------SCHEMA-NULL------");
 		//Do nothing
 	} else {
 		kset_registers( &( S_pcbQ->ready->registers ) );
