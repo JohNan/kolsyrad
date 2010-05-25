@@ -2,12 +2,12 @@
 
 pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
-  {0, "hello", (int)&hello},
+  {0, "idle", (int)&idle},
   {1, "goodbye", (int)&goodbye},
   {2, "smile", (int)&smile},
   {3, "kjell", (int)&kjell}
 };
-uint8_t pstack[MAX_PROCESS][STACK_SIZE];
+uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
 
 void init_poc() {
   int i;
@@ -28,7 +28,7 @@ void init_poc() {
   pcbs[0].flags = 0;
   /* registers do not need init */
   // except for SP
-  pcbs[0].registers.sp_reg = (uint32_t) &pstack[0];
+  pcbs[0].registers.sp_reg = (uint32_t) &pstack[1];
   pcbs[0].next = &pcbs[1];
   pcbs[0].prev = &pcbs[MAX_PROCESS - 1];
   /* next_instr does not need init */
@@ -39,7 +39,7 @@ void init_poc() {
   pcbs[MAX_PROCESS - 1].state = PS_FREE;
   pcbs[MAX_PROCESS - 1].flags = 0;
   /* registers do not need init */
-  pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS - 1];
+  pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS];
   pcbs[MAX_PROCESS - 1].next = &pcbs[0];
   pcbs[MAX_PROCESS - 1].prev = &pcbs[MAX_PROCESS - 2];
   /* next_instr does not need init */
@@ -120,7 +120,6 @@ void p_free_pcb(pcb *p) {
 //terminates process either normaly or abnormaly
 // currently, exit status is ignored
 void exit() {
-	DputStr("------EXIT------");
 	syscall_exit();
 	//S_remove_active();
 	/*  pcb *me = pcbq.ready;

@@ -4,7 +4,7 @@
 #include "device_handler.h"
 #include "api.h"
 
-void hello();
+void idle();
 void goodbye();
 void smile();
 void kjell();
