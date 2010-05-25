@@ -19,7 +19,7 @@ void init() {
 	if(i != -1){
 		DputStr("First process created.");
 	}
-	i = make_process(1,25);
+	/*i = make_process(1,25);
 	if(i != -1){
 		DputStr("Second process created.");
 	}
@@ -27,7 +27,7 @@ void init() {
 		if(i != -1){
 		DputStr("Third process created.");
 
-	}
+	}*/
 /*
 	for(i=0;i<3;i++){
 		DputStr("---Process---");
