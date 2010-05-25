@@ -1,12 +1,5 @@
 #include "api.h"
 
-void new_p( int pibsNr, int prio ){
-	/*
-	 * TODO: Move to process handle to filter.
-	 */
-	syscall_newp(pibsNr, prio);
-}
-
 void printN( int num ){
 	char temp[12];
 	itoa( num, temp, 10 );

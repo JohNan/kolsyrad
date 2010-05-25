@@ -3,13 +3,9 @@
 
 #include "other/types.h"
 #include "structs/registers.h"
-#include "user_prog.h"
-
 
 #define FIFO_SIZE 8
 #define PROC_COUNT 30
-#define MAX_PROCESS 20 // maximum number of processes
-#define MAX_PROGRAM 5 // maximum number of programs
 
 /*
  * device

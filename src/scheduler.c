@@ -4,26 +4,23 @@ pcb_queues * S_pcbQ;
 free_pcb * S_freeQ;
 
 void S_schedule(){
-
+	DputStr("------SCHEMA------");
 	if( S_pcbQ->first_ready == NULL ){
+		DputStr("------SCHEMA-NULL------");
 		//Do nothing
 	} else {
+
+		DputStr("------SCHEMA-READY-PID------");
+		printPid( S_pcbQ->ready );
+
 		kset_registers( &( S_pcbQ->ready->registers ) );
 
 		S_pcbQ->ready = S_pcbQ->ready->next;
 
+		DputStr("------SCHEMA-READY-NEXT-PID------");
+		printPid( S_pcbQ->ready );
 
 	}
-}
-
-void copyRegisters(registers_t *target, registers_t *source) {
-        int i;
-        uint32_t *_target = (uint32_t *)target;
-        uint32_t *_source = (uint32_t *)source;
-
-        for (i = 0; i < 30; i++) {
-                _target[i] = _source[i];
-        }
 }
 
 void S_add_new_pcb( pcb * toAdd ){
@@ -42,16 +39,31 @@ void S_add_new_pcb( pcb * toAdd ){
 }
 
 void S_remove_active(){
+	DputStr("------REMOVE------");
 	pcb * current = NULL;
 	current = S_pcbQ->ready->prev;
 
+	char temp[10];
+		itoa( S_pcbQ->magic, temp, 10 );
+		temp[9] = '\0';
+		DputStr( temp );
+
+	DputStr("------REMOVE-READY-PID------");
+	printPid( S_pcbQ->ready );
+
+	DputStr("------REMOVE-READY-PREV-PID------");
+	printPid( S_pcbQ->ready->prev );
+
+
 	if( S_pcbQ->ready == S_pcbQ->ready->prev ){
+		DputStr( "------REMOVE-Fisk------" );
 		S_pcbQ->ready->next = S_freeQ->first;
 		S_freeQ->first = S_pcbQ->ready;
 
 		S_pcbQ->ready = NULL;
 		S_pcbQ->first_ready = NULL;
 	} else if( current == S_pcbQ->first_ready ){
+		DputStr("------REMOVE-ELSE-L44------");
 		current->prev->next = current->next;
 		current->next->prev = current->prev;
 
@@ -65,9 +77,10 @@ void S_remove_active(){
 			S_freeQ->first = current;
 		}
 	} else {
-
+		DputStr("------ALLT-ANNAT------" );
 	}
 
+	DputStr( "------EXIT-REMOVE------" );
 }
 
 void init_scheduler(pcb_queues * p1, free_pcb * p2){

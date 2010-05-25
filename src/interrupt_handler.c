@@ -1,16 +1,14 @@
 #include "interrupt_handler.h"
+
 static registers_t regs;
-
-void enableTimer(){
-	/* Initialise timer to interrupt in 100 ms (simulated time). */
-	kload_timer(100 * timer_msec);
-}
-
 
 void init_exc() {
 	status_reg_t and, or;
 	/* Setup storage-area for saving registers on exception. */
 	kset_registers(&regs);
+
+	/* Initialise timer to interrupt in 100 ms (simulated time). */
+	kload_timer(100 * timer_msec);
 
 	/* Update the status register to enable timer interrupts. */
 	//kset_sr(0xFFBF00E8, 0x10008001);
