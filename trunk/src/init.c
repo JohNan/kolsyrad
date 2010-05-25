@@ -1,29 +1,54 @@
 #include "init.h"
 
 void init() {
-        int i;
-        //init devices.
-        init_devices();
+	int i;
+	//init devices.
+	init_devices();
 
-        //init exceptions
-        init_exc();
 
-        //init processes
-        init_poc();
+	char tmp[8];
+	tmp[8] = '\0';
 
-        //init scheduler
-        init_scheduler(&pcbq, &free_pcb_q);
+	char tmp2[8];
+	tmp2[8] = '\0';
 
-        /*
-         * Skit
-         */
-        make_process(0,25);
-        // now we just wait for an exception to occur and start scheduling
+	init_poc();
+	init_scheduler(&pcbq, &free_pcb_q);
 
-        DputStr("Init done.");
-        //putStrP("Init done.");
+	i = make_process(0,25);
+	if(i != -1){
+		DputStr("First process created.");
+	}
+	i = make_process(1,25);
+	if(i != -1){
+		DputStr("Second process created.");
+	}
+	i = make_process(3,25);
+		if(i != -1){
+		DputStr("Third process created.");
 
-        enableTimer();
+	}
+
+	for(i=0;i<3;i++){
+		DputStr("---Process---");
+		DputStr("PID: ");
+		printPid(&pcbs[i]);
+		DputStr("Next: ");
+		printPid(pcbs[i].next);
+		DputStr(tmp2);
+		DputStr("Prev: ");
+		printPid(pcbs[i].next);
+		DputStr(tmp);
+		DputStr("---end---");
+	}
+
+	// now we just wait for an exception to occur and start scheduling
+
+	DputStr("Init done.");
+	//putStrP("Init done.");
+
+	//init exceptions
+	init_exc();
 
   while (1) {};
 }

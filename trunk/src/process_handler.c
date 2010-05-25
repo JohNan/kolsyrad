@@ -7,7 +7,7 @@ pib pibs[MAX_PROGRAM] = {
   {2, "smile", (int)&smile},
   {3, "kjell", (int)&kjell}
 };
-uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
+uint8_t pstack[MAX_PROCESS][STACK_SIZE];
 
 void init_poc() {
   int i;
@@ -28,7 +28,7 @@ void init_poc() {
   pcbs[0].flags = 0;
   /* registers do not need init */
   // except for SP
-  pcbs[0].registers.sp_reg = (uint32_t) &pstack[1];
+  pcbs[0].registers.sp_reg = (uint32_t) &pstack[0];
   pcbs[0].next = &pcbs[1];
   pcbs[0].prev = &pcbs[MAX_PROCESS - 1];
   /* next_instr does not need init */
@@ -39,7 +39,7 @@ void init_poc() {
   pcbs[MAX_PROCESS - 1].state = PS_FREE;
   pcbs[MAX_PROCESS - 1].flags = 0;
   /* registers do not need init */
-  pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS];
+  pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS - 1];
   pcbs[MAX_PROCESS - 1].next = &pcbs[0];
   pcbs[MAX_PROCESS - 1].prev = &pcbs[MAX_PROCESS - 2];
   /* next_instr does not need init */
@@ -51,7 +51,7 @@ void init_poc() {
     pcbs[i].state = PS_FREE;
     pcbs[i].flags = 0;
     /* registers do not need init */
-    pcbs[i].registers.sp_reg = (uint32_t) &pstack[i+1];
+    pcbs[i].registers.sp_reg = (uint32_t) &pstack[i];
     pcbs[i].next = &pcbs[i + 1];
     pcbs[i].prev = &pcbs[i - 1];
     /* next_instr does not need init */
@@ -69,8 +69,8 @@ int get_pid() {
 void set_exec_image(pib *newPIB) {
   (pcbq.ready) -> progid = newPIB -> progid;
   /*__inline__ __asm__ {
-          sw ra,newPIB->start_ptr
-          }*/
+	  sw ra,newPIB->start_ptr
+	  }*/
   /* need some inline asm code here to mess about with the stack frame
      so that when we return, execution continues at the starting point of
      new new program */
@@ -120,10 +120,10 @@ void p_free_pcb(pcb *p) {
 //terminates process either normaly or abnormaly
 // currently, exit status is ignored
 void exit() {
-        DputStr("------EXIT------");
-        syscall_exit();
-        //S_remove_active();
-        /*  pcb *me = pcbq.ready;
+	DputStr("------EXIT------");
+	syscall_exit();
+	//S_remove_active();
+	/*  pcb *me = pcbq.ready;
   me->state = PS_DEAD;
 */
   /* TODO: check if this PID has any devices, and free them if so */
@@ -144,7 +144,7 @@ void exit() {
   me->prev = me->next = NULL;
   p_free_pcb(me);
 */
-        DputStr("------Died------");
+	DputStr("------Died------");
   while(1){}
 }
 
@@ -181,33 +181,33 @@ pcb *list_queue(int what) {
   return NULL;
 }
 
-void make_process( int pibsNr, int prio ){
-        pcb *newPcb = get_pcb();
+int make_process( int pibsNr, int prio ){
+	pcb *newPcb = get_pcb();
 
-        newPcb->progid = pibs[pibsNr].progid;
-        newPcb->state = PS_READY;
-        newPcb->registers.epc_reg = pibs[pibsNr].start_ptr;
-        newPcb->registers.ra_reg = (int)&exit;
-        newPcb->priority = prio;
-        S_add_new_pcb( newPcb );
-//      S_schedule();
-        //return newPcb->pid;
+	newPcb->progid = pibs[pibsNr].progid;
+	newPcb->state = PS_READY;
+	newPcb->registers.epc_reg = pibs[pibsNr].start_ptr;
+	newPcb->registers.ra_reg = (int)&exit;
+	newPcb->priority = prio;
+	S_add_new_pcb( newPcb );
+//	S_schedule();
+	return newPcb->pid;
 
 
 
 /*
-        pcb * free = free_pcb_q.first;
-        free_pcb_q.first->prev->next = free_pcb_q.first->next;
-        free_pcb_q.first->next->prev = free_pcb_q.first->prev;
+	pcb * free = free_pcb_q.first;
+	free_pcb_q.first->prev->next = free_pcb_q.first->next;
+	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
 
-        free->progid = pibs[pibsNr].progid;
-        free->state = PS_READY;
-        free->registers.epc_reg = pibs[pibsNr].start_ptr;
-        free->registers.ra_reg = (int)&exit;
-        free->priority = prio;
+	free->progid = pibs[pibsNr].progid;
+	free->state = PS_READY;
+	free->registers.epc_reg = pibs[pibsNr].start_ptr;
+	free->registers.ra_reg = (int)&exit;
+	free->priority = prio;
 
-        S_add_new_pcb( free );
+	S_add_new_pcb( free );
 
-        return free;
+	return free;
 */
 }

@@ -1,45 +1,40 @@
 #include "user_prog.h"
 
 void hello(){
-	DputStr("Idle process started.");
-
-	new_p(1,25);
-	DputStr("First process created.");
-
-	new_p(2,25);
-	DputStr("Second process created.");
-
-	new_p(3,25);
-	DputStr("Third process created.");
-	while(1){}
+	//int i = 0;
+	//putCh('P');
+	DputStr( "Det FUNKAR!!!" );
 }
 
 void kjell(){
-	putStr("§kolsyrad > ");
+	while(1){
+		DputStr("§kolsyrad > ");
+	}
+
 }
 
 void goodbye(){
 	//int i = 0;
-	putStr("Goodbye world.");
+	DputStr("Goodbye world.");
 /*	while(i < 2000){
 		//putMalta(i++);
 		if(i % 1000 == 0) {
 			putStr("Goodbye world.\n");
 		}
 	}*/
-	putStr("G: Counting done.");
+	DputStr("G: Counting done.");
 }
 
 void smile(){
 	//int i = 0;
-	putStr("Smile.");
+	DputStr("Smile.");
 	/*while(i < 2000){
 		//putMalta(i++);
 		if(i % 1000 == 0) {
 			putStr("Smile.\n");
 		}
 	}*/
-	putStr("S: Smile.");
+	DputStr("S: Smile.");
 }
 // increments i and prints it to a new line.
 // pre max > 0

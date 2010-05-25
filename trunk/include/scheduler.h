@@ -5,6 +5,8 @@
 #include "other/types.h"
 #include "other/stdlib.h"
 
+#include "structs/registers.h"
+
 #include "device_handler.h"
 #include "structs.h"
 

@@ -6,8 +6,6 @@
 #include "other/stdlib.h"
 #include "other/debug.h"
 
-#include "structs/registers.h"
-
 #include "structs.h"
 
 #include "scheduler.h"
@@ -17,4 +15,5 @@
 #include "_boot.h"
 
 void init();
+void ksyscall_handler(registers_t* reg);
 #endif

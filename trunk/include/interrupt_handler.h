@@ -12,9 +12,7 @@
 /*
  * Init the exception handler
  */
-void enableTimer();
 void init_exc();
 void kexception();
-
 
 #endif
