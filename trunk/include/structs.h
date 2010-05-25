@@ -3,9 +3,13 @@
 
 #include "other/types.h"
 #include "structs/registers.h"
+#include "user_prog.h"
+
 
 #define FIFO_SIZE 8
 #define PROC_COUNT 30
+#define MAX_PROCESS 20 // maximum number of processes
+#define MAX_PROGRAM 5 // maximum number of programs
 
 /*
  * device
@@ -43,6 +47,15 @@ typedef struct pib{  // Program information block
 	char pname[16]; // The human readable name of the program.
 	int start_ptr; // A pointer to the entry point of the program
 }pib;
+
+// global variables, defined in process_handler.c
+pcb pcbs[MAX_PROCESS];
+pib pibs[] = {
+            {0, "hello", (int)&hello},
+            {1, "goodbye", (int)&goodbye},
+            {2, "smile", (int)&smile},
+            {3, "kjell", (int)&kjell}
+          };
 
 typedef struct proc_handler{
 	pcb pcb_array[PROC_COUNT]; // An array of all current pcb's.
