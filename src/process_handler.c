@@ -181,7 +181,7 @@ pcb *list_queue(int what) {
   return NULL;
 }
 
-int make_process( int pibsNr, int prio ){
+void make_process( int pibsNr, int prio ){
 	pcb *newPcb = get_pcb();
 
 	newPcb->progid = pibs[pibsNr].progid;
@@ -191,7 +191,7 @@ int make_process( int pibsNr, int prio ){
 	newPcb->priority = prio;
 	S_add_new_pcb( newPcb );
 //	S_schedule();
-	return newPcb->pid;
+	//return newPcb->pid;
 
 
 
