@@ -12,8 +12,7 @@
 #include "structs.h"
 #include "user_prog.h"
 
-#define MAX_PROCESS 20 // maximum number of processes
-#define MAX_PROGRAM 5 // maximum number of programs
+
 #define STACK_SIZE 1024 // stack size for programs
 
 /* Process states */
@@ -22,10 +21,6 @@
 #define PS_READY 2; // this process is ready to run
 #define PS_SLEEP 3; // this process is waiting for something
 #define PS_DEAD 4; // this process has finished execution
-
-// global variables, defined in process_handler.c
-extern pcb pcbs[];
-extern pib pibs[];
 
 void init_poc();
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
