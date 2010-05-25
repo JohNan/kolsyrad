@@ -8,4 +8,9 @@ void idle();
 void goodbye();
 void smile();
 void kjell();
+
+void increment(int);
+int fibonacci_aux(int);
+int fibonacci(int);
+
 #endif

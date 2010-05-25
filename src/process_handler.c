@@ -4,9 +4,11 @@ pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
   {0, "idle", (int)&idle},
   {1, "goodbye", (int)&goodbye},
-  {2, "smile", (int)&smile},
-  {3, "kjell", (int)&kjell}
+  {2, "kjell", (int)&kjell},
+  {3, "increment", (int)&increment},
+  {4, "fibonacci", (int)&fibonacci}
 };
+
 uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
 
 void init_poc() {
@@ -180,13 +182,14 @@ pcb *list_queue(int what) {
   return NULL;
 }
 
-int make_process( int pibsNr, int prio ){
+int make_process( int pibsNr, int prio, uint32_t args ){
 	pcb *newPcb = get_pcb();
 
 	newPcb->progid = pibs[pibsNr].progid;
 	newPcb->state = PS_READY;
 	newPcb->registers.epc_reg = pibs[pibsNr].start_ptr;
 	newPcb->registers.ra_reg = (int)&exit;
+	newPcb->registers.a_reg[0] = args;
 	newPcb->priority = prio;
 	S_add_new_pcb( newPcb );
 //	S_schedule();

@@ -12,9 +12,9 @@ void kjell(){
 void goodbye(){
 	int i = 0;
 	putStr("Goodbye world.\n");
-	while(i < 2000){
-		putMalta(i++);
-		if(i % 500 == 0) {
+	while(i < 90000){
+		//putMalta(i++);
+		if(i % 1000 == 0) {
 			putStr("Goodbye world.\n");
 		}
 		i++;
@@ -39,7 +39,7 @@ void smile(){
 void increment(int max){
 	int i;
 	for (i = 0; i < max; i++){
-		printCln(i);
+		printNln(i);
 	}
 }
 //prints the fibonacci serie from 0 to the given number.
@@ -62,7 +62,7 @@ int fibonacci_aux(int input){
 int fibonacci(int input)
 {
 	int n;
-	for(n=0; n<input; n++) printCln(fibonacci_aux(input));
+	for(n=0; n<input; n++) printNln(fibonacci_aux(input));
 	return 0;
 }
 
