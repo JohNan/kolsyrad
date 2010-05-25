@@ -17,5 +17,4 @@
 #include "_boot.h"
 
 void init();
-void ksyscall_handler(registers_t* reg);
 #endif
