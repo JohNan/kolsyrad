@@ -58,7 +58,6 @@ void putStr(char* text) {
 			d_tty.owner = -1;
 		}
 	}
-	DputStr("putStr - done");
 }
 
 /*
@@ -102,9 +101,6 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
 
 	if (bfifo->length < FIFO_SIZE) {
 		bfifo->buf[(bfifo->length)++] = ch;
-	} else {
-		bfifo->length = 0;
-		bfifo->buf[(bfifo->length)++] = ch;
 	}
 	if (tty->lsr.thre) {
 		/* Transmitter idle: transmit buffered character */
@@ -124,7 +120,6 @@ void bfifo_putStr(bounded_fifo* bfifo, uint32_t c) {
 		}
 		ch++;
 	}
-	  bfifo->length = 0;
 }
 
 /* bfifo_get: Returns a character removed from the front of the queue. */

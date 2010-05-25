@@ -5,15 +5,14 @@ void init() {
 	//init devices.
 	init_devices();
 
-
-	char tmp[8];
-	tmp[8] = '\0';
-
-	char tmp2[8];
-	tmp2[8] = '\0';
-
+	//init processes
 	init_poc();
+
+	//init scheduler
 	init_scheduler(&pcbq, &free_pcb_q);
+
+	//init exceptions
+	init_exc();
 
 	i = make_process(0,25);
 	if(i != -1){
@@ -23,11 +22,24 @@ void init() {
 	if(i != -1){
 		DputStr("Second process created.");
 	}
+	i = make_process(2,25);
+		if(i != -1){
+		DputStr("Third process created.");
+
+	}
 	i = make_process(3,25);
 		if(i != -1){
 		DputStr("Third process created.");
 
 	}
+/*
+
+	char tmp[8];
+	tmp[8] = '\0';
+
+	char tmp2[8];
+	tmp2[8] = '\0';
+
 
 	for(i=0;i<3;i++){
 		DputStr("---Process---");
@@ -41,14 +53,12 @@ void init() {
 		DputStr(tmp);
 		DputStr("---end---");
 	}
-
+*/
 	// now we just wait for an exception to occur and start scheduling
 
 	DputStr("Init done.");
-	//putStrP("Init done.");
 
-	//init exceptions
-	init_exc();
+	enableTimer();
 
   while (1) {};
 }

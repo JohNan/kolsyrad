@@ -14,5 +14,6 @@
  */
 void init_exc();
 void kexception();
+void enableTimer();
 
 #endif
