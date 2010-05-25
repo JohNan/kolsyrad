@@ -16,6 +16,8 @@ void init_poc() {
     pcbq.ready =
     pcbq.waiting = NULL;
 
+  pcbq.magic = 666;
+
   free_pcb_q.first = &pcbs[0];
   free_pcb_q.last = &pcbs[MAX_PROCESS - 1];
 
