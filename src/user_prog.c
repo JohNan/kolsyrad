@@ -1,8 +1,9 @@
 #include "user_prog.h"
 
 void hello(){
-	int i = 0;
-	putStr( "Det FUNKAR!!!" );
+	//int i = 0;
+	//putCh('P');
+	DputStr( "Det FUNKAR!!!" );
 }
 
 void kjell(){

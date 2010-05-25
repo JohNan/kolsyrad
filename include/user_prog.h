@@ -6,4 +6,5 @@
 void hello();
 void goodbye();
 void smile();
+void kjell();
 #endif
