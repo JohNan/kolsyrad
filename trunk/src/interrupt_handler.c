@@ -3,7 +3,7 @@ static registers_t regs;
 
 void enableTimer(){
         /* Initialise timer to interrupt in 100 ms (simulated time). */
-        kload_timer(100 * timer_msec);
+        kload_timer(1 * timer_msec);
 
         DputStr("Interrupt enabled.");
 }
