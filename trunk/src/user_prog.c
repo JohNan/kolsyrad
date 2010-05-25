@@ -42,7 +42,7 @@ void smile(){
 void increment(int max){
 	int i;
 	for (i = 0; i < max; i++){
-		println(i);
+		printCln(i);
 	}
 }
 //prints the fibonacci serie from 0 to the given number.
@@ -59,13 +59,13 @@ int fibonacci_aux(int input){
 		m = n + m;
 		n = nAux;
 	  }
-	  return n1;
+	  return n;
 	}
-}
+
 int fibonacci(int input)
 {
 	int n;
-	for(n=0; n<input; n++) println(fibonacci_aux(input));
+	for(n=0; n<input; n++) printCln(fibonacci_aux(input));
 	return 0;
 }
 
