@@ -1,31 +1,31 @@
 #include "api.h"
 
-void print( int num ){
+void printN( int num ){
 	char temp[12];
 	itoa( num, temp, 10 );
 
 	putStr( temp );
 }
 
-void print( char ch ){
+void printC( char ch ){
 	putCh( ch );
 }
 
-void print( char * str ){
+void printS( char * str ){
 	putStr( str );
 }
 
-void println( int num ){
+void printNln( int num ){
 	char temp[13];
 	itoa( num, temp, 10 );
 	println( temp );
 }
 
-void println( char ch ){
+void printCln( char ch ){
 	putCh( ch );
 	putCh( '\n' );
 }
-void println( char * str ){
+void printSln( char * str ){
 	int i;
 	for( i = 0; str[i] != '\0'; i++ ){
 

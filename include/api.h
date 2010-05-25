@@ -6,13 +6,13 @@
 #include "other/types.h"
 #include "structs.h"
 
-void print( int num );
-void print( char ch );
-void print( char * str );
+void printN( int num );
+void printC( char ch );
+void printS( char * str );
 
-void println( int num );
-void println( char ch );
-void println( char * str );
+void printNln( int num );
+void printCln( char ch );
+void printSln( char * str );
 
 void printP();
 
