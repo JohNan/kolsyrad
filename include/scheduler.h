@@ -33,8 +33,12 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2 );
 
 pcb* getCurrent();
 
-void S_stop( uint16_t ms, pcb * q );
-#define S_stop(x) S_stop(x,NULL)
+void S_stop( uint16_t ms, pcb * q);
 void S_start( pcb * q );
 
 #endif
+
+
+
+
+
