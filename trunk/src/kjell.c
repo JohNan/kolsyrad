@@ -1,5 +1,4 @@
-#include "user_prog.h"
-#include "other/types.h"
+#include "kjell.h"
 
 void kjell(){
 	int i = 1;
