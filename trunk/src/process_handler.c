@@ -62,13 +62,8 @@ void init_poc() {
   DputStr("Process init done");
 }
 
-// get PID of current running process
-int get_pid() {
-  return pcbq.ready->pid;
-}
-
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
-void set_exec_image(pib *newPIB) {
+void set_pcb_image(pib *newPIB) {
  // (pcbq.ready) -> progid = newPIB -> progid;
   /*__inline__ __asm__ {
 	  sw ra,newPIB->start_ptr

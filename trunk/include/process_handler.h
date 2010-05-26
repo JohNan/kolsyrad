@@ -12,6 +12,7 @@
 #include "scheduler.h"
 #include "structs.h"
 #include "user_prog.h"
+#include "_boot.h"
 
 #define MAX_PROCESS 20 // maximum number of processes
 #define MAX_PROGRAM 5 // maximum number of programs
@@ -57,3 +58,6 @@ int make_process( int pibsNr, int prio, uint32_t args );
 #define PL_SLEEP 2
 
 #endif
+
+
+

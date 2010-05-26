@@ -8,6 +8,10 @@ void syscall_putMalta(uint32_t word);
 void syscall_putStr(bounded_fifo* bfifo, char* ch);
 void syscall_putC(bounded_fifo* bfifo, char ch);
 uint8_t syscall_getC();
+void syscall_exec(pib *new);
+pcb *syscall_fork();
+void syscall_set_prio(pcb *who, int prio);
+pcb *syscall_get_pid();
 void syscall_exit();
 
 #endif
