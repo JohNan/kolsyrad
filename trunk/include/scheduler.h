@@ -33,4 +33,7 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2);
 
 pcb* getCurrent();
 
+void S_stop( pcb * q );
+void S_start( pcb * q );
+
 #endif
