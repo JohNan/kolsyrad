@@ -57,6 +57,7 @@ excn_stack:
 	.globl	syscall_putStr
 	.globl	syscall_putC
 	.globl	syscall_getC
+	.globl	syscall_getS
 	.globl 	ksyscall_handler
 
 # -------------------------------------------------------------------------
@@ -296,6 +297,11 @@ syscall_putC:
 
 syscall_getC:
 	la v0,kgetCh
+	syscall
+	jr ra
+
+syscall_getS:
+	la v0,kgetStr
 	syscall
 	jr ra
 
