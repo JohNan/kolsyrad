@@ -270,7 +270,7 @@ syscall_putC:
 	jr ra
 
 syscall_getC:
-	la v0,bfifo_get
+	la v0,kgetCh
 	syscall
 	jr ra
 

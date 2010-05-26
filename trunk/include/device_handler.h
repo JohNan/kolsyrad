@@ -20,6 +20,8 @@ static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 void printPid(pcb * p);
 void printPrio(pcb * p);
 
+void parseKjell(uint8_t c);
+
 void init_devices();
 int IO_device(Device);
 
