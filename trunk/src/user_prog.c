@@ -52,18 +52,19 @@ int fibonacci_aux(int input){
 	  if (input==0)
 		return 0;
 	  for (i=0; i < input-1; i++) {
-		nAux = n;
+		nAux = m;
 		m = n + m;
 		n = nAux;
 	  }
-	  return n;
-	}
+	  return m;
+}
 
-int fibonacci(int input)
+void fibonacci(int input)
 {
 	int n;
-	for(n=0; n<input; n++) printNln(fibonacci_aux(input));
-	return 0;
+	for(n=0; n<input; n++) {
+		printNln(fibonacci_aux(input));
+	}
 }
 
 

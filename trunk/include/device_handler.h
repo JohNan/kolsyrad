@@ -10,6 +10,7 @@
 #include "structs/malta.h"
 #include "structs/console.h"
 
+#include "scheduler.h"
 #include "structs.h"
 #include "_boot.h"
 

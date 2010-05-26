@@ -32,6 +32,7 @@ typedef struct pcb{
 	short progid;
 	uint8_t priority;
 	uint8_t state;
+	bounded_fifo fifoOut;
 	short flags;
 	registers_t registers;
 	struct pcb *next;
