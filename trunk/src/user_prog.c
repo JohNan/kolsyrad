@@ -63,7 +63,7 @@ void fibonacci(int input)
 {
 	int n;
 	for(n=0; n<input; n++) {
-		printNln(fibonacci_aux(input));
+		printNln(fibonacci_aux(n));
 	}
 }
 
