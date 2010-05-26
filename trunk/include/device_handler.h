@@ -18,6 +18,7 @@ static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 
 void printPid(pcb * p);
+void printPrio(pcb * p);
 
 void init_devices();
 int IO_device(Device);
@@ -26,7 +27,7 @@ void putCh(char c);
 void putStr(char* text);
 void putMalta(uint32_t word);
 
-void bfifo_put(bounded_fifo* bfifo, uint8_t ch);
+void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output);
 void bfifo_putStr(bounded_fifo* bfifo, uint32_t c);
 uint8_t bfifo_get(bounded_fifo* bfifo);
 

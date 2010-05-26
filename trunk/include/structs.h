@@ -23,6 +23,7 @@ typedef struct {
 } bounded_fifo;
 
 bounded_fifo bfifoOut;
+bounded_fifo bfifoIn;
 
 /*
  * process
