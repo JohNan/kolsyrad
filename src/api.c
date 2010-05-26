@@ -90,3 +90,7 @@ void printP(){
 		printSln( "End of waiting processes" );
 	}
 }
+
+void sleep( uint32_t ms ){
+
+}

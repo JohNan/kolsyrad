@@ -4,7 +4,7 @@
 #include "other/types.h"
 #include "structs/registers.h"
 
-#define FIFO_SIZE 8
+#define FIFO_SIZE 32
 #define PROC_COUNT 30
 
 /*
@@ -39,25 +39,40 @@ typedef struct pib{  // Program information block
  */
 typedef struct pcb{
 	char pid;
-	pib *progid;
+	char flags;
 	uint8_t priority;
 	uint8_t state;
+	pib *progid;
 	bounded_fifo fifoOut;
-	short flags;
 	registers_t registers;
 	struct pcb *next;
 	struct pcb *prev;
+	uint32_t time;
 }pcb;
 
 typedef struct proc_handler{
 	pcb pcb_array[PROC_COUNT]; // An array of all current pcb's.
 }proc_handler;
 
-typedef struct _pcb_queues{
-	int magic;
+typedef struct pcb_timer{
+	pcb * first;
+	pcb * last;
+}pcb_timer;
+
+typedef struct pcb_int{
+	pcb * first;
+	pcb * last;
+}pcb_int;
+
+typedef struct pcb_waiting{
+	pcb_timer pcbTimer;
+	pcb_int pcbInt;
+}pcb_waiting;
+
+typedef struct pcb_queues{
 	pcb * first_ready; //a pointer to the first ready process' PCB. It will only change if the process is not longer
 	pcb * ready; //a pointer to the currently runnning process' PCB. It will walk through all process of highest current priority when scheduling.
-	pcb * waiting; //a pointer to the first waiting process' PCB.
+	pcb_waiting waiting; //pointer to waiting processes
 } pcb_queues;
 
 typedef struct free_pcb{
