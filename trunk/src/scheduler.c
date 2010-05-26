@@ -106,10 +106,14 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2){
 	S_freeQ = p2;
 }
 
-void S_stop( uint16_t ms, pcb * q ){
+// tells process q to wait for ms milliseconds
+void S_stop( uint16_t ms, pcb * q){
 
 }
 
 void S_start( pcb * q ){
 
 }
+
+
+
