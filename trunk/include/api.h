@@ -17,4 +17,6 @@ void printSln( char * str );
 
 void printP();
 
+void sleep( uint32_t ms );
+
 #endif

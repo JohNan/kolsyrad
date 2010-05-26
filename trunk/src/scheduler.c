@@ -106,45 +106,10 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2){
 	S_freeQ = p2;
 }
 
-void S_stop( pcb * q ){
-	if( q == S_pcbQ->first_ready ){
-		if( q == S_pcbQ->ready ){
-			S_pcbQ->first_ready = q->next;
-			S_pcbQ->ready = q->next;
-		} else {
-			S_pcbQ->first_ready = q->next;
-		}
-	}
+void S_stop( uint16_t ms, pcb * q ){
 
-	q->next->prev = q->prev;
-	q->prev->next = q->next;
-
-	q->next = S_pcbQ->waiting;
-	q->prev = S_pcbQ->waiting->prev;
-	S_pcbQ->waiting->prev->next = q;
-	S_pcbQ->waiting->prev = q;
 }
 
 void S_start( pcb * q ){
-	if( q->priority > S_pcbQ->first_ready->priority ){
-		q->next->prev = q->prev;
-		q->prev->next = q->next;
 
-		SP_add_before( q, S_pcbQ->first_ready );
-		S_pcbQ->ready = q;
-		S_pcbQ->first_ready = q;
-	} else {
-		pcb * inLoop = S_pcbQ->first_ready->next;
-		int i = 1;
-		while( i ){
-			if( inLoop == S_pcbQ->first_ready ){
-				SP_add_before( q, inLoop );
-				i = 0;
-			} else if( inLoop->priority > inLoop->next->priority ){
-				SP_add_before( q, inLoop->next );
-				i = 0;
-			}
-			inLoop = inLoop->next;
-		}
-	}
 }

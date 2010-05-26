@@ -29,11 +29,12 @@ void S_remove_active();
  */
 void S_activate_pcb( pcb * toActivate );
 
-void init_scheduler(pcb_queues * p1, free_pcb * p2);
+void init_scheduler(pcb_queues * p1, free_pcb * p2 );
 
 pcb* getCurrent();
 
-void S_stop( pcb * q );
+void S_stop( uint16_t ms, pcb * q );
+#define S_stop(x) S_stop(x,NULL)
 void S_start( pcb * q );
 
 #endif
