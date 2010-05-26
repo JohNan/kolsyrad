@@ -59,6 +59,10 @@ void S_remove_active(){
 
 }
 
+pcb* getCurrent(){
+	return S_pcbQ->ready;
+}
+
 void init_scheduler(pcb_queues * p1, free_pcb * p2){
 	S_pcbQ = p1;
 	S_freeQ = p2;

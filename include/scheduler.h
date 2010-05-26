@@ -31,4 +31,6 @@ void S_activate_pcb( pcb * toActivate );
 
 void init_scheduler(pcb_queues * p1, free_pcb * p2);
 
+pcb* getCurrent();
+
 #endif

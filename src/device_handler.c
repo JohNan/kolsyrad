@@ -15,7 +15,7 @@ Device d_malta = { 2, -1, NULL };
 
 int IO_device(Device d){
 	if(d.owner == -1 ) {
-		d.owner = 1;
+		d.owner = getCurrent()->pid;
 		return 1;
 	} else {
 		return 0;
@@ -39,22 +39,22 @@ void putMalta(uint32_t word){
 }
 
 void putCh(char c) {
-	syscall_putC(&bfifoOut,c);
+	syscall_putC(&getCurrent()->fifoOut,c);
 	if (c == '\n') {
-		syscall_putC(&bfifoOut, '\r');
+		syscall_putC(&getCurrent()->fifoOut, '\r');
 	}
 }
 
 void putStr(char* text) {
 	if(d_tty.owner == -1){
 		if(IO_device(d_tty)){
-			syscall_putStr(&bfifoOut, text);
+			syscall_putStr(&getCurrent()->fifoOut, text);
 			d_tty.owner = -1;
 		}
 	} else {
 		while(d_tty.owner == -1){}
 		if(IO_device(d_tty)){
-			syscall_putStr(&bfifoOut, text);
+			syscall_putStr(&getCurrent()->fifoOut, text);
 			d_tty.owner = -1;
 		}
 	}
