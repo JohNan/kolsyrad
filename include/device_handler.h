@@ -23,7 +23,7 @@ void printPrio(pcb * p);
 void parseKjell(uint8_t c);
 
 void init_devices();
-int IO_device(Device);
+int IO_device(Device *);
 
 uint8_t getCh();
 void kgetCh();

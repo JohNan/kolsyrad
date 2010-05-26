@@ -13,9 +13,9 @@ Device d_malta = { 2, -1, NULL };
 
 // Assignes a name to a connected devices memory allocation.
 
-int IO_device(Device d){
-	if(d.owner == -1 ) {
-		d.owner = getCurrent()->pid;
+int IO_device(Device *d){
+	if(d->owner == -1 ) {
+		d->owner = getCurrent()->pid;
 		return 1;
 	} else {
 		return 0;
@@ -52,7 +52,7 @@ char *getStr(){
 
 void kgetStr(){
 	if(bfifoIn.length > 0){
-		kget_registers()->v_reg[0] = &bfifoIn.buf[0];
+	  kget_registers()->v_reg[0] = (uint32_t) &bfifoIn.buf[0];
 	}
 }
 
@@ -73,14 +73,14 @@ void putCh(char c) {
 }
 
 void putStr(char* text) {
-	if(d_tty.owner == -1){
-		if(IO_device(d_tty)){
+  if(d_tty.owner == -1){ // is the tty free?
+		if(IO_device(&d_tty)){
 			syscall_putStr(&getCurrent()->fifoOut, text);
 			d_tty.owner = -1;
 		}
 	} else {
-		while(d_tty.owner == -1){}
-		if(IO_device(d_tty)){
+	  while(d_tty.owner != -1){} // poll until it is free
+		if(IO_device(&d_tty)){
 			syscall_putStr(&getCurrent()->fifoOut, text);
 			d_tty.owner = -1;
 		}
@@ -103,17 +103,17 @@ void DputMalta(uint32_t word){
 /* Polled output to tty */
 void DputCh(char c) {
 	while ( !tty-> lsr.thre ) {}
-		tty->thr = c;
+	tty->thr = c;
 	if(c == '\n') {
 		while ( !tty-> lsr.thre ) {}
-				tty->thr = '\r';
+		tty->thr = '\r';
 	}
 }
 
 /* Outputs a string on tty, polled */
 void DputStr(char* text) {
-	while (text[0] != '\0') {
-		DputCh(text[0]);
+	while (*text != '\0') {
+		DputCh(*text);
 		++text;
 	}
 	DputCh('\n');
