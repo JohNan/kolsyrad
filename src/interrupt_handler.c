@@ -3,7 +3,7 @@ static registers_t regs;
 
 void enableTimer(){
         /* Initialise timer to interrupt in 100 ms (simulated time). */
-        kload_timer(1 * timer_msec);
+        kload_timer(100 * timer_msec);
 
         DputStr("Interrupt enabled.");
 }
@@ -60,16 +60,17 @@ void kexception() {
 	  	  if (tty->lsr.dr) {
 	  		/* Data ready: add character to buffer */
 	  		ch = tty->thr; /* rbr and thr is the same. */
-	  		bfifo_put(&bfifoOut, ch);
+	  		bfifo_put(&bfifoOut, ch,1);
+	  		bfifo_put(&bfifoIn, ch,0);
 
 	  		/* Should be moved to shell program */
 	  		if (ch == '\r') {
-	  				bfifo_put(&bfifoOut, '\n');
+	  				bfifo_put(&bfifoOut, '\n',1);
 	  		}
 
 	  		if (ch == '\b') {
-	  				bfifo_put(&bfifoOut, ' ');
-	  				bfifo_put(&bfifoOut, '\b');
+	  				bfifo_put(&bfifoOut, ' ',1);
+	  				bfifo_put(&bfifoOut, '\b',1);
 	  		}
 
 
@@ -93,8 +94,6 @@ void kexception() {
 
 	  /* lets schedule! */
 	  S_schedule();
-
-	  kload_timer(100 * timer_msec);
 
   } else if(cause.field.exc == 8) { /* Syscall exception */
 	  /* Get pointer to stored registers. */

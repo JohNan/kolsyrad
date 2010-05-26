@@ -53,7 +53,7 @@ void init_poc() {
     pcbs[i].state = PS_FREE;
     pcbs[i].flags = 0;
     /* registers do not need init */
-    pcbs[i].registers.sp_reg = (uint32_t) &pstack[i];
+    pcbs[i].registers.sp_reg = (uint32_t) &pstack[i+1];
     pcbs[i].next = &pcbs[i + 1];
     pcbs[i].prev = &pcbs[i - 1];
     /* next_instr does not need init */

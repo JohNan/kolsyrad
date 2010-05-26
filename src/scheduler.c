@@ -9,10 +9,17 @@ void S_schedule(){
 	} else {
 
 		kset_registers( &( S_pcbQ->ready->registers ) );
-
-		S_pcbQ->ready = S_pcbQ->ready->next;
-
+	/*
+		if( S_pcbQ->ready->next->priority > S_pcbQ->ready->priority ){
+			S_pcbQ->ready = S_pcbQ->ready->next;
+		} else {
+			S_pcbQ->ready = S_pcbQ->first_ready;
+		}
+	 */
 	}
+
+	S_pcbQ->ready = S_pcbQ->ready->next;
+	kload_timer(1 * timer_msec);
 }
 
 void S_add_new_pcb( pcb * toAdd ){
@@ -23,10 +30,46 @@ void S_add_new_pcb( pcb * toAdd ){
 		toAdd->next = toAdd;
 		toAdd->prev = toAdd;
 	} else {
+		pcb * currentInLoop = S_pcbQ->first_ready;
+		if( toAdd->priority > currentInLoop->priority ){
+
+			toAdd->next = currentInLoop;
+			toAdd->prev = currentInLoop->prev;
+			currentInLoop->prev->next = toAdd;
+			currentInLoop->prev = toAdd;
+
+			S_pcbQ->first_ready = toAdd;
+
+		} else {
+			currentInLoop = currentInLoop->next;
+
+			int i = 1;
+			while( i ){
+				if( currentInLoop == S_pcbQ->first_ready ){
+					toAdd->next = currentInLoop;
+					toAdd->prev = currentInLoop->prev;
+					currentInLoop->prev->next = toAdd;
+					currentInLoop->prev = toAdd;
+						i = 0;
+				} else if( toAdd->priority > currentInLoop->priority ){
+					toAdd->next = currentInLoop;
+					toAdd->prev = currentInLoop->prev;
+					currentInLoop->prev->next = toAdd;
+					currentInLoop->prev = toAdd;
+						i = 0;
+				} else {
+						i++;
+						currentInLoop = currentInLoop->next;
+				}
+			}
+
+		}
+		/*
 		toAdd->next = S_pcbQ->ready;
-		toAdd->prev = S_pcbQ->ready->prev;
-		S_pcbQ->ready->prev->next = toAdd;
-		S_pcbQ->ready->prev = toAdd;
+				toAdd->prev = S_pcbQ->ready->prev;
+				S_pcbQ->ready->prev->next = toAdd;
+				S_pcbQ->ready->prev = toAdd; */
+
 	}
 }
 

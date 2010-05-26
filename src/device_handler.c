@@ -28,6 +28,12 @@ void printPid(pcb * p){
 	itoa(p->pid,tmp,10);
 	DputStr(tmp);
 }
+void printPrio(pcb * p){
+	char tmp[8];
+	tmp[7] = '\0';
+	itoa(p->priority,tmp,10);
+	DputStr(tmp);
+}
 
 /*
  * Interrupt output to tty
@@ -94,7 +100,7 @@ void DputStr(char* text) {
 
 
 /* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
+void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output) {
 	/* Make sure the 'bfifo' pointer is not 0. */
 
 	kdebug_assert(bfifo != 0);
@@ -102,7 +108,7 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
 	if (bfifo->length < FIFO_SIZE) {
 		bfifo->buf[(bfifo->length)++] = ch;
 	}
-	if (tty->lsr.thre) {
+	if (tty->lsr.thre && output) {
 		/* Transmitter idle: transmit buffered character */
 		tty->thr = bfifo_get(bfifo);
 		/* Determine if we should be notified when transmitter becomes idle */
@@ -114,9 +120,9 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch) {
 void bfifo_putStr(bounded_fifo* bfifo, uint32_t c) {
 	char* ch = (char*)c;
 	  while( ch[0] != '\0' ){
-		  bfifo_put( bfifo,ch[0] );
+		  bfifo_put( bfifo,ch[0],1);
 		if( ch[0] == '\n' ) {
-			bfifo_put( bfifo,'\r' );
+			bfifo_put( bfifo,'\r',1);
 		}
 		ch++;
 	}
