@@ -22,10 +22,10 @@ void S_schedule(){
 }
 
 void SP_add_before( pcb * toAdd, pcb * before ){
-	toAdd->next = currentInLoop;
-	toAdd->prev = currentInLoop->prev;
-	currentInLoop->prev->next = toAdd;
-	currentInLoop->prev = toAdd;
+	toAdd->next = before;
+	toAdd->prev = before->prev;
+	before->prev->next = toAdd;
+	before->prev = toAdd;
 }
 
 void S_add_new_pcb( pcb * toAdd ){
