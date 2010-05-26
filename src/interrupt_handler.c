@@ -103,7 +103,7 @@ void kexception() {
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();
 
-	  /* Handle the system call (see syscall.S). */
+	  /* Handle the system call (see _boot.S). */
 	  ksyscall_handler(reg);
 
 	  /* Return from exception to instruction following syscall. */
