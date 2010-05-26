@@ -22,11 +22,12 @@ void init() {
 	if(i != -1){
 		DputStr("Second process created.");
 	}
-	i = make_process(2,25,0);
+/*	i = make_process(2,25,0);
 		if(i != -1){
 		DputStr("Third process created.");
 
 	}
+	*/
 	i = make_process(3,30,20);
 		if(i != -1){
 		DputStr("Forth process created.");
@@ -38,7 +39,7 @@ void init() {
 
 	}
 
-
+/*
 
 	char tmp[8];
 	tmp[8] = '\0';
@@ -64,7 +65,7 @@ void init() {
 	printPid(pcbq.first_ready);
 	DputStr("---Ready---");
 	printPid(pcbq.ready);
-
+*/
 	// now we just wait for an exception to occur and start scheduling
 
 	DputStr("Init done.");

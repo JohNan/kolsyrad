@@ -45,7 +45,7 @@ void printP(){
 		printSln( "----------------" );
 		printN( temp->pid );
 		printS( "\t" );
-		printN( temp->progid );
+		printN( temp->progid->progid );
 		printS( "\t" );
 		printN( temp->priority );
 		printS( "\t" );
@@ -54,7 +54,7 @@ void printP(){
 		for( temp++; temp != list_queue( 1 ); temp++ ){
 			printN( temp->pid );
 			printS( "\t" );
-			printN( temp->progid );
+			printN( temp->progid->progid );
 			printS( "\t" );
 			printN( temp->priority );
 			printS( "\t" );
@@ -71,7 +71,7 @@ void printP(){
 		printSln( "-----------------" );
 		printN( temp->pid );
 		printS( "\t" );
-		printN( temp->progid );
+		printN( temp->progid->progid );
 		printS( "\t" );
 		printN( temp->priority );
 		printS( "\t" );
@@ -80,7 +80,7 @@ void printP(){
 		for( temp++; temp != list_queue( 1 ); temp++ ){
 			printN( temp->pid );
 			printS( "\t" );
-			printN( temp->progid );
+			printN( temp->progid->progid );
 			printS( "\t" );
 			printN( temp->priority );
 			printS( "\t" );

@@ -66,6 +66,7 @@ void kexception() {
 	  		/* Should be moved to shell program */
 	  		if (ch == '\r') {
 	  				bfifo_put(&bfifoOut, '\n',1);
+	  				bfifo_put(&bfifoIn, '\n',0);
 	  		}
 
 	  		if (ch == '\b') {
