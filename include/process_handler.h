@@ -8,6 +8,7 @@
 
 #include "structs/registers.h"
 
+#include "kjell.h"
 #include "scheduler.h"
 #include "structs.h"
 #include "user_prog.h"

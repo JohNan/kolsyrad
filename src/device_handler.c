@@ -35,6 +35,10 @@ void printPrio(pcb * p){
 	DputStr(tmp);
 }
 
+uint8_t getCh(){
+	return syscall_getC(&bfifoIn);
+}
+
 /*
  * Interrupt output to tty
  * Using syscall

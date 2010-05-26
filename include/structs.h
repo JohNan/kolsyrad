@@ -26,11 +26,20 @@ bounded_fifo bfifoOut;
 bounded_fifo bfifoIn;
 
 /*
+ * Program Information Block
+ */
+typedef struct pib{  // Program information block
+	short progid; // Hold the program ID.
+	char pname[16]; // The human readable name of the program.
+	int start_ptr; // A pointer to the entry point of the program
+}pib;
+
+/*
  * process
  */
 typedef struct pcb{
 	char pid;
-	short progid;
+	pib *progid;
 	uint8_t priority;
 	uint8_t state;
 	bounded_fifo fifoOut;
@@ -39,12 +48,6 @@ typedef struct pcb{
 	struct pcb *next;
 	struct pcb *prev;
 }pcb;
-
-typedef struct pib{  // Program information block
-	short progid; // Hold the program ID.
-	char pname[16]; // The human readable name of the program.
-	int start_ptr; // A pointer to the entry point of the program
-}pib;
 
 typedef struct proc_handler{
 	pcb pcb_array[PROC_COUNT]; // An array of all current pcb's.

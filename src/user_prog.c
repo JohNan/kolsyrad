@@ -5,8 +5,6 @@ void idle(){
 	while(1){}
 }
 
-
-
 void goodbye(){
 	int i = 0;
 	putStr("Goodbye world.\n");
@@ -57,13 +55,10 @@ int fibonacci_aux(int input){
 	  return m;
 }
 
-void fibonacci(int input)
-{
+void fibonacci(int input) {
 	int n;
 
 	for(n=0; n<input; n++) {
 		printNln(fibonacci_aux(n));
 	}
 }
-
-

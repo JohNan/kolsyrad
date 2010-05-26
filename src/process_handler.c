@@ -24,7 +24,7 @@ void init_poc() {
   free_pcb_q.last = &pcbs[MAX_PROCESS - 1];
 
   pcbs[0].pid = 0;
-  pcbs[0].progid = -1;
+  pcbs[0].progid = NULL;
   pcbs[0].priority = 0;
   pcbs[0].state = PS_FREE;
   pcbs[0].flags = 0;
@@ -36,7 +36,7 @@ void init_poc() {
   /* next_instr does not need init */
 
   pcbs[MAX_PROCESS - 1].pid = MAX_PROCESS - 1;
-  pcbs[MAX_PROCESS - 1].progid = -1;
+  pcbs[MAX_PROCESS - 1].progid = NULL;
   pcbs[MAX_PROCESS - 1].priority = 0;
   pcbs[MAX_PROCESS - 1].state = PS_FREE;
   pcbs[MAX_PROCESS - 1].flags = 0;
@@ -48,7 +48,7 @@ void init_poc() {
 
   for(i = 1; i < (MAX_PROCESS - 1); i++) {
     pcbs[i].pid = i;
-    pcbs[i].progid = -1;
+    pcbs[i].progid = NULL;
     pcbs[i].priority = 0;
     pcbs[i].state = PS_FREE;
     pcbs[i].flags = 0;
@@ -69,7 +69,7 @@ int get_pid() {
 
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
 void set_exec_image(pib *newPIB) {
-  (pcbq.ready) -> progid = newPIB -> progid;
+ // (pcbq.ready) -> progid = newPIB -> progid;
   /*__inline__ __asm__ {
 	  sw ra,newPIB->start_ptr
 	  }*/
@@ -115,7 +115,7 @@ void p_free_pcb(pcb *p) {
     p->prev = free_pcb_q.last;
     free_pcb_q.last = p->prev->next = p;
   }
-  p->progid = -1;
+  p->progid = NULL;
   p->state = PS_FREE;
 }
 
@@ -185,9 +185,9 @@ pcb *list_queue(int what) {
 int make_process( int pibsNr, int prio, uint32_t args ){
 	pcb *newPcb = get_pcb();
 
-	newPcb->progid = pibs[pibsNr].progid;
+	newPcb->progid = &pibs[pibsNr];
 	newPcb->state = PS_READY;
-	newPcb->registers.epc_reg = pibs[pibsNr].start_ptr;
+	newPcb->registers.epc_reg = newPcb->progid->start_ptr;
 	newPcb->registers.ra_reg = (int)&exit;
 	newPcb->registers.a_reg[0] = args;
 	newPcb->priority = prio;

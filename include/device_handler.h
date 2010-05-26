@@ -23,6 +23,7 @@ void printPrio(pcb * p);
 void init_devices();
 int IO_device(Device);
 
+uint8_t getCh();
 void putCh(char c);
 void putStr(char* text);
 void putMalta(uint32_t word);
