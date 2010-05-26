@@ -50,23 +50,13 @@ typedef struct pcb{
 	uint32_t time;
 }pcb;
 
-typedef struct proc_handler{
+/*typedef struct proc_handler{
 	pcb pcb_array[PROC_COUNT]; // An array of all current pcb's.
-}proc_handler;
-
-typedef struct pcb_timer{
-	pcb * first;
-	pcb * last;
-}pcb_timer;
-
-typedef struct pcb_int{
-	pcb * first;
-	pcb * last;
-}pcb_int;
+	}proc_handler;*/
 
 typedef struct pcb_waiting{
-	pcb_timer pcbTimer;
-	pcb_int pcbInt;
+	pcb *pcbTimer;
+	pcb *pcbInt;
 }pcb_waiting;
 
 typedef struct pcb_queues{
@@ -80,7 +70,7 @@ typedef struct free_pcb{
 	pcb * last;
 } free_pcb;
 
-pcb_queues pcbq;
-free_pcb free_pcb_q;
+extern pcb_queues pcbq;
+extern free_pcb free_pcb_q;
 
 #endif

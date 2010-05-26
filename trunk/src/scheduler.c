@@ -101,6 +101,45 @@ pcb* getCurrent(){
 	return S_pcbQ->ready->prev;
 }
 
+void move_to_int(pcb *who) {
+  pcb *p = S_pcbQ->waiting.pcbInt;
+  unlink_pcb(who);
+  if(p != NULL)
+    p->prev = who;
+  who->next = p;
+  S_pcbQ->waiting.pcbInt = who;
+}
+
+void move_to_sleep(pcb *who) {
+  pcb *p = S_pcbQ->waiting.pcbTimer;
+  unlink_pcb(who);
+  if(p != NULL)
+    p->prev = who;
+  who->next = p;
+  S_pcbQ->waiting.pcbInt = who;
+}
+
+void move_to_ready(pcb *who) {
+  unlink_pcb(who);
+  S_add_new_pcb(who);
+}
+
+void unlink_pcb(pcb *who) {
+  if(S_pcbQ->ready == who)
+    S_pcbQ->ready = who->next;
+  if(S_pcbQ->first_ready == who)
+    S_pcbQ->first_ready = who->next;
+  if(S_pcbQ->waiting.pcbInt == who)
+    S_pcbQ->waiting.pcbInt = who->next;
+  if(S_pcbQ->waiting.pcbTimer == who)
+    S_pcbQ->waiting.pcbTimer = who->next;
+
+  if(who->next != NULL)
+    who->next->prev = who->prev;
+  if(who->prev != NULL)
+    who->prev->next = who->next;
+}
+
 void init_scheduler(pcb_queues * p1, free_pcb * p2){
 	S_pcbQ = p1;
 	S_freeQ = p2;
@@ -108,12 +147,12 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2){
 
 // tells process q to wait for ms milliseconds
 void S_stop( uint16_t ms, pcb * q){
-
+  int t = (q == S_pcbQ->ready->prev); // is it current proc that sleeps?
+  q->time = ms;
+  move_to_sleep(q);
+  if(t) S_schedule();
 }
 
 void S_start( pcb * q ){
-
+  move_to_ready(q);
 }
-
-
-

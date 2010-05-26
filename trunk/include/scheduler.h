@@ -33,6 +33,10 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2 );
 
 pcb* getCurrent();
 
+void move_to_ready(pcb *p);
+void move_to_int(pcb *p);
+void move_to_sleep(pcb *p);
+void unlink_pcb(pcb *);
 void S_stop( uint16_t ms, pcb * q);
 void S_start( pcb * q );
 

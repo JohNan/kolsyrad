@@ -8,6 +8,8 @@ pib pibs[MAX_PROGRAM] = {
   {3, "increment", (int)&increment},
   {4, "fibonacci", (int)&fibonacci}
 };
+pcb_queues pcbq;
+free_pcb free_pcb_q;
 
 uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
 
@@ -16,9 +18,8 @@ void init_poc() {
 
   pcbq.first_ready =
     pcbq.ready =
-    pcbq.waiting = NULL;
-
-  pcbq.magic = 666;
+    pcbq.waiting.pcbTimer =
+    pcbq.waiting.pcbInt = NULL;
 
   free_pcb_q.first = &pcbs[0];
   free_pcb_q.last = &pcbs[MAX_PROCESS - 1];
@@ -145,21 +146,21 @@ void exit() {
 }
 
 // unblocks a process
-
+/*
 void unblock(pcb *who) {
   if(pcbq.waiting == who)
     pcbq.waiting = who->next;
 
-  /* unlink */
+  // unlink
   if(who->prev != NULL)
     who->prev->next = who->next;
   if(who->next != NULL)
     who->next->prev = who->prev;
   who->prev = who->next = NULL;
 
-  /* TODO: call the scheduler to insert it at the right place in ready Q */
+  // TODO: call the scheduler to insert it at the right place in ready Q
 }
-
+*/
 
 // sets priority on processes
 void set_priority(pcb *who, int p) {
@@ -172,7 +173,7 @@ pcb *list_queue(int what) {
   case PL_READY:
     return pcbq.ready;
   case PL_SLEEP:
-    return pcbq.waiting;
+    return pcbq.waiting.pcbInt;
   }
   return NULL;
 }
