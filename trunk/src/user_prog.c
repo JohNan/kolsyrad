@@ -5,9 +5,7 @@ void idle(){
 	while(1){}
 }
 
-void kjell(){
-	putStr("§kolsyrad > \n");
-}
+
 
 void goodbye(){
 	int i = 0;
@@ -62,9 +60,10 @@ int fibonacci_aux(int input){
 void fibonacci(int input)
 {
 	int n;
+
 	for(n=0; n<input; n++) {
 		printNln(fibonacci_aux(n));
 	}
-}
+
 
 
