@@ -5,7 +5,7 @@
 SIMICS_J=/home/jone4151/simics-workspace 
 SIMICS_P=/home/pebo6223/simics-workspace 
 SIMICS_S=/home/stri1033/simics-workspace 
-SIMICS_K=/home/?/simics-workspace 
+SIMICS_K=/home/krem7521/simics-workspace 
 
 EXECUTABLES=$(addprefix bin/, boot_malta)
 
@@ -34,13 +34,13 @@ LD=$(MIPS_PREFIX)-ld -Ttext 80020000
 
 boot_j: bin/boot 
 	./scripts/run.sh $(SIMICS_J) $<
-	
+
 boot_p: bin/boot 
 	./scripts/run.sh $(SIMICS_P) $<
 
 boot_s: bin/boot 
 	./scripts/run.sh $(SIMICS_S) $<
-	
+
 boot_k: bin/boot 
 	./scripts/run.sh $(SIMICS_K) $<
 
@@ -61,12 +61,12 @@ boot_all: bin/boot
 # Build the timer example
 bin/boot:  $(addprefix build/, kjell.o init.o stdlib.o debug.o user_prog.o interrupt_handler.o device_handler.o process_handler.o scheduler.o _boot.o api.o)
 	$(LD) $(ARCH) -o $@ $^
-	
+
 #### Add dependency on headerfile of various tty.o files
 
 build/%.o: %.c include/%.h
 	$(CC) $(ARCH) $(CFLAGS)  -c $< -o $@	
-	
+
 # clean: remove object files and emacs backup files
 clean: 
 	pwd
