@@ -61,20 +61,22 @@ void kexception() {
 	  		/* Data ready: add character to buffer */
 	  		ch = tty->thr; /* rbr and thr is the same. */
 	  		bfifo_put(&bfifoOut, ch,1);
-	  		//bfifo_put(&bfifoIn, ch,0);
+	  		Input(&bfifoIn, ch);
 
-	  		kgetCh(ch);
 
 	  		/* Should be moved to shell program */
 	  		if (ch == '\r') {
 	  				bfifo_put(&bfifoOut, '\n',1);
-	  				//bfifo_put(&bfifoIn, '\n',0);
-	  				kgetCh(ch);
+	  				Input(&bfifoIn, '\n');
 	  		}
 
 	  		if (ch == '\b') {
 	  				bfifo_put(&bfifoOut, ' ',1);
 	  				bfifo_put(&bfifoOut, '\b',1);
+
+	  				if(bfifoIn.length > 0){
+	  					bfifoIn.length--;
+	  				}
 	  		}
 
 
@@ -103,7 +105,7 @@ void kexception() {
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();
 
-	  /* Handle the system call (see _boot.S). */
+	  /* Handle the system call (see syscall.S). */
 	  ksyscall_handler(reg);
 
 	  /* Return from exception to instruction following syscall. */

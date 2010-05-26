@@ -40,9 +40,20 @@ uint8_t getCh(){
 }
 
 
-uint8_t kgetCh(uint8_t c){
-	kget_registers()->v_reg[0] = c;
-	return c;
+void kgetCh(){
+	if(bfifoIn.length > 0){
+		kget_registers()->v_reg[0] = bfifoIn.buf[bfifoIn.length];
+	}
+}
+
+char *getStr(){
+	return syscall_getS();
+}
+
+void kgetStr(){
+	if(bfifoIn.length > 0){
+		kget_registers()->v_reg[0] = &bfifoIn.buf[0];
+	}
 }
 
 /*
@@ -108,6 +119,13 @@ void DputStr(char* text) {
 	DputCh('\n');
 }
 
+/* bfifo_get: Returns a character removed from the front of the queue. */
+void Input(bounded_fifo* bfifo, char ch) {
+	if (bfifo->length < FIFO_SIZE) {
+			bfifo->buf[(bfifo->length)++] = ch;
+	}
+}
+
 
 /* bfifo_put: Inserts a character at the end of the queue. */
 void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output) {
@@ -156,7 +174,6 @@ uint8_t bfifo_get(bounded_fifo* bfifo) {
   }
   return ch;
 }
-
 
 //Resets the buffer
 void bfifo_flush(bounded_fifo* bfifo)
