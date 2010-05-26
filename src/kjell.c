@@ -9,7 +9,7 @@ void kjell(){
 			i = 0;
 		}
 		else{
-			if (getCh == '\n'){
+			if (getCh() == '\r' || getCh() == '\n'){
 				i = 1;
 			}
 		}

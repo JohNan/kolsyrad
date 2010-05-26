@@ -36,7 +36,13 @@ void printPrio(pcb * p){
 }
 
 uint8_t getCh(){
-	return syscall_getC(&bfifoIn);
+	return syscall_getC();
+}
+
+
+uint8_t kgetCh(uint8_t c){
+	kget_registers()->v_reg[0] = c;
+	return c;
 }
 
 /*
