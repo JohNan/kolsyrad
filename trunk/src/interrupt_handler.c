@@ -61,13 +61,13 @@ void kexception() {
 	  	  if (tty->lsr.dr) {
 	  		/* Data ready: add character to buffer */
 	  		ch = tty->thr; /* rbr and thr is the same. */
-	  		bfifo_put(&bfifoOut, ch,1);
+
 	  		Input(&bfifoIn, ch);
 
 
 	  		/* Should be moved to shell program */
 	  		if (ch == '\r') {
-	  				bfifo_put(&bfifoOut, '\n',1);
+
 	  				Input(&bfifoIn, '\n');
 	  		}
 

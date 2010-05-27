@@ -40,20 +40,28 @@ uint8_t getCh(){
 }
 
 
-void kgetCh(){
+uint8_t kgetCh(){
 	if(bfifoIn.length > 0){
-		kget_registers()->v_reg[0] = bfifoIn.buf[bfifoIn.length];
+		kget_registers()->v_reg[0] = bfifoIn.buf[bfifoIn.length-1];
 	}
+	return NULL;
 }
 
 char *getStr(){
 	return syscall_getS();
 }
 
-void kgetStr(){
+char *kgetStr(){
 	if(bfifoIn.length > 0){
-	  kget_registers()->v_reg[0] = (uint32_t) &bfifoIn.buf[0];
+		if(bfifoIn.buf[bfifoIn.length-1] == '\n') {
+			kget_registers()->v_reg[0] = (int)bfifoIn.buf;
+		}
 	}
+	return NULL;
+}
+
+void flush() {
+	syscall_flush(&bfifoIn);
 }
 
 /*
@@ -78,14 +86,15 @@ void putCh(char c) {
 }
 
 void putStr(char* text) {
-  if(d_tty.owner == -1){ // is the tty free?
+  if(d_tty.owner == -1){
+ // is the tty free?
 		if(IO_device(&d_tty)){
 			syscall_putStr(&getCurrent()->fifoOut, text);
 			d_tty.owner = -1;
 		}
 	} else {
-	  while(d_tty.owner != -1){} // poll until it is free
-		if(IO_device(&d_tty)){
+		while(d_tty.owner != -1){}
+		if(IO_device(d_tty)){
 			syscall_putStr(&getCurrent()->fifoOut, text);
 			d_tty.owner = -1;
 		}
@@ -135,7 +144,11 @@ void DputStr(char* text) {
 /* bfifo_get: Returns a character removed from the front of the queue. */
 void Input(bounded_fifo* bfifo, char ch) {
 	if (bfifo->length < FIFO_SIZE) {
-			bfifo->buf[(bfifo->length)++] = ch;
+		bfifo_put(&bfifoOut, ch, 1);
+		bfifo->buf[bfifo->length] = ch;
+		bfifo->buf[bfifo->length+1] = '\0';
+		bfifo->length++;
+		//DputCh(ch);
 	}
 }
 
@@ -189,39 +202,17 @@ uint8_t bfifo_get(bounded_fifo* bfifo) {
 }
 
 //Resets the buffer
-void bfifo_flush(bounded_fifo* bfifo)
-{
-  int i;
-
-  /* Make sure the 'bfifo' pointer is not 0, and that queue is not empty. */
-  kdebug_assert(bfifo != 0);
-  kdebug_assert(bfifo->length > 0);
-
-  if (bfifo->length > 0) {
-
-  for (i = 0; i < bfifo->length; i++) {
-	  if (bfifo->length > 0 && tty->lsr.thre) {
-		  tty->thr = bfifo->buf[i];
-
-		  tty->ier.etbei = (bfifo->length > 0);
-	  }
-  }
-  bfifo->length = 0;
-
-  }
+void bfifo_flush(bounded_fifo* bfifo) {
+	bfifo->length = 0;
+	bfifo->buf[bfifo->length] = '\0';
 }
-
-// stops a process from running
-void block(void){
-
-}
-
 
 void init_devices(){
 
 	status_reg_t and, or;
 	// Set fifo-length
 	bfifoOut.length = 0;
+	bfifoIn.length = 0;
 
 	//Set MCR Out2 to 1 to enable interrupts on the console.
 	tty->mcr.out2 = 1;
