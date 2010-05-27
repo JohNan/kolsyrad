@@ -28,7 +28,7 @@ void init() {
 
 	}
 		
-	i = make_process(3,30,20);
+		/*i = make_process(3,30,20);
 		if(i != -1){
 		DputStr("Forth process created.");
 

@@ -8,7 +8,6 @@ void S_schedule(){
 		DputStr( "PiNK SCREEN\n" );
 		DputStr( "No processes to run, " );
 		while( 1 ){
-			DputStr( "rEEbOOt" );
 		}
 	} else if( S_pcbQ->ready->priority > S_pcbQ->ready->next->priority ){
 		kset_registers( &S_pcbQ->ready->registers );
@@ -18,7 +17,7 @@ void S_schedule(){
 		S_pcbQ->ready = S_pcbQ->ready->next;
 	}
 
-	kload_timer(1 * timer_msec);
+	kload_timer(10 * timer_msec);
 }
 
 void SP_add_before( pcb * toAdd, pcb * before ){
@@ -116,12 +115,15 @@ void move_to_sleep(pcb *who) {
   if(p != NULL)
     p->prev = who;
   who->next = p;
-  S_pcbQ->waiting.pcbInt = who;
+  S_pcbQ->waiting.pcbTimer = who;
 }
 
 void move_to_ready(pcb *who) {
+  DputStr("ready!");
   unlink_pcb(who);
+  DputStr("set!");
   S_add_new_pcb(who);
+  DputStr("go!");
 }
 
 void unlink_pcb(pcb *who) {
@@ -152,6 +154,7 @@ void S_stop( uint16_t ms, pcb * q){
   if(q == NULL) q = S_pcbQ->ready->prev;
   t = (q == S_pcbQ->ready->prev); // is it current proc that sleeps?
   q->time = ms;
+  DputStr("Time to sleep!");
   move_to_sleep(q);
   if(t) S_schedule();
 }

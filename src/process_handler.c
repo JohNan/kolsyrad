@@ -34,6 +34,7 @@ void init_poc() {
   pcbs[0].registers.sp_reg = (uint32_t) &pstack[1];
   pcbs[0].next = &pcbs[1];
   pcbs[0].prev = &pcbs[MAX_PROCESS - 1];
+  pcbs[0].time = 0;
   /* next_instr does not need init */
 
   pcbs[MAX_PROCESS - 1].pid = MAX_PROCESS - 1;
@@ -45,6 +46,7 @@ void init_poc() {
   pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS];
   pcbs[MAX_PROCESS - 1].next = &pcbs[0];
   pcbs[MAX_PROCESS - 1].prev = &pcbs[MAX_PROCESS - 2];
+  pcbs[MAX_PROCESS - 1].time = 0;
   /* next_instr does not need init */
 
   for(i = 1; i < (MAX_PROCESS - 1); i++) {
@@ -57,6 +59,7 @@ void init_poc() {
     pcbs[i].registers.sp_reg = (uint32_t) &pstack[i+1];
     pcbs[i].next = &pcbs[i + 1];
     pcbs[i].prev = &pcbs[i - 1];
+    pcbs[i].time = 0;
     /* next_instr does not need init */
   }
 
@@ -188,6 +191,7 @@ int make_process( int pibsNr, int prio, uint32_t args ){
 	newPcb->registers.a_reg[0] = args;
 	newPcb->priority = prio;
 	newPcb->fifoOut.length = 0;
+	newPcb->next = newPcb->prev = NULL;
 	S_add_new_pcb( newPcb );
 //	S_schedule();
 	return newPcb->pid;
