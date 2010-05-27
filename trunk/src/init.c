@@ -14,20 +14,20 @@ void init() {
 	//init exceptions
 	init_exc();
 
-	i = make_process(0,1,0);
+	/*	i = make_process(0,1,0);
 	if(i != -1){
 		DputStr("First process created.");
-	}
+		}*/
 	i = make_process(1,25,0);
 	if(i != -1){
 		DputStr("Second process created.");
-	}
-/*	i = make_process(2,25,0);
+		}
+	/*i = make_process(2,25,0);
 		if(i != -1){
 		DputStr("Third process created.");
 
 	}
-	*/
+		
 	i = make_process(3,30,20);
 		if(i != -1){
 		DputStr("Forth process created.");
@@ -37,7 +37,7 @@ void init() {
 		if(i != -1){
 		DputStr("Fifth process created.");
 
-	}
+		}*/
 
 /*
 

@@ -54,6 +54,7 @@ excn_stack:
 	.globl	syscall_get_pid
 	.globl 	syscall_exit
 	.globl 	syscall_putMalta
+	.globl	syscall_putMaltaStr
 	.globl	syscall_putStr
 	.globl	syscall_putC
 	.globl	syscall_getC
@@ -285,6 +286,11 @@ syscall_putMalta:
 	syscall			# Enter kernel mode by 'syscall' exception.
 	jr ra			# Back in user mode, return to caller
 
+syscall_putMaltaStr:
+	la v0,DputMaltaStr
+	syscall
+	jr ra
+	
 syscall_putStr:
 	la v0,bfifo_putStr
 	syscall

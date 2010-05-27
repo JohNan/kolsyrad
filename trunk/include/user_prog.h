@@ -8,6 +8,7 @@ void idle();
 void goodbye();
 void smile();
 
+void mscroll();
 void increment(int);
 int fibonacci_aux(int);
 void fibonacci(int);

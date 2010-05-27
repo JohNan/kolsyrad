@@ -65,6 +65,11 @@ void putMalta(uint32_t word){
 	syscall_putMalta(word);
 }
 
+void putMaltaStr(char *str) {
+  syscall_putMaltaStr(str);
+}
+
+
 void putCh(char c) {
 	syscall_putC(&getCurrent()->fifoOut,c);
 	if (c == '\n') {
@@ -97,6 +102,14 @@ void DputMalta(uint32_t word){
   for (i = 7; i >= 0; --i) {
     malta->asciipos[i].value = '0' + word % 10;
     word /= 10;
+  }
+}
+
+void DputMaltaStr(char *str) {
+  int i;
+  malta->ledbar.reg = 0xFF;
+  for (i = 0;i < 8; i++) {
+    malta->asciipos[i].value = *str++;
   }
 }
 
