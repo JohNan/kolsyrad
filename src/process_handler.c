@@ -13,6 +13,12 @@ free_pcb free_pcb_q;
 
 uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
 
+/* init_poc()
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: initializes all proces related structures
+ */
 void init_poc() {
   int i;
 
