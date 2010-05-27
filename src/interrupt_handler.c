@@ -41,6 +41,7 @@ void kexception() {
 
   registers_t* reg;
   cause_reg_t cause;
+  pcb *p;
   /* Make sure that we are here because of a timer interrupt. */
   cause.reg = kget_cause();
 
@@ -93,8 +94,17 @@ void kexception() {
 	  	  kset_cause(~0x1000, 0);
   } else if(cause.field.exc == 0){ /* Timer interrupt */
 	  /* Reload timer for another 100 ms (simulated time) */
+    kload_timer(1 * timer_msec);
 
-
+    /* count down all sleepers */
+    p = pcbq.waiting.pcbTimer;
+    while(p != NULL) {
+      if(p->time > 0) {
+	if((--(p->time)) == 0)
+	  move_to_ready(p);
+      }
+      p = p->next;
+    }
 	  /* Icrease the number on the Malta display. */
 	  // DputMalta(++i);
 

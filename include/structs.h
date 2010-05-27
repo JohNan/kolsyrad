@@ -50,10 +50,6 @@ typedef struct pcb{
 	uint32_t time;
 }pcb;
 
-/*typedef struct proc_handler{
-	pcb pcb_array[PROC_COUNT]; // An array of all current pcb's.
-	}proc_handler;*/
-
 typedef struct pcb_waiting{
 	pcb *pcbTimer;
 	pcb *pcbInt;

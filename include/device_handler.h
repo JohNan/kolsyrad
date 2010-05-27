@@ -34,6 +34,7 @@ void kgetStr();
 void putCh(char c);
 void putStr(char* text);
 void putMalta(uint32_t word);
+void putMaltaStr(char *str);
 
 void Input(bounded_fifo* bfifo, char ch);
 

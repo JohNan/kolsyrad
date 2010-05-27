@@ -5,6 +5,15 @@ void idle(){
 	while(1){}
 }
 
+void mscroll() {
+  char *str = "MALTA!  ";
+
+  while(1) {
+    putMaltaStr(str);
+    S_stop(100,NULL);
+  }
+}
+
 void goodbye(){
 	int i = 0;
 	putStr("Goodbye world.\n");
@@ -110,3 +119,5 @@ void proc3(){
 		i++;
 	}
 }
+
+

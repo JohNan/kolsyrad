@@ -3,7 +3,7 @@
 pcb pcbs[MAX_PROCESS];
 pib pibs[MAX_PROGRAM] = {
   {0, "idle", (int)&idle},
-  {1, "goodbye", (int)&goodbye},
+  {1, "malta_scroll", (int)&mscroll},
   {2, "kjell", (int)&kjell},
   {3, "increment", (int)&increment},
   {4, "fibonacci", (int)&fibonacci}

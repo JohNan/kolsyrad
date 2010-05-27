@@ -147,7 +147,10 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2){
 
 // tells process q to wait for ms milliseconds
 void S_stop( uint16_t ms, pcb * q){
-  int t = (q == S_pcbQ->ready->prev); // is it current proc that sleeps?
+  int t;
+
+  if(q == NULL) q = S_pcbQ->ready->prev;
+  t = (q == S_pcbQ->ready->prev); // is it current proc that sleeps?
   q->time = ms;
   move_to_sleep(q);
   if(t) S_schedule();
