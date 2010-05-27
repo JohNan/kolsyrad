@@ -20,15 +20,15 @@ static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 void printPid(pcb * p);
 void printPrio(pcb * p);
 
-void parseKjell(uint8_t c);
-
 void init_devices();
 int IO_device(Device *);
 
 uint8_t getCh();
-void kgetCh();
+uint8_t kgetCh();
 char *getStr();
-void kgetStr();
+char *kgetStr();
+
+void flush();
 
 
 void putCh(char c);
@@ -41,7 +41,6 @@ void Input(bounded_fifo* bfifo, char ch);
 void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output);
 void bfifo_putStr(bounded_fifo* bfifo, uint32_t c);
 uint8_t bfifo_get(bounded_fifo* bfifo);
-
 void bfifo_flush(bounded_fifo* bfifo);
 
 /*
