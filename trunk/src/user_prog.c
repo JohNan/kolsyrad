@@ -6,11 +6,16 @@ void idle(){
 }
 
 void mscroll() {
-  char *str = "MALTA!  ";
+  int i;
+  char *str = "MALTA!  ", c;
 
   while(1) {
     putMaltaStr(str);
-    S_stop(100,NULL);
+    c = *str;
+    for(i = 0;i < 7;i++)
+      str[i] = str[i+1];
+    str[7] = c;
+    S_stop(10,NULL);
   }
 }
 

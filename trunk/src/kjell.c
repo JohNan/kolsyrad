@@ -13,12 +13,12 @@ void kjell(){
 		}
 
 		if (strcmp(inString,"fibbonacci")){
-			fibbonacci();
+			fibonacci(6);
 		}
 		else{
 			temp = getCh();
 			if (temp == '\r' || temp == '\n'){
-				instring = getStr();
+				inString = getStr();
 				i = 1;
 			}
 
