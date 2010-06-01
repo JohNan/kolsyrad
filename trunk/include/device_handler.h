@@ -36,7 +36,7 @@ void putStr(char* text);
 void putMalta(uint32_t word);
 void putMaltaStr(char *str);
 
-void Input(bounded_fifo* bfifo, char ch);
+void Input(char ch);
 
 void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output);
 void bfifo_putStr(bounded_fifo* bfifo, uint32_t c);

@@ -62,22 +62,19 @@ void kexception() {
 	  		/* Data ready: add character to buffer */
 	  		ch = tty->thr; /* rbr and thr is the same. */
 
-	  		Input(&bfifoIn, ch);
+	  		Input(ch);
 
 
 	  		/* Should be moved to shell program */
 	  		if (ch == '\r') {
 
-	  				Input(&bfifoIn, '\n');
+	  				Input('\n');
 	  		}
 
 	  		if (ch == '\b') {
 	  				bfifo_put(&bfifoOut, ' ',1);
 	  				bfifo_put(&bfifoOut, '\b',1);
 
-	  				if(bfifoIn.length > 0){
-	  					bfifoIn.length--;
-	  				}
 	  		}
 
 

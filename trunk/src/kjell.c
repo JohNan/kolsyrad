@@ -62,7 +62,7 @@ void kjell(){
 	uint8_t temp;
 	char *inString;
 	while(1){
-		temp = getCh();
+		inString = getStr();
 		if(i){
 			printS("kolsyrad>");
 			i = 0;
@@ -70,14 +70,6 @@ void kjell(){
 
 		if (strcmp(inString,"fibbonacci")){
 			fibonacci(6);
-		}
-		else{
-			temp = getCh();
-			if (temp == '\r' || temp == '\n'){
-				inString = getStr();
-				i = 1;
-			}
-
 		}
 	}
 }
