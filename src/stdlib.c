@@ -1,3 +1,7 @@
+
+/* borrowed from C-standard library.*/
+
+
 #include "other/stdlib.h"
 
 char *itoa(int n, char *s, int b) {
