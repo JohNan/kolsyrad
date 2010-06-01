@@ -148,7 +148,7 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2){
 }
 
 // tells process q to wait for ms milliseconds
-void S_stop( uint16_t ms, pcb * q){
+void S_stop_ms( uint16_t ms, pcb * q){
   int t;
 
   if(q == NULL) q = S_pcbQ->ready->prev;
@@ -161,4 +161,8 @@ void S_stop( uint16_t ms, pcb * q){
 
 void S_start( pcb * q ){
   move_to_ready(q);
+}
+
+void S_stop( pcb * q ){
+
 }
