@@ -52,11 +52,19 @@ char *getStr(){
 }
 
 char *kgetStr(){
-	if(bfifoIn.length > 0){
-		if(bfifoIn.buf[bfifoIn.length-1] == '\n') {
-			kget_registers()->v_reg[0] = (int)bfifoIn.buf;
-		}
+	Pcb *current = getCurrent();
+	if(ioqueue.current == NULL){
+		ioqueue.current = current;
+		ioqueue.last = current;
+	} else {
+		ioqueue.last->nextIO = current;
+		ioqueue.last = current;
 	}
+
+	S_stop(current);
+
+	kget_registers()->v_reg[0] = (int)current->bfifoIn.buf;
+
 	return NULL;
 }
 
@@ -142,13 +150,33 @@ void DputStr(char* text) {
 }
 
 /* bfifo_get: Returns a character removed from the front of the queue. */
-void Input(bounded_fifo* bfifo, char ch) {
-	if (bfifo->length < FIFO_SIZE) {
+void Input(char ch) {
+	pcb *current = ioqueue.current;
+
+	if(ch == '\n'){
+		bfifo_put(&bfifoOut, '\n', 1);
+		bfifo_put(&bfifoOut, '\r', 1);
+		current.fifoIn->buf[bfifo->length] = '\0';
+	} else if(ch == '\b'){
+		if(current.fifoIn->length > 0){
+			current.fifoIn->length--;
+		}
+	} else {
 		bfifo_put(&bfifoOut, ch, 1);
-		bfifo->buf[bfifo->length] = ch;
-		bfifo->buf[bfifo->length+1] = '\0';
-		bfifo->length++;
-		//DputCh(ch);
+		current.fifoIn->buf[current.fifoIn->length] = ch;
+		current.fifoIn->buf[current.fifoIn->length+1] = '\0';
+		current.fifoIn->length++;
+	}
+
+	if(ch == '\n'){
+		if(ioqueue.last == current){
+			ioqueue.current = NULL;
+			ioqueue.last = NULL;
+		} else {
+			ioqueue.current = current->nextIO;
+		}
+		current.fifoIn->length = 0;
+		S_start(current)
 	}
 }
 

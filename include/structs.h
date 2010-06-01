@@ -44,11 +44,21 @@ typedef struct pcb{
 	uint8_t state;
 	pib *progid;
 	bounded_fifo fifoOut;
+	bounded_fifo fifoIn;
 	registers_t registers;
 	struct pcb *next;
 	struct pcb *prev;
+	struct pcb *nextIO;
 	uint32_t time;
 }pcb;
+
+typedef struct io_queue{
+	pcb *current;
+	pcb *next;
+}io_queue;
+
+io_queue ioqueue;
+
 
 typedef struct pcb_waiting{
 	pcb *pcbTimer;
