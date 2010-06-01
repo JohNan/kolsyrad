@@ -90,25 +90,25 @@ void kexception() {
 	  	  /* Acknowledge UART interrupt. */
 	  	  kset_cause(~0x1000, 0);
   } else if(cause.field.exc == 0){ /* Timer interrupt */
-    DputStr("Tick!");
+    //DputStr("Tick!");
     /* count down all sleepers */
     p = pcbq.waiting.pcbTimer;
     while(p != NULL) {
-      q = p->next;
-      if(p->time > 0) {
-	DputStr("Tock!");
-	if((--(p->time)) == 0) {
-	  DputStr("Wake up!");
-	  move_to_ready(p);
-	}
-      }
-      p = q;
+    	q = p->next;
+		if(p->time > 0) {
+			//DputStr("Tock!");
+			if((--(p->time)) == 0) {
+				//DputStr("Wake up!");
+				move_to_ready(p);
+			}
+		}
+		p = q;
     }
 
 	  /* Icrease the number on the Malta display. */
 	  // DputMalta(++i);
 
-    DputStr("Schedule!");
+    //DputStr("Schedule!");
 	  /* lets schedule! */
 	  S_schedule();
 
