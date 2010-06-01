@@ -49,12 +49,12 @@ typedef struct pcb{
 	struct pcb *next;
 	struct pcb *prev;
 	struct pcb *nextIO;
-	uint32_t time;
+	int time;
 }pcb;
 
 typedef struct io_queue{
 	pcb *current;
-	pcb *next;
+	pcb *last;
 }io_queue;
 
 io_queue ioqueue;

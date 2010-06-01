@@ -18,7 +18,7 @@ void init() {
 	if(i != -1){
 		DputStr("First process created.");
 		}*/
-	i = make_process(1,25,0);
+	i = make_process(2,25,0);
 	if(i != -1){
 		DputStr("Second process created.");
 		}

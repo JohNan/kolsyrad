@@ -58,17 +58,11 @@ void parser( char * str ){
 }
 
 void kjell(){
-	int i = 1;
-	uint8_t temp;
 	char *inString;
+	printS("kolsyrad>");
 	while(1){
 		inString = getStr();
-		if(i){
-			printS("kolsyrad>");
-			i = 0;
-		}
-
-		if (strcmp(inString,"fibbonacci")){
+		if (strcmp(inString,"fibonacci")){
 			fibonacci(6);
 		}
 	}

@@ -54,7 +54,7 @@ void move_to_ready(pcb *p);
 void move_to_int(pcb *p);
 void move_to_sleep(pcb *p);
 void unlink_pcb(pcb *);
-void S_stop_ms( uint16_t ms, pcb * q);
+void S_stop_ms( int32_t ms, pcb * q);
 void S_start( pcb * q );
 void S_stop( pcb * q );
 

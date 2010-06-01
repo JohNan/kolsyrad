@@ -124,6 +124,7 @@ void move_to_ready(pcb *who) {
   DputStr("set!");
   S_add_new_pcb(who);
   DputStr("go!");
+  printPid(who);
 }
 
 void unlink_pcb(pcb *who) {
@@ -148,15 +149,19 @@ void init_scheduler(pcb_queues * p1, free_pcb * p2){
 }
 
 // tells process q to wait for ms milliseconds
-void S_stop_ms( uint16_t ms, pcb * q){
+void S_stop_ms( int32_t ms, pcb * q){
   int t;
 
-  if(q == NULL) q = S_pcbQ->ready->prev;
+  if(q == NULL) {
+	  q = S_pcbQ->ready->prev;
+  }
   t = (q == S_pcbQ->ready->prev); // is it current proc that sleeps?
   q->time = ms;
   DputStr("Time to sleep!");
   move_to_sleep(q);
-  if(t) S_schedule();
+  if(t){
+	  S_schedule();
+  }
 }
 
 void S_start( pcb * q ){

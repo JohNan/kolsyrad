@@ -52,7 +52,7 @@ char *getStr(){
 }
 
 char *kgetStr(){
-	Pcb *current = getCurrent();
+	pcb *current = getCurrent();
 	if(ioqueue.current == NULL){
 		ioqueue.current = current;
 		ioqueue.last = current;
@@ -61,9 +61,9 @@ char *kgetStr(){
 		ioqueue.last = current;
 	}
 
-	S_stop(current);
+	S_stop_ms(-1,current);
 
-	kget_registers()->v_reg[0] = (int)current->bfifoIn.buf;
+	kget_registers()->v_reg[0] = (int)current->fifoIn.buf;
 
 	return NULL;
 }
@@ -102,7 +102,7 @@ void putStr(char* text) {
 		}
 	} else {
 		while(d_tty.owner != -1){}
-		if(IO_device(d_tty)){
+		if(IO_device(&d_tty)){
 			syscall_putStr(&getCurrent()->fifoOut, text);
 			d_tty.owner = -1;
 		}
@@ -156,16 +156,18 @@ void Input(char ch) {
 	if(ch == '\n'){
 		bfifo_put(&bfifoOut, '\n', 1);
 		bfifo_put(&bfifoOut, '\r', 1);
-		current.fifoIn->buf[bfifo->length] = '\0';
+		current->fifoIn.buf[current->fifoIn.length] = '\0';
 	} else if(ch == '\b'){
-		if(current.fifoIn->length > 0){
-			current.fifoIn->length--;
+		if(current->fifoIn.length > 0){
+			current->fifoIn.length--;
 		}
+	} else if(ch == '\r'){
+
 	} else {
 		bfifo_put(&bfifoOut, ch, 1);
-		current.fifoIn->buf[current.fifoIn->length] = ch;
-		current.fifoIn->buf[current.fifoIn->length+1] = '\0';
-		current.fifoIn->length++;
+		current->fifoIn.buf[current->fifoIn.length] = ch;
+		current->fifoIn.buf[current->fifoIn.length+1] = '\0';
+		current->fifoIn.length++;
 	}
 
 	if(ch == '\n'){
@@ -175,8 +177,8 @@ void Input(char ch) {
 		} else {
 			ioqueue.current = current->nextIO;
 		}
-		current.fifoIn->length = 0;
-		S_start(current)
+		current->fifoIn.length = 0;
+		S_start(current);
 	}
 }
 
