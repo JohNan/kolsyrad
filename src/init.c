@@ -14,10 +14,10 @@ void init() {
 	//init exceptions
 	init_exc();
 
-	/*	i = make_process(0,1,0);
+	i = make_process(0,1,0);
 	if(i != -1){
 		DputStr("First process created.");
-		}*/
+		}
 	i = make_process(2,25,0);
 	if(i != -1){
 		DputStr("Second process created.");
@@ -39,7 +39,7 @@ void init() {
 
 		}*/
 
-/*
+
 
 	char tmp[8];
 	tmp[8] = '\0';
@@ -48,10 +48,12 @@ void init() {
 	tmp2[8] = '\0';
 
 
-	for(i=0;i<5;i++){
+	for(i=0;i<2;i++){
 		DputStr("---Process---");
 		DputStr("PID: ");
 		printPid(&pcbs[i]);
+		DputStr("Name: ");
+		DputStr(pcbs[i].progid->pname);
 		DputStr("Next: ");
 		printPid(pcbs[i].next);
 		DputStr("Prev: ");
@@ -60,7 +62,7 @@ void init() {
 		printPrio(&pcbs[i]);
 		DputStr("---end---");
 	}
-
+/*
 	DputStr("---First ready---");
 	printPid(pcbq.first_ready);
 	DputStr("---Ready---");

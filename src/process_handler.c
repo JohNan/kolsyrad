@@ -197,6 +197,8 @@ int make_process( int pibsNr, int prio, uint32_t args ){
 	newPcb->registers.a_reg[0] = args;
 	newPcb->priority = prio;
 	newPcb->fifoOut.length = 0;
+	newPcb->fifoIn.length = 0;
+	newPcb->nextIO = 0;
 	newPcb->next = newPcb->prev = NULL;
 	S_add_new_pcb( newPcb );
 //	S_schedule();

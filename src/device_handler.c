@@ -65,6 +65,8 @@ char *kgetStr(){
 
 	kget_registers()->v_reg[0] = (int)current->fifoIn.buf;
 
+	S_schedule();
+
 	return NULL;
 }
 
