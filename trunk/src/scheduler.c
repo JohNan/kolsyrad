@@ -1,9 +1,11 @@
 #include "scheduler.h"
 
+pcb *currentPcb;
 pcb_queues * S_pcbQ;
 free_pcb * S_freeQ;
 
 void S_schedule(){
+	currentPcb = S_pcbQ->ready;
 	if( S_pcbQ->first_ready == NULL ){
 		DputStr( "PiNK SCREEN\n" );
 		DputStr( "No processes to run, " );
@@ -97,7 +99,7 @@ void S_remove_active(){
 }
 
 pcb* getCurrent(){
-	return S_pcbQ->ready->prev;
+	return currentPcb;
 }
 
 void move_to_int(pcb *who) {
@@ -110,12 +112,12 @@ void move_to_int(pcb *who) {
 }
 
 void move_to_sleep(pcb *who) {
-  pcb *p = S_pcbQ->waiting.pcbTimer;
-  unlink_pcb(who);
-  if(p != NULL)
-    p->prev = who;
-  who->next = p;
-  S_pcbQ->waiting.pcbTimer = who;
+	pcb *p = S_pcbQ->waiting.pcbTimer;
+	unlink_pcb(who);
+	if(p != NULL)
+		p->prev = who;
+	who->next = p;
+	S_pcbQ->waiting.pcbTimer = who;
 }
 
 void move_to_ready(pcb *who) {
@@ -124,7 +126,7 @@ void move_to_ready(pcb *who) {
   DputStr("set!");
   S_add_new_pcb(who);
   DputStr("go!");
-  printPid(who);
+
 }
 
 void unlink_pcb(pcb *who) {
@@ -158,6 +160,7 @@ void S_stop_ms( int32_t ms, pcb * q){
   t = (q == S_pcbQ->ready->prev); // is it current proc that sleeps?
   q->time = ms;
   DputStr("Time to sleep!");
+  printPid(q);
   move_to_sleep(q);
   if(t){
 	  S_schedule();
