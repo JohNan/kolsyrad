@@ -80,18 +80,14 @@ void S_remove_active(){
 	current = S_pcbQ->ready->prev;
 
 	if( S_pcbQ->ready == current ){
-		DputStr( "S_remove_active: 1\n" );
-
 		S_pcbQ->ready = NULL;
 		S_pcbQ->first_ready = NULL;
 	} else if( current == S_pcbQ->first_ready ){
-		DputStr( "S_remove_active: 2\n" );
 		current->prev->next = current->next;
 		current->next->prev = current->prev;
 
 		S_pcbQ->first_ready = current->next;
 	} else {
-		DputStr( "S_remove_active: 3\n" );
 		current->prev->next = current->next;
 		current->next->prev = current->prev;
 	}
@@ -169,8 +165,4 @@ void S_stop_ms( int32_t ms, pcb * q){
 
 void S_start( pcb * q ){
   move_to_ready(q);
-}
-
-void S_stop( pcb * q ){
-
 }
