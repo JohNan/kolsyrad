@@ -82,7 +82,8 @@ void S_remove_active(){
 	if( S_pcbQ->ready == current ){
 		//S_pcbQ->ready = NULL;
 		//S_pcbQ->first_ready = NULL;
-		if( S_pcbQ->ready->next == current ){
+		if( S_pcbQ->ready->next == current && S_pcbQ->waiting.pcbInt == NULL){
+			DputStr("If only one. Waiting emtpy ");
 			DputStr(getCurrent()->progid->pname);
 			S_pcbQ->ready = NULL;
 			S_pcbQ->first_ready = NULL;
@@ -100,7 +101,12 @@ void S_remove_active(){
 		current->next->prev = current->prev;
 	}
 	SP_add_to_free( current );
+	DputStr("Before Schedule");
+	DputStr(getCurrent()->progid->pname);
 	S_schedule();
+	DputStr("After Schedule");
+	DputStr(getCurrent()->progid->pname);
+
 }
 
 pcb* getCurrent(){
@@ -131,7 +137,7 @@ void move_to_ready(pcb *who) {
   //DputStr("set!");
   S_add_new_pcb(who);
   //DputStr("go!");
-
+//  DputStr(getCurrent()->progid->pname);
 }
 
 void unlink_pcb(pcb *who) {

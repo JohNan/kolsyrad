@@ -47,11 +47,15 @@ void printP(){
 	if( temp != NULL ){
 		printSln( "Active processes" );
 		printSln( "----------------" );
+		printSln( "PID      Pname      Priority      State" );
 		printN( temp->pid );
+		printS( "      ");
 		printS( "\t" );
-		printN( temp->progid->progid );
+		printS( temp->progid->pname );
+		printS( "      ");
 		printS( "\t" );
 		printN( temp->priority );
+		printS( "      ");
 		printS( "\t" );
 		printNln( temp->state );
 

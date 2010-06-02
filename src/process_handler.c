@@ -6,7 +6,8 @@ pib pibs[MAX_PROGRAM] = {
   {1, "malta_scroll", (int)&mscroll},
   {2, "kjell", (int)&kjell},
   {3, "increment", (int)&increment},
-  {4, "fibonacci", (int)&fibonacci}
+  {4, "fibonacci", (int)&fibonacci},
+  {5, "printp", (int)&smile}
 };
 pcb_queues pcbq;
 free_pcb free_pcb_q;
