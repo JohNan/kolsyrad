@@ -95,6 +95,10 @@ void printP(){
 	}
 }
 
-void sleep( uint32_t ms ){
+void sleep( int ms ){
+	S_stop_ms( ms, getCurrent() );
+}
 
+void wait(){
+	S_stop_ms( -1, getCurrent() );
 }

@@ -79,11 +79,19 @@ void printSln( char * str );
 void printP();
 
 /* sleep( ms )
- * TYPES: uint32_t -> void
+ * TYPES: int -> void
+ * PRE: ms > 0
+ * POST: none
+ * SIDE-EFFECT: puts the current process to sleep for ms milliseconds
+ */
+void sleep( int ms );
+
+/* wait()
+ * TYPES: void -> void
  * PRE: none
  * POST: none
- * SIDE-EFFECT: puts the process that calls it to sleep fore ms time
+ * SIDE-EFFECT: puts the current process to wait until another reactivates it
  */
-void sleep( uint32_t ms );
+void wait();
 
 #endif
