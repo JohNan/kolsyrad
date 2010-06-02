@@ -1,5 +1,9 @@
 #include "api.h"
 
+void newP(int pibsNr, int prio, uint32_t args){
+	syscall_newp(pibsNr, prio, args);
+}
+
 void printN( int num ){
 	char temp[12];
 	itoa( num, temp, 10 );

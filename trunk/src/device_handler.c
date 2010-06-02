@@ -161,6 +161,9 @@ void Input(char ch) {
 		current->fifoIn.buf[current->fifoIn.length] = '\0';
 	} else if(ch == '\b'){
 		if(current->fifoIn.length > 0){
+			bfifo_put(&bfifoOut, '\b',1);
+			bfifo_put(&bfifoOut, ' ',1);
+			bfifo_put(&bfifoOut, '\b',1);
 			current->fifoIn.length--;
 		}
 	} else if(ch == '\r'){
@@ -246,6 +249,10 @@ void init_devices(){
 	bfifoOut.length = 0;
 	bfifoIn.length = 0;
 
+	// Set ioqueue to 0
+	ioqueue.last = NULL;
+	ioqueue.current = NULL;
+
 	//Set MCR Out2 to 1 to enable interrupts on the console.
 	tty->mcr.out2 = 1;
 	tty->ier.erbfi = 1;
@@ -269,5 +276,5 @@ void init_devices(){
 
 	kset_sr(and.reg, or.reg);
 
-	DputStr("Device init done");
+	//DputStr("Device init done");
 }

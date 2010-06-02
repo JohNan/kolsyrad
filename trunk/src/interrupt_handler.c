@@ -5,7 +5,7 @@ void enableTimer(){
         /* Initialise timer to interrupt in 100 ms (simulated time). */
         kload_timer(100 * timer_msec);
 
-        DputStr("Interrupt enabled.");
+        //DputStr("Interrupt enabled.");
 }
 
 void init_exc() {
@@ -67,14 +67,12 @@ void kexception() {
 
 	  		/* Should be moved to shell program */
 	  		if (ch == '\r') {
-
 	  				Input('\n');
 	  		}
 
 	  		if (ch == '\b') {
 	  				bfifo_put(&bfifoOut, ' ',1);
 	  				bfifo_put(&bfifoOut, '\b',1);
-
 	  		}
 
 

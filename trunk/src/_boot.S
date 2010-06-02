@@ -48,6 +48,7 @@ excn_stack:
 	.globl  kget_registers
 	.globl  kexception
 	.globl	kdebug_magic_break
+	.globl	syscall_newp
 	.globl	syscall_exec
 	.globl	syscall_fork
 	.globl	syscall_set_prio
@@ -256,6 +257,10 @@ exception_handler:
 	#   A user mode interface to the kernel mode function
 	#   'kmy_system_call'.
 	#
+syscall_newp:
+	la v0,make_process
+	syscall
+	jr ra
 
 syscall_exec:
 	la v0,set_pcb_image

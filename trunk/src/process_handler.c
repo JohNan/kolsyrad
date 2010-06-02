@@ -69,7 +69,7 @@ void init_poc() {
     /* next_instr does not need init */
   }
 
-  DputStr("Process init done");
+  //DputStr("Process init done");
 }
 
 //updates the process table (PID is the index of array and the data is a pointer to PCB)
@@ -128,29 +128,6 @@ void p_free_pcb(pcb *p) {
 // currently, exit status is ignored
 void exit() {
 	syscall_exit();
-	//S_remove_active();
-	/*  pcb *me = pcbq.ready;
-  me->state = PS_DEAD;
-*/
-  /* TODO: check if this PID has any devices, and free them if so */
-/*
-  if(pcbq.first_ready == me)
-    pcbq.first_ready = me -> next;
-*/
-  /* unlink us from the ready queue */
-/*  if(me->prev != NULL)
-    me->prev->next = me->next;
-  if(me->next != NULL)
-    me->next->prev = me->prev; */
-
-  /* if we in the future wish to keep a terminated process as
-     zombie until someone checks its exit state, the code below
-     should be changed */
-/*  pcbq.ready = me->next;
-  me->prev = me->next = NULL;
-  p_free_pcb(me);
-*/
-	DputStr("------Died------");
   while(1){}
 }
 
@@ -203,22 +180,8 @@ int make_process( int pibsNr, int prio, uint32_t args ){
 	S_add_new_pcb( newPcb );
 //	S_schedule();
 	return newPcb->pid;
-
-
+}
 
 /*
-	pcb * free = free_pcb_q.first;
-	free_pcb_q.first->prev->next = free_pcb_q.first->next;
-	free_pcb_q.first->next->prev = free_pcb_q.first->prev;
-
-	free->progid = pibs[pibsNr].progid;
-	free->state = PS_READY;
-	free->registers.epc_reg = pibs[pibsNr].start_ptr;
-	free->registers.ra_reg = (int)&exit;
-	free->priority = prio;
-
-	S_add_new_pcb( free );
-
-	return free;
-*/
-}
+ * SYSCALLS
+ */
