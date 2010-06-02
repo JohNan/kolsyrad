@@ -2,7 +2,9 @@
 
 void idle(){
 	//putStr("Idle process started\n");
-	while(1){}
+	while(1){
+		__asm( "nop" );
+	}
 }
 
 void mscroll() {
