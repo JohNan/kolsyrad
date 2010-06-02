@@ -14,6 +14,11 @@
 #include "structs.h"
 #include "_boot.h"
 
+#define RIGHTARROW 0x43
+#define LEFTARROW 0x44
+#define UPARROW 0x41
+#define DOWNARROW 0x42
+
 static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 
