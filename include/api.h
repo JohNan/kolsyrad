@@ -7,6 +7,15 @@
 #include "other/types.h"
 #include "structs.h"
 
+/* newP(int,int,uin32_t)
+ * TYPES: int -> void
+ * PRE: pibsNr must be valid pib
+ * 		0 < prio < 30
+ * POST: none
+ * SIDE-EFFECT: A new process is created.
+ */
+void newP(int pibsNr, int prio, uint32_t args);
+
 /* printN( num )
  * TYPES: int -> void
  * PRE: none

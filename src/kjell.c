@@ -56,17 +56,18 @@ void parser( char * str ){
 		newp( 3, 25, atoi(ret.args) );
 	else if( strcmp( ret.com, ""))*/
 	if( strcmp( ret.com, "malta_scroll" ) ){
-		newp( 1, 15, NULL );
+		newP( 1, 15, NULL );
 	} else if( strcmp( ret.com, "kjell") ){
-		newp( 2, 2, NULL );
+		newP( 2, 2, NULL );
 	} else if( strcmp( ret.com, "increment" ) ){
-		newp( 3, 15, atoi( ret.args ) );
+		newP( 3, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){
-		newp( 4, 15, atoi( ret.args ) );
+		newP( 4, 15, atoi( ret.args ) );
 	} else {
 		printS( "Jo fäjld bastärd!");
 	}
 }
+
 
 void kjell(){
 	char *inString;
