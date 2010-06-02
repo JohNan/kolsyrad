@@ -96,6 +96,11 @@ void putCh(char c) {
 }
 
 void putStr(char* text) {
+	syscall_putStr(&getCurrent()->fifoOut, text);
+}
+
+/*
+void putStr(char* text) {
   if(d_tty.owner == -1){
  // is the tty free?
 		if(IO_device(&d_tty)){
@@ -110,7 +115,7 @@ void putStr(char* text) {
 		}
 	}
 }
-
+*/
 /*
  * Debug prints.
  * Polled
@@ -151,7 +156,7 @@ void DputStr(char* text) {
 	DputCh('\n');
 }
 
-/* bfifo_get: Returns a character removed from the front of the queue. */
+uint8_t prevCmd[FIFO_SIZE] = "";
 void Input(char ch) {
 	pcb *current = ioqueue.current;
 
@@ -168,7 +173,12 @@ void Input(char ch) {
 		}
 	} else if(ch == '\r'){
 
-	} else {
+	} else if(ch == UPARROW) {
+		bfifo_putStr(&bfifoOut,(uint32_t)prevCmd);
+		strcpy(current->fifoIn.buf,prevCmd);
+		current->fifoIn.length = strlen(current->fifoIn.buf);
+	}
+	else {
 		bfifo_put(&bfifoOut, ch, 1);
 		current->fifoIn.buf[current->fifoIn.length] = ch;
 		current->fifoIn.buf[current->fifoIn.length+1] = '\0';
@@ -176,12 +186,16 @@ void Input(char ch) {
 	}
 
 	if(ch == '\n'){
+
+		strcpy(prevCmd,current->fifoIn.buf);
+
 		if(ioqueue.last == current){
 			ioqueue.current = NULL;
 			ioqueue.last = NULL;
 		} else {
 			ioqueue.current = current->nextIO;
 		}
+
 		current->fifoIn.length = 0;
 		S_start(current);
 	}

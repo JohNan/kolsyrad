@@ -1,31 +1,31 @@
 #include "init.h"
 
 void bootscr(){
-	DputStr("                                   ooo                                       ");
-	DputStr("                                  o   o                                      	");
-	DputStr("         ooooo                    o   o                                      	");
-	DputStr("        o     o                   o   o                        oooo          	");
-	DputStr("       o       o                   ooo                        o    o         	");
-	DputStr("      o         o                                            o      o        	");
-	DputStr("      o         o                                           o        o       	");
-	DputStr("      o         o                                           o        o       	");
-	DputStr("      o         o                            oooo           o        o       	");
-	DputStr("      o         o                           o    o          o        o       	");
-	DputStr("       o       o                           o      o          o      o        	");
-	DputStr("        o     o          oooo              o      o           o    o         	");
-	DputStr("         ooooo          o    o             o      o            oooo          	");
-	DputStr("                       o      o            o      o                          	");
-	DputStr("                      o        o            o    o                           	");
-	DputStr("                      o        o             oooo                            	");
-	DputStr("                      o        o                                             	");
-	DputStr("                      o        o                                             	");
-	DputStr("                       o      o                                              	");
-	DputStr("                        o    o                                               	");
-	DputStr("     ooo                 oooo                                                	");
-	DputStr("    o   o                              ooo                                   	");
-	DputStr("    o   o        oooo                 o   o                   ooo            	");
-	DputStr("    o   o       o    o                o   o                  o   o           	");
-	DputStr("     ooo       o      o               o   o                  o   o           	");
+	DputStr("                                   ooo ");
+	DputStr("                                  o   o");
+	DputStr("         ooooo                    o   o");
+	DputStr("        o     o                   o   o                        oooo");
+	DputStr("       o       o                   ooo                        o    o ");
+	DputStr("      o         o                                            o      o ");
+	DputStr("      o         o                                           o        o ");
+	DputStr("      o         o                                           o        o  ");
+	DputStr("      o         o                            oooo           o        o  ");
+	DputStr("      o         o                           o    o          o        o   ");
+	DputStr("       o       o                           o      o          o      o 	");
+	DputStr("        o     o          oooo              o      o           o    o ");
+	DputStr("         ooooo          o    o             o      o            oooo  ");
+	DputStr("                       o      o            o      o  ");
+	DputStr("                      o        o            o    o ");
+	DputStr("                      o        o             oooo   ");
+	DputStr("                      o        o   	");
+	DputStr("                      o        o 	");
+	DputStr("                       o      o 	");
+	DputStr("                        o    o   ");
+	DputStr("     ooo                 oooo  ");
+	DputStr("    o   o                              ooo   	");
+	DputStr("    o   o        oooo                 o   o                   ooo   ");
+	DputStr("    o   o       o    o                o   o                  o   o  ");
+	DputStr("     ooo       o      o               o   o                  o   o  ");
 	DputStr("               o      o                ooo                   o   o           	");
 	DputStr("               o      o                                       ooo            	");
 	DputStr("               o      o                       ooo                            	");
@@ -53,6 +53,7 @@ void bootscr(){
 	DputStr("                                                                     oo      	");
 	DputStr("                                                                             	");
 	DputStr("  By: Johan Nenzén, Per Boström, Stefan Risberg, Krister Emrén - 2010 ");
+	DputStr("");
 }
 
 void init() {
@@ -73,7 +74,7 @@ void init() {
 	//Starts the idle process
 	i = make_process(0,1,0);
 	//Starts kjell
-	i = make_process(2,25,0);
+	i = make_process(2,2,0);
 
 
 	/*
