@@ -77,11 +77,19 @@ void SP_add_to_free( pcb * q ){
 
 void S_remove_active(){
 	pcb * current = NULL;
-	current = S_pcbQ->ready->prev;
+	current = getCurrent();
 
 	if( S_pcbQ->ready == current ){
-		S_pcbQ->ready = NULL;
-		S_pcbQ->first_ready = NULL;
+		//S_pcbQ->ready = NULL;
+		//S_pcbQ->first_ready = NULL;
+		if( S_pcbQ->ready->next == current ){
+			DputStr(getCurrent()->progid->pname);
+			S_pcbQ->ready = NULL;
+			S_pcbQ->first_ready = NULL;
+		} else {
+			S_pcbQ->first_ready = S_pcbQ->first_ready->next;
+			S_pcbQ->ready = S_pcbQ->ready->next;
+		}
 	} else if( current == S_pcbQ->first_ready ){
 		current->prev->next = current->next;
 		current->next->prev = current->prev;
@@ -92,6 +100,7 @@ void S_remove_active(){
 		current->next->prev = current->prev;
 	}
 	SP_add_to_free( current );
+	S_schedule();
 }
 
 pcb* getCurrent(){
