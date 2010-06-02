@@ -15,7 +15,7 @@
 #include "_boot.h"
 
 #define MAX_PROCESS 20 // maximum number of processes
-#define MAX_PROGRAM 5 // maximum number of programs
+#define MAX_PROGRAM 6 // maximum number of programs
 #define STACK_SIZE 1024 // stack size for programs
 
 /* Process states */

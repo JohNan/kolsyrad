@@ -63,7 +63,9 @@ void parser( char * str ){
 		newP( 3, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){
 		newP( 4, 15, atoi( ret.args ) );
-	} else {
+	} else if( strcmp( ret.com, "printp" ) ){
+		newP( 5, 15, NULL );
+	}else {
 		printSln( " Error: Command not recognized");
 	}
 }

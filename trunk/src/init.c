@@ -104,7 +104,7 @@ void init() {
 		}
 
 
-
+*/
 	char tmp[8];
 	tmp[8] = '\0';
 
@@ -126,7 +126,7 @@ void init() {
 		printPrio(&pcbs[i]);
 		DputStr("---end---");
 	}
-
+/*
 	DputStr("---First ready---");
 	printPid(pcbq.first_ready);
 	DputStr("---Ready---");

@@ -203,6 +203,7 @@ void Input(char ch) {
 
 		current->fifoIn.length = 0;
 		S_start(current);
+		S_schedule();
 	}
 }
 

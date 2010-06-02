@@ -35,15 +35,7 @@ void goodbye(){
 }
 
 void smile(){
-	//int i = 0;
-	putStr("Smile.\n");
-	/*while(i < 2000){
-		//putMalta(i++);
-		if(i % 1000 == 0) {
-			putStr("Smile.\n");
-		}
-	}*/
-	putStr("S: Smile.\n");
+	printP();
 }
 // increments i and prints it to a new line.
 // pre max > 0
