@@ -185,3 +185,20 @@ int make_process( int pibsNr, int prio, uint32_t args ){
 /*
  * SYSCALLS
  */
+void knewP( int pibsNr, int prio, uint32_t args){
+	pcb *newPcb = get_pcb();
+
+	newPcb->progid = &pibs[pibsNr];
+	newPcb->state = PS_READY;
+	newPcb->registers.epc_reg = newPcb->progid->start_ptr;
+	newPcb->registers.ra_reg = (int)&exit;
+	newPcb->registers.a_reg[0] = args;
+	newPcb->priority = prio;
+	newPcb->fifoOut.length = 0;
+	newPcb->fifoIn.length = 0;
+	newPcb->nextIO = 0;
+	newPcb->next = newPcb->prev = NULL;
+	S_add_new_pcb( newPcb );
+	S_schedule();
+}
+

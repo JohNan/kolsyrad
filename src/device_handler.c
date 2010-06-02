@@ -61,12 +61,14 @@ char *kgetStr(){
 		ioqueue.last = current;
 	}
 
+
+
 	S_stop_ms(-1,current);
 
 	kget_registers()->v_reg[0] = (int)current->fifoIn.buf;
 
 	S_schedule();
-
+	DputStr(getCurrent()->progid->pname);
 	return NULL;
 }
 
@@ -159,6 +161,9 @@ void DputStr(char* text) {
 uint8_t prevCmd[FIFO_SIZE] = "";
 void Input(char ch) {
 	pcb *current = ioqueue.current;
+
+	if (ioqueue.current == NULL)
+		return;
 
 	if(ch == '\n'){
 		bfifo_put(&bfifoOut, '\n', 1);
