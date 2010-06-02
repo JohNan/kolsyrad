@@ -258,7 +258,7 @@ exception_handler:
 	#   'kmy_system_call'.
 	#
 syscall_newp:
-	la v0,make_process
+	la v0,knewP
 	syscall
 	jr ra
 

@@ -64,7 +64,7 @@ void parser( char * str ){
 	} else if( strcmp( ret.com, "fibonacci" ) ){
 		newP( 4, 15, atoi( ret.args ) );
 	} else {
-		printS( "Jo fäjld bastärd!");
+		printSln( " Error: Command not recognized");
 	}
 }
 
@@ -74,10 +74,13 @@ void kjell(){
 	while(1){
 		printS("kolsyrad>");
 		inString = getStr();
-		parser(inString);
-	/*	if (strcmp(inString,"fibonacci")){
-			fibonacci(6);
-		} */
+		if( strcmp( inString, "increment" ) ){
+			DputStr("START");
+			newP( 3, 15, 5 );
+		} else {
+			DputStr("ERROR!");
+		}
+		//parser(inString);
 	}
 }
 

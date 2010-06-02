@@ -54,6 +54,9 @@ pcb *list_queue(int);
 // Make a process
 int make_process( int pibsNr, int prio, uint32_t args );
 
+//
+void knewP( int pibsNr, int prio, uint32_t args);
+
 #define PL_READY 1
 #define PL_SLEEP 2
 

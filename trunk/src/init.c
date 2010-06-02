@@ -61,7 +61,7 @@ void init() {
 
 	//init devices.
 	init_devices();
-
+	DputStr("Welcome");
 	//init processes
 	init_poc();
 
@@ -72,21 +72,21 @@ void init() {
 	init_exc();
 
 	//Starts the idle process
-	i = make_process(0,1,0);
+	//i = make_process(0,1,0);
 	//Starts kjell
-	i = make_process(2,2,0);
+//	i = make_process(2,2,0);
 
 
-	/*
+
 	i = make_process(0,1,0);
 	if(i != -1){
 		DputStr("First process created.");
 		}
-	i = make_process(2,25,0);
+	i = make_process(2,2,0);
 		if(i != -1){
 		DputStr("Second process created.");
 		}
-	i = make_process(2,25,0);
+/*	i = make_process(2,25,0);
 		if(i != -1){
 		DputStr("Third process created.");
 
@@ -101,9 +101,9 @@ void init() {
 		if(i != -1){
 		DputStr("Fifth process created.");
 
-		}*/
+		}
 
-/*
+
 
 	char tmp[8];
 	tmp[8] = '\0';
