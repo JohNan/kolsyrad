@@ -52,9 +52,20 @@ void parser( char * str ){
 	}
 
 	ret.s = s;
-	char t[] = "increment";
-	if( strcmp( ret.com, t ) == 1 )
-		fibonacci(6); //ret.prog = 3;
+	/*if( strcmp( ret.com, "increment" ) == 1 )
+		newp( 3, 25, atoi(ret.args) );
+	else if( strcmp( ret.com, ""))*/
+	if( strcmp( ret.com, "malta_scroll" ) ){
+		newp( 1, 15, NULL );
+	} else if( strcmp( ret.com, "kjell") ){
+		newp( 2, 2, NULL );
+	} else if( strcmp( ret.com, "increment" ) ){
+		newp( 3, 15, atoi( ret.args ) );
+	} else if( strcmp( ret.com, "fibonacci" ) ){
+		newp( 4, 15, atoi( ret.args ) );
+	} else {
+		printS( "Jo fäjld bastärd!");
+	}
 }
 
 void kjell(){
