@@ -24,7 +24,7 @@ void parser( char * str ){
 	int s = parsing_command;
 
 	int i;
-	for( i = 0; str[i] != '\n'; i++ ){
+	for( i = 0; str[i] != '\0'; i++ ){
 		switch( s ){
 		case parsing_command:
 			if( str[i] == ' ' ){
@@ -36,7 +36,7 @@ void parser( char * str ){
 			}
 			break;
 		case parsing_args:
-			if( str[i] == '\r' ){
+			if( str[i] == '\0' ){
 				if( ret.indexA == 0 )
 					s = command;
 				else{
@@ -54,17 +54,18 @@ void parser( char * str ){
 	ret.s = s;
 	char t[] = "increment";
 	if( strcmp( ret.com, t ) == 1 )
-		ret.prog = 3;
+		fibonacci(6); //ret.prog = 3;
 }
 
 void kjell(){
 	char *inString;
-	printS("kolsyrad>");
 	while(1){
+		printS("kolsyrad>");
 		inString = getStr();
-		if (strcmp(inString,"fibonacci")){
+		parser(inString);
+	/*	if (strcmp(inString,"fibonacci")){
 			fibonacci(6);
-		}
+		} */
 	}
 }
 

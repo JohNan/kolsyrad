@@ -1,7 +1,7 @@
 #include "user_prog.h"
 
 void idle(){
-	putStr("Idle process started\n");
+	//putStr("Idle process started\n");
 	while(1){}
 }
 
