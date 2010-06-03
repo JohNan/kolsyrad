@@ -63,14 +63,12 @@ char *kgetStr(){
 		ioqueue.last = current;
 	}
 
-
-
 	ksleep(-1,current);
 
 	kget_registers()->v_reg[0] = (int)current->fifoIn.buf;
 
-	//S_schedule();
-	//DputStr(getCurrent()->progid->pname);
+	S_schedule();
+
 	return NULL;
 }
 
@@ -167,8 +165,6 @@ void Input(char ch) {
 	if (ioqueue.current == NULL)
 		return;
 
-	printPid(current);
-
 	if(ch == '\n'){
 		bfifo_put(&bfifoOut, '\n', 1);
 		bfifo_put(&bfifoOut, '\r', 1);
@@ -205,7 +201,9 @@ void Input(char ch) {
 			ioqueue.current = current->nextIO;
 		}
 
+		current->fifoIn.buf[current->fifoIn.length] = '\0';
 		current->fifoIn.length = 0;
+
 		kunblock(current);
 		S_schedule();
 	}

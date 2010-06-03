@@ -1,7 +1,7 @@
 #include "api.h"
 
-void newP(int pibsNr, int prio, uint32_t args){
-	syscall_newp(pibsNr, prio, args);
+int newP(int pibsNr, int prio, uint32_t args){
+	return syscall_newp(pibsNr, prio, args);
 }
 
 

@@ -65,6 +65,9 @@ void insertPcb( queue *q, pcb *newPcb ) {
 	} else if (newPcb->priority > q->first->priority) {
 		SP_add_before(newPcb, q->first);
 		q->first = newPcb;
+		if(q == &readyQ){
+			nextPcb = newPcb;
+		}
 	} else {
 		pcb * currentInLoop = q->first->next;
 		int i = 1;
@@ -154,15 +157,12 @@ void ksleep( int32_t ms, pcb * q){
 	if(q == NULL) {
 		q = getCurrent();
 	}
-	t = (q == getCurrent()); // is it current proc that sleeps?
+
 	q->time = ms;
 	//DputStr("Time to sleep!");
 	//printPid(q);
 	removePcb(&readyQ,q);
 	insertPcb(&waitingQ,q);
-	if(t){
-		S_schedule();
-	}
 }
 
 /* kexit

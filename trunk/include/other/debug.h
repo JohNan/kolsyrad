@@ -22,7 +22,7 @@
  * POST: -
  * SIDE-EFFECT: prints ch to the console, using polled IO
  */
-void kdebug_putc(char c);´
+void kdebug_putc(char c);
 
 /* kdebug_print(str)
  * TYPE: char[] -> void

@@ -184,6 +184,9 @@ int knewP( int pibsNr, int prio, uint32_t args){
 	newPcb->next = newPcb->prev = NULL;
 	insertPcb(&readyQ,newPcb);
 	S_schedule();
+
+	kget_registers()->v_reg[0] = (int)newPcb->pid;
+
 	return newPcb->pid;
 }
 

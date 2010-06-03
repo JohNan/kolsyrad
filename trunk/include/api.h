@@ -14,7 +14,7 @@
  * POST: none
  * SIDE-EFFECT: A new process is created.
  */
-void newP(int pibsNr, int prio, uint32_t args);
+int newP(int pibsNr, int prio, uint32_t args);
 
 /* printN(num)
  * TYPE: int -> void
@@ -94,8 +94,6 @@ void block();
  * POST: a string read from the console
  * SIDE-EFFECT: puts the current process to sleep until a newline is read
  */
-char *getStr(){
-	return syscall_getS();
-}
+char *getStr();
 
 #endif

@@ -28,7 +28,7 @@ void parser( char * str ){
 	ret.indexC = 0;
 
 	int s = parsing_command;
-
+	int pid = 0;
 	int i;
 	for( i = 0; str[i] != '\0'; i++ ){
 		switch( s ){
@@ -62,19 +62,20 @@ void parser( char * str ){
 		newp( 3, 25, atoi(ret.args) );
 	else if( strcmp( ret.com, ""))*/
 	if( strcmp( ret.com, "malta_scroll" ) ){
-		newP( 1, 15, NULL );
+		pid = newP( 1, 15, NULL );
 	} else if( strcmp( ret.com, "kjell") ){
-		newP( 2, 2, NULL );
+		pid = newP( 2, 2, NULL );
 	} else if( strcmp( ret.com, "increment" ) ){
-		newP( 3, 15, atoi( ret.args ) );
+		pid = newP( 3, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){
-		newP( 4, 15, atoi( ret.args ) );
+		pid = newP( 4, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "printp" ) ){
-		newP( 5, 15, NULL );
+		pid = newP( 5, 15, NULL );
 	}else {
 		printSln(ret.com);
 		printS( " Error: Command not recognized\n");
 	}
+
 }
 
 /* kjell
@@ -89,12 +90,16 @@ void kjell(){
 	while(1){
 		printS("kolsyrad>");
 		inString = getStr();
-		/*if( strcmp( inString, "increment" ) ){
+	/*	if( strcmp( inString, "increment" ) ){
 			DputStr("START");
 			newP( 3, 15, 5 );
 		} else {
-			DputStr("ERROR!");
-		}*/
+			char tmp[9];
+				tmp[8] = '\0';
+				itoa((int)inString,tmp,10);
+				DputStr(tmp);
+			DputStr(inString);
+		} */
 		parser(inString);
 	}
 }
