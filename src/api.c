@@ -117,6 +117,7 @@ void printP(){
 			printS( "      ");
 			printS( "\t" );
 			printN( temp->state );
+			printS( "\n");
 		}
 		printS( "\n------------------------" );
 		printS( "End of waiting processes" );

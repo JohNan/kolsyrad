@@ -4,7 +4,7 @@
 #include "other/types.h"
 #include "structs/registers.h"
 
-#define FIFO_SIZE 32
+#define FIFO_SIZE 10000
 #define PROC_COUNT 30
 
 /*

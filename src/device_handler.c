@@ -134,9 +134,9 @@ void DputMalta(uint32_t word){
 
 void DputMaltaStr(char *str) {
   int i;
-  malta->ledbar.reg = 0xFF;
+  //malta->ledbar.reg = 0xFF;
   for (i = 0;i < 8; i++) {
-    malta->asciipos[i].value = *str++;
+    malta->asciipos[i].value = str[i];
   }
 }
 
@@ -164,31 +164,62 @@ void Input(char ch) {
 
 	if (ioqueue.current == NULL)
 		return;
+    static char escape1 = 0;
+     static char escape2 = 0;
+     static char escape3 = 0;
+     //static char lastCommand[200] = "";
 
-	if(ch == '\n'){
-		bfifo_put(&bfifoOut, '\n', 1);
-		bfifo_put(&bfifoOut, '\r', 1);
-		current->fifoIn.buf[current->fifoIn.length] = '\0';
-	} else if(ch == '\b'){
-		if(current->fifoIn.length > 0){
-			bfifo_put(&bfifoOut, '\b',1);
-			bfifo_put(&bfifoOut, ' ',1);
-			bfifo_put(&bfifoOut, '\b',1);
-			current->fifoIn.length--;
+     // We got an escape char
+     if (ch == ESCAPE) {
+     //      putslnDebug("c=escape");
+             escape1 = ch;
+     }
+     else if (escape1 == ESCAPE) {
+             //putslnDebug("escape1=escape");
+             // We have escape char stored
+             if (escape2 == SKIP) {
+                     // We have an escape key stored (e.g. an arrow)
+                     escape3 = ch;
+             }
+             else if (ch == SKIP) {
+                     // We have the second sign of an escape sequence
+                     escape2 = ch;
+             }
+     }
+     else if (escape3 == 0) {
+    	 if(ch == '\n'){
+
+			bfifo_put(&bfifoOut, '\n', 1);
+			bfifo_put(&bfifoOut, '\r', 1);
+			current->fifoIn.buf[current->fifoIn.length] = '\0';
+		} else if(ch == '\b'){
+			if(current->fifoIn.length > 0){
+				bfifo_put(&bfifoOut, '\b',1);
+				bfifo_put(&bfifoOut, ' ',1);
+				bfifo_put(&bfifoOut, '\b',1);
+				current->fifoIn.length--;
+			}
+		} else if(ch == '\r'){
+
+		} else {
+			bfifo_put(&bfifoOut, ch, 1);
+			current->fifoIn.buf[current->fifoIn.length] = ch;
+			current->fifoIn.buf[current->fifoIn.length+1] = '\0';
+			current->fifoIn.length++;
 		}
-	} else if(ch == '\r'){
+     }
 
-	} else if(ch == UPARROW) {
-		bfifo_putStr(&bfifoOut,prevCmd);
-		strcpy(current->fifoIn.buf,prevCmd);
-		current->fifoIn.length = strlen(current->fifoIn.buf);
-	}
-	else {
-		bfifo_put(&bfifoOut, ch, 1);
-		current->fifoIn.buf[current->fifoIn.length] = ch;
-		current->fifoIn.buf[current->fifoIn.length+1] = '\0';
-		current->fifoIn.length++;
-	}
+     if (escape3 != 0) {
+			if(ch == UPARROW && prevCmd[0] != '\0') {
+     			bfifo_putStr(&bfifoOut,prevCmd);
+     			strcpy(current->fifoIn.buf,prevCmd);
+     			current->fifoIn.length = strlen(current->fifoIn.buf);
+     		}
+
+    	 escape1 = 0;
+    	 escape2 = 0;
+    	 escape3 = 0;
+     }
 
 	if(ch == '\n'){
 

@@ -19,6 +19,9 @@
 #define UPARROW 0x41
 #define DOWNARROW 0x42
 
+#define ESCAPE 0x1b
+#define SKIP 0x5b
+
 static volatile tty_t* const tty = (tty_t*) 0xb80003f8;
 static volatile malta_t* const malta = (malta_t*) 0xbf000400;
 
