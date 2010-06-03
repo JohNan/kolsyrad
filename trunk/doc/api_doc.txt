@@ -1,5 +1,10 @@
 Documentation API.
 
+
+in api.h
+--------
+
+
 PrintN(int x)
 prints a integer
 usage:
@@ -64,6 +69,25 @@ usage:
 printP();
 
 --------------------
+sleep(int ms, pid p)
+sets the calling function in waiting mode for ms milliseconds
+
+--------------------
+block(pid p)
+sets the caling function in wait mode until released.
+
+--------------------
+unblock(pid p)
+reenables a waiting process with pid p
+
+--------------------
+kill(pid p)
+terminates the process with pid p
+
+--------------------
+
+functions in other/stdlib  
+--------------------
 char strCmp(char *a,char *b)
 returns 1 if a=b else 0
 usage:
@@ -77,20 +101,13 @@ i = strCmp(a,b);
 i = strCmp(a,c);
 -> i = 0;
 
-
---------------------
-sleep(int ms, pid p)
-sets the calling function in waiting mode for ms milliseconds
-
---------------------
-block(pid p)
-sets the caling function in wait mode until released.
-
---------------------
-unblock(pid p)
-reenables a waiting process with pid p
-
---------------------
-
-functions in other/stdlib are standard c and well documented already. 
+functions in other/stdlib folowing standard c.
+------------------------
+itoa()
+atoi()
+strlen()
+strrev()
+strcpy()
+strcmp()
+strchr()
 
