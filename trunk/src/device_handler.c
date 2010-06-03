@@ -89,7 +89,7 @@ char *kgetStr(){
 
 
 
-	S_stop_ms(-1,current);
+	ksleep(-1,current);
 
 	kget_registers()->v_reg[0] = (int)current->fifoIn.buf;
 
@@ -288,7 +288,7 @@ void Input(char ch) {
 		}
 
 		current->fifoIn.length = 0;
-		S_start(current);
+		kunblock(current);
 		S_schedule();
 	}
 }

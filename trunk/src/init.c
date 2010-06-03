@@ -78,7 +78,7 @@ void init() {
 	init_poc();
 
 	//init scheduler
-	init_scheduler(&pcbq, &free_pcb_q);
+	init_scheduler();
 
 	//init exceptions
 	init_exc();

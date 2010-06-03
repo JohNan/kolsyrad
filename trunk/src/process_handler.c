@@ -9,8 +9,6 @@ pib pibs[MAX_PROGRAM] = {
   {4, "fibonacci", (int)&fibonacci},
   {5, "printp", (int)&smile}
 };
-pcb_queues pcbq;
-free_pcb free_pcb_q;
 
 uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
 
@@ -23,13 +21,15 @@ uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
 void init_poc() {
   int i;
 
-  pcbq.first_ready =
-    pcbq.ready =
-    pcbq.waiting.pcbTimer =
-    pcbq.waiting.pcbInt = NULL;
+	readyQ.first =
+	readyQ.last =
+		freeQ.first =
+		freeQ.last =
+			waitingQ.first =
+			waitingQ.last = NULL;
 
-  free_pcb_q.first = &pcbs[0];
-  free_pcb_q.last = &pcbs[MAX_PROCESS - 1];
+  freeQ.first = &pcbs[0];
+  freeQ.last = &pcbs[MAX_PROCESS - 1];
 
   pcbs[0].pid = 0;
   pcbs[0].progid = NULL;
@@ -86,15 +86,15 @@ int fork() {
 //creates an PCB for a new process returns -1 if fail else pidx
 // note that the returned PCB is completely unlinked
 pcb *get_pcb(void) {
-	pcb *p = free->first;
-	removePcb(free,p);
+	pcb *p = freeQ.first;
+	removePcb(&freeQ,p);
 	return p;
 }
 
 //marks the given PCB as free and adds it to the free list
 //the given PCB must be unlinked
 void p_free_pcb(pcb *p) {
-	insertPcb(free,p);
+	insertPcb(&freeQ,p);
 	p->progid = NULL;
 	p->state = PS_FREE;
 }
@@ -115,9 +115,9 @@ void set_priority(pcb *who, int p) {
 pcb *list_queue(int what) {
   switch(what) {
   case PL_READY:
-    return ready;
+    return readyQ.first;
   case PL_SLEEP:
-    return waiting;
+    return waitingQ.first;
   }
   return NULL;
 }
@@ -135,7 +135,7 @@ int make_process( int pibsNr, int prio, uint32_t args ){
 	newPcb->fifoIn.length = 0;
 	newPcb->nextIO = 0;
 	newPcb->next = newPcb->prev = NULL;
-	insertPcb(ready,newPcb);
+	insertPcb(&readyQ,newPcb);
 //	S_schedule();
 	return newPcb->pid;
 }
@@ -156,7 +156,7 @@ void knewP( int pibsNr, int prio, uint32_t args){
 	newPcb->fifoIn.length = 0;
 	newPcb->nextIO = 0;
 	newPcb->next = newPcb->prev = NULL;
-	insertPcb(ready,newPcb);
+	insertPcb(&readyQ,newPcb);
 	S_schedule();
 }
 

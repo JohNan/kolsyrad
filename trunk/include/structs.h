@@ -64,28 +64,8 @@ typedef struct queue {
 	pcb * last;
 } queue;
 
-queue ready;
-queue wating;
-queue free;
-
-/*
-typedef struct pcb_waiting{
-	pcb *pcbTimer;
-	pcb *pcbInt;
-}pcb_waiting;
-
-typedef struct pcb_queues{
-	pcb * first_ready; //a pointer to the first ready process' PCB. It will only change if the process is not longer
-	pcb * ready; //a pointer to the currently runnning process' PCB. It will walk through all process of highest current priority when scheduling.
-	pcb_waiting waiting; //pointer to waiting processes
-} pcb_queues;
-
-typedef struct free_pcb{
-	pcb * first;
-	pcb * last;
-} free_pcb;
-*/
-extern pcb_queues pcbq;
-extern free_pcb free_pcb_q;
+queue readyQ;
+queue waitingQ;
+queue freeQ;
 
 #endif

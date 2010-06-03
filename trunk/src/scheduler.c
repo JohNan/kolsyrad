@@ -19,12 +19,12 @@ void SP_add_before( pcb * toAdd, pcb * before ){
 void S_schedule(){
 	runningPcb = nextPcb;
 	if(nextPcb->next->priority < nextPcb->priority){
-		nextPcb = ready->first;
+		nextPcb = readyQ.first;
 	} else {
 		nextPcb = nextPcb->next;
 	}
 
-	kset_register(&runningPcb->registers);
+	kset_registers(&runningPcb->registers);
 	kload_timer(1 * timer_msec);
 }
 
@@ -33,7 +33,7 @@ void insertPcb( queue *q, pcb *newPcb ) {
 		q->first = newPcb;
 		newPcb->next = newPcb;
 		newPcb->prev = newPcb;
-	} else if (newPcb->priority > q->first) {
+	} else if (newPcb->priority > q->first->priority) {
 		SP_add_before(newPcb, q->first);
 		q->first = newPcb;
 	} else {
@@ -44,7 +44,7 @@ void insertPcb( queue *q, pcb *newPcb ) {
 				SP_add_before( newPcb, currentInLoop );
 				i = 0;
 			} else if( newPcb->priority > currentInLoop->priority ){
-				SP_add_before( toAdd, currentInLoop );
+				SP_add_before( newPcb, currentInLoop );
 				i = 0;
 			}
 			currentInLoop = currentInLoop->next;
@@ -87,19 +87,26 @@ void ksleep( int32_t ms, pcb * q){
 	q->time = ms;
 	//DputStr("Time to sleep!");
 	//printPid(q);
-	removePcb(ready,q);
-	insertPcb(waiting,q);
+	removePcb(&readyQ,q);
+	insertPcb(&waitingQ,q);
 	if(t){
 		S_schedule();
 	}
 }
 
+void kexit(){
+	pcb *delPcb = getCurrent();
+	removePcb(&readyQ,delPcb);
+	insertPcb(&freeQ,delPcb);
+	S_schedule();
+}
+
 void kunblock( pcb * q ){
-	removePcb(waiting,q);
-	insertPcb(ready,q);
+	removePcb(&waitingQ,q);
+	insertPcb(&readyQ,q);
 }
 
 void init_scheduler(){
-	currentPcb = NULL;
+	runningPcb = NULL;
 	nextPcb = NULL;
 }

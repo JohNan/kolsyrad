@@ -166,15 +166,17 @@ void printP(){
  * SIDE-EFFECT: puts current process to sleep for ms milliseconds
  */
 void sleep( int ms ){
-	S_stop_ms( ms, getCurrent() );
+	//TODO: Add syscall
+	ksleep( ms, getCurrent() );
 }
 
-/* wait
+/* block
  * TYPE: void -> void
  * PRE: exceptions must be initialized
  * POST: -
  * SIDE-EFFECT: puts current process to sleep until woken by another process
  */
-void wait(){
-	S_stop_ms( -1, getCurrent() );
+void block(){
+	//TODO: Add syscall
+	ksleep( -1, getCurrent() );
 }
