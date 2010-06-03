@@ -6,6 +6,7 @@ static registers_t regs;
  * PRE: -
  * POST: -
  * SIDE-EFFECT: starts the timer interrupt
+ */
 void enableTimer(){
         /* Initialise timer to interrupt in 100 ms (simulated time). */
         kload_timer(100 * timer_msec);

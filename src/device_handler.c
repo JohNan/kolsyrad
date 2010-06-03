@@ -69,7 +69,7 @@ char *kgetStr(){
 
 	kget_registers()->v_reg[0] = (int)current->fifoIn.buf;
 
-	S_schedule();
+	//S_schedule();
 	//DputStr(getCurrent()->progid->pname);
 	return NULL;
 }
@@ -166,6 +166,8 @@ void Input(char ch) {
 
 	if (ioqueue.current == NULL)
 		return;
+
+	printPid(current);
 
 	if(ch == '\n'){
 		bfifo_put(&bfifoOut, '\n', 1);

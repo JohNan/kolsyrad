@@ -72,7 +72,8 @@ void parser( char * str ){
 	} else if( strcmp( ret.com, "printp" ) ){
 		newP( 5, 15, NULL );
 	}else {
-		printSln( " Error: Command not recognized");
+		printSln(ret.com);
+		printS( " Error: Command not recognized\n");
 	}
 }
 
