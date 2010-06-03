@@ -73,26 +73,15 @@ void init_poc() {
   //DputStr("Process init done");
 }
 
-// creates a new process with the same PIB
-/*
-int fork() {
-  int pid = get_pcb();
-  if(pid > -1) {
-    //pcbs[pid]
-  }
-  return pid;
-}
-*/
-//creates an PCB for a new process returns -1 if fail else pidx
-// note that the returned PCB is completely unlinked
-pcb *get_pcb(void) {
-	pcb *p = freeQ.first;
-	removePcb(&freeQ,p);
-	return p;
-}
 
 //marks the given PCB as free and adds it to the free list
 //the given PCB must be unlinked
+/* p_free_pcb(p)
+ * TYPE: pcb& -> void
+ * PRE: p must not be NULL
+ * POST: -
+ * SIDE-EFFECT: moves p to the free queue
+ */
 void p_free_pcb(pcb *p) {
 	insertPcb(&freeQ,p);
 	p->progid = NULL;
@@ -101,17 +90,34 @@ void p_free_pcb(pcb *p) {
 
 //terminates process either normaly or abnormaly
 // currently, exit status is ignored
+/* exit
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: terminates the current process
+ */
 void exit() {
 	syscall_exit();
   while(1){}
 }
 
 // sets priority on processes
+/* set_priority(who,prio)
+ * TYPE: pcb& * int -> void
+ * PRE: who must not be NULL
+ * POST: -
+ * SIDE-EFFECT: sets the priority of who to prio
+ */
 void set_priority(pcb *who, int p) {
   who->priority = p;
 }
 
 // Returns a list of processes in any queue. Argument will decide what queues to return.
+/* list_queue(what)
+ * TYPE: int -> pcb&
+ * PRE: -
+ * POST: the requested list, or NULL if what is not a valid queue identifier
+ */
 pcb *list_queue(int what) {
   switch(what) {
   case PL_READY:
@@ -122,6 +128,12 @@ pcb *list_queue(int what) {
   return NULL;
 }
 
+/* make_process(pib, prio, args)
+ * TYPE: int * int * uint32 -> int
+ * PRE: pib must be an index to a valid PIB
+ * POST: the pid of the created process
+ * SIDE-EFFECT: initializes the new PCB and adds it to scheduling
+ */
 int make_process( int pibsNr, int prio, uint32_t args ){
 	pcb *newPcb = get_pcb();
 
@@ -143,7 +155,13 @@ int make_process( int pibsNr, int prio, uint32_t args ){
 /*
  * SYSCALLS
  */
-void knewP( int pibsNr, int prio, uint32_t args){
+/* make_process(pib, prio, args)
+ * TYPE: int * int * uint32 -> int
+ * PRE: pib must be an index to a valid PIB
+ * POST: the pid of the created process
+ * SIDE-EFFECT: initializes the new PCB and adds it to scheduling
+ */
+int knewP( int pibsNr, int prio, uint32_t args){
 	pcb *newPcb = get_pcb();
 
 	newPcb->progid = &pibs[pibsNr];
@@ -158,5 +176,6 @@ void knewP( int pibsNr, int prio, uint32_t args){
 	newPcb->next = newPcb->prev = NULL;
 	insertPcb(&readyQ,newPcb);
 	S_schedule();
+	return newPcb->pid;
 }
 

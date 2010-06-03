@@ -1,6 +1,11 @@
 #include "interrupt_handler.h"
 static registers_t regs;
 
+/* enableTimer
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: starts the timer interrupt
 void enableTimer(){
         /* Initialise timer to interrupt in 100 ms (simulated time). */
         kload_timer(100 * timer_msec);
@@ -8,6 +13,12 @@ void enableTimer(){
         //DputStr("Interrupt enabled.");
 }
 
+/* init_exc
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: initialized the exception handler
+ */
 void init_exc() {
 	status_reg_t and, or;
 	/* Setup storage-area for saving registers on exception. */
@@ -36,6 +47,12 @@ void init_exc() {
 /* kexception:
  *   Application-specific exception handler, called after registers
  *   have been saved.
+ */
+/* kexception
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: handles an exception
  */
 void kexception() {
 
