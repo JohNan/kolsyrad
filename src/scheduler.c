@@ -6,6 +6,12 @@ pcb *nextPcb;
 /*
  * Local functions
  */
+/* SP_add_before(toAdd,before)
+ * TYPE: pcb& * pcb& -> void
+ * PRE: toAdd and before must be non-NULL
+ * POST: -
+ * SIDE-EFFECT: inserts toAdd in front of before
+ */
 void SP_add_before( pcb * toAdd, pcb * before ){
 	toAdd->next = before;
 	toAdd->prev = before->prev;
@@ -15,6 +21,12 @@ void SP_add_before( pcb * toAdd, pcb * before ){
 
 /*
  * Public functions
+ */
+/* S_schedule
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: switches to next process
  */
 void S_schedule(){
 /*	DputStr("----Schedule-RUN---");
@@ -34,6 +46,12 @@ void S_schedule(){
 	kload_timer(1 * timer_msec);
 }
 
+/* insertPcb(q,p)
+ * TYPE: queue& * pcb& -> void
+ * PRE: q and p must be non-NULL
+ * POST: -
+ * SIDE-EFFECT: adds p to q
+ */
 void insertPcb( queue *q, pcb *newPcb ) {
 	if(q->first == NULL){
 		q->first = newPcb;
@@ -61,6 +79,12 @@ void insertPcb( queue *q, pcb *newPcb ) {
 	printPid(newPcb);
 }
 
+/* removePcb(q,p)
+ * TYPE: queue& * pcb& -> void
+ * PRE: q and p must be non-NULL
+ * POST: -
+ * SIDE-EFFECT: removes p from q
+ */
 void removePcb( queue *q, pcb *remPcb ) {
 	if(q->first == remPcb){
 		if(q->first->next == remPcb){ //Only one Pcb in queue;
@@ -78,15 +102,33 @@ void removePcb( queue *q, pcb *remPcb ) {
 	}
 }
 
+/* getCurrent
+ * TYPE: void -> pcb&
+ * PRE: -
+ * POST: pointer to current running PCB
+ */
 pcb* getCurrent(){
 	return runningPcb;
 }
 
+/* getNext
+ * TYPE: void -> pcb&
+ * PRE:
+ * POST: pointer to next running PCB
+ */
 pcb* getNext(){
 	return nextPcb;
 }
 
 // tells process q to wait for ms milliseconds
+/* ksleep(ms,who)
+ * TYPE: int32 * pcb& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: puts who to sleep for ms milliseconds. if who is NULL, the
+ *              current process sleeps. if the current process sleeps, call
+ *              S_schedule
+ */
 void ksleep( int32_t ms, pcb * q){
 	int t;
 	if(q == NULL) {
@@ -103,6 +145,12 @@ void ksleep( int32_t ms, pcb * q){
 	}
 }
 
+/* kexit
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: terminates current process and calls S_schedule
+ */
 void kexit(){
 	pcb *delPcb = getCurrent();
 	removePcb(&readyQ,delPcb);
@@ -110,11 +158,23 @@ void kexit(){
 	S_schedule();
 }
 
+/* kunblock(who)
+ * TYPE: pcb& -> void
+ * PRE: who must not be NULL
+ * POST: -
+ * SIDE-EFFECT: moves who from waiting queue to ready queue
+ */
 void kunblock( pcb * q ){
 	removePcb(&waitingQ,q);
 	insertPcb(&readyQ,q);
 }
 
+/* init_scheduler
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: initializes some global pointers
+ */
 void init_scheduler(){
 	runningPcb = NULL;
 	nextPcb = NULL;
