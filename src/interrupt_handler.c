@@ -110,20 +110,24 @@ void kexception() {
 
 	/* count down all sleepers */
     if(waitingQ.first != NULL){
-		p = waitingQ.first->next;
-		while(p != waitingQ.first) {
-
-			if(p->time > 0 && p->time != -1) {
+		p = waitingQ.first;
+		while(p != waitingQ.first->prev) {
+			if(p->time > 0 ) {
 				//DputStr("Tock!");
-				printPid( p );
 				p->time--;
 				if( p->time == 0) {
-
-					removePcb(&waitingQ, p);
-					insertPcb(&readyQ, p);
+					pcb *q = p;
+					p = q->next;
+					removePcb(&waitingQ, q);
+					insertPcb(&readyQ, q);
+					S_schedule();
 				}
+				else {
+					p = p->next;
+				}
+			} else {
+				p = p->next;
 			}
-			p = p->next;
 		}
     }
 	  /* Icrease the number on the Malta display. */

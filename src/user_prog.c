@@ -29,7 +29,7 @@ void mscroll() {
     for(i = 0;i < 7;i++)
       str[i] = str[i+1];
     str[7] = c;
-    sleep(10);
+    sleep(30);
   }
 }
 
