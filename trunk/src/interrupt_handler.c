@@ -116,14 +116,16 @@ void kexception() {
 				//DputStr("Tock!");
 				p->time--;
 				if( p->time == 0) {
+					//DputStr("Tock!");
 					pcb *q = p;
 					p = q->next;
 					removePcb(&waitingQ, q);
 					insertPcb(&readyQ, q);
-					S_schedule();
+					//S_schedule();
 				}
 				else {
 					p = p->next;
+					//DputStr("Tick!");
 				}
 			} else {
 				p = p->next;

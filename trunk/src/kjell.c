@@ -69,7 +69,11 @@ void parser( char * str ){
 	} else if( strcmp( ret.com, "increment" ) ){
 		newP( 3, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){
-		newP( 4, 15, atoi( ret.args ) );
+		if(ret.indexA != NULL) {
+			newP( 4, 15, atoi( ret.args ) );
+		} else {
+			printS("Need argument. Try again.\n");
+		}
 	} else if( strcmp( ret.com, "printp" ) ){
 		newP( 5, 15, NULL );
 	} else if( strcmp(ret.com, "idle" ) ){

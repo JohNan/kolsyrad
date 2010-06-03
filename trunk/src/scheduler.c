@@ -111,8 +111,10 @@ void removePcb( queue *q, pcb *remPcb ) {
 			q->first = NULL;
 			q->last = NULL;
 		} else {
-			if(nextPcb == remPcb) {
-				nextPcb = remPcb->next;
+			if(q == &readyQ){
+				if(nextPcb == remPcb) {
+					nextPcb = remPcb->next;
+				}
 			}
 			remPcb->prev->next = remPcb->next;
 			remPcb->next->prev = remPcb->prev;
@@ -120,9 +122,11 @@ void removePcb( queue *q, pcb *remPcb ) {
 			q->first->prev = remPcb->prev;
 		}
 	} else {
-		if(nextPcb == remPcb) {
-			nextPcb = remPcb->next;
-		}
+		if(q == &readyQ){
+						if(nextPcb == remPcb) {
+							nextPcb = remPcb->next;
+						}
+					}
 		remPcb->prev->next = remPcb->next;
 		remPcb->next->prev = remPcb->prev;
 	}
