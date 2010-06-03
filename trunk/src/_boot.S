@@ -133,6 +133,14 @@ kget_registers:
 #   Executes a magic instruction, this will stop simics simulation if
 #   preceded by the 'magic-break-enable' simics command.
 # -------------------------------------------------------------------------
+
+# kdebug_magic_break
+# TYPE: void -> void
+# PRE: -
+# POST: -
+# SIDE-EFFECT: halts the CPU
+
+
 kdebug_magic_break:
 	li	zero,0	# This is the simics magic break instruction for MIPS
 	jr	ra

@@ -1,12 +1,7 @@
 #include "other/debug.h"
 
 #ifndef NDEBUG
-/* kdebug_putc(ch)
- * TYPE: char -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: prints ch to the console, using polled IO
- */
+
 void kdebug_putc(char c)
 {
   // BUSY wait for transmitter ready
@@ -16,12 +11,6 @@ void kdebug_putc(char c)
   tty->thr = c;
 }
 
-/* kdebug_print(str)
- * TYPE: char[] -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: prints str to the console, using polled IO
- */
 void kdebug_print(const char* text)
 {
   while (text[0] != '\0')
@@ -32,12 +21,6 @@ void kdebug_print(const char* text)
   }
 }
 
-/* kdebug_println(str)
- * TYPE: char[] -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: prints str to the console, followed by a newline, using polled IO
- */
 void kdebug_println(const char* text)
 {
   kdebug_print(text);
@@ -45,12 +28,6 @@ void kdebug_println(const char* text)
   kdebug_putc('\r');
 }
 
-/* kdebug_printint(val)
- * TYPE: int -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: prints val to the console, using polled IO
- */
 void kdebug_printint(int value)
 {
   // Recursive C is not very efficient, but the recursive
@@ -67,21 +44,9 @@ void kdebug_printint(int value)
   }
 }
 
-/* kdebug_magic_break
- * TYPE: void -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: halts the CPU
- */
 void kdebug_magic_break();
 
-/* kdebug_assert_at(ass, file, line)
- * TYPE: int * char[] * int -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: if ass is true, does nothing, otherwise it prints an error
- *              message and halts the CPU
- */
+
 void kdebug_assert_at(int assertion, const char* file, int line)
 {
   if (!assertion)
