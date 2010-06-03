@@ -17,6 +17,12 @@ typedef struct pRet{
 
 pRet ret;
 
+/* parser(str)
+ * TYPE: char& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: parses str and takes appropriate action
+ */
 void parser( char * str ){
 	ret.indexA = 0;
 	ret.indexC = 0;
@@ -70,7 +76,13 @@ void parser( char * str ){
 	}
 }
 
-
+/* kjell
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: runs a loop that prints a prompt and then parses whatever the
+ *              user enters
+ */
 void kjell(){
 	char *inString;
 	while(1){
