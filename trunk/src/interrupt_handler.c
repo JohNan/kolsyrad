@@ -91,19 +91,20 @@ void kexception() {
     //DputStr("Tick!");
 
 	/* count down all sleepers */
-    p = waitingQ.first;
-    while(p != waitingQ.first->prev) {
-		if(p->time > 0 && p->time != -1) {
-			//DputStr("Tock!");
-			if((--(p->time)) == 0) {
-				//DputStr("Wake up!");
-				removePcb(&waitingQ, p);
-				insertPcb(&readyQ, p);
+    if(waitingQ.first != NULL){
+		p = waitingQ.first;
+		while(p != waitingQ.first->prev) {
+			if(p->time > 0 && p->time != -1) {
+				//DputStr("Tock!");
+				if((--(p->time)) == 0) {
+					//DputStr("Wake up!");
+					removePcb(&waitingQ, p);
+					insertPcb(&readyQ, p);
+				}
 			}
+			p = p->next;
 		}
-		p = p->next;
     }
-
 	  /* Icrease the number on the Malta display. */
 	  // DputMalta(++i);
 

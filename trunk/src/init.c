@@ -94,7 +94,7 @@ void init() {
 	if(i != -1){
 		DputStr("First process created.");
 		}
-	i = make_process(1,25,0);
+	i = make_process(2,2,0);
 		if(i != -1){
 		DputStr("Second process created.");
 		}
@@ -147,7 +147,7 @@ void init() {
 	// now we just wait for an exception to occur and start scheduling
 
 //	DputStr("Init done.");
-	bootscr();
+//	bootscr();
 	enableTimer();
 
   while (1) {};
