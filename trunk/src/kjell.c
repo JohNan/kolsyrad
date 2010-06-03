@@ -63,9 +63,9 @@ void parser( char * str ){
 		newp( 3, 25, atoi(ret.args) );
 	else if( strcmp( ret.com, ""))*/
 	if( strcmp( ret.com, "malta_scroll" ) ){
-		newP( 1, 15, NULL );
+		newP( 1, 25, NULL );
 	} else if( strcmp( ret.com, "kjell") ){
-		newP( 2, 30, NULL );
+		newP( 2, 2, NULL );
 	} else if( strcmp( ret.com, "increment" ) ){
 		newP( 3, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){
