@@ -190,3 +190,12 @@ int knewP( int pibsNr, int prio, uint32_t args){
 	return newPcb->pid;
 }
 
+void kkill(int pid){
+	if(pcbs[pid].state == PS_READY){
+		removePcb(&readyQ, &pcbs[pid]);
+		p_free_pcb(&pcbs[pid]);
+	} else if(pcbs[pid].state == PS_SLEEP){
+		removePcb(&waitingQ, &pcbs[pid]);
+		p_free_pcb(&pcbs[pid]);
+	}
+}
