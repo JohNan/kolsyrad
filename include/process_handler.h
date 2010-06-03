@@ -30,8 +30,6 @@ extern pcb pcbs[];
 extern pib pibs[];
 
 void init_poc();
-//updates the process table (PID is the index of array and the data is a pointer to PCB)
-void set_pcb_image(pib *);
 
 //creates an PCB for a new process returns -1 if fail else pidx
 pcb *get_pcb(void);

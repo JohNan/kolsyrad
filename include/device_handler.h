@@ -28,8 +28,6 @@ void printPrio(pcb * p);
 void init_devices();
 int IO_device(Device *);
 
-uint8_t getCh();
-uint8_t kgetCh();
 char *getStr();
 char *kgetStr();
 
@@ -44,7 +42,7 @@ void putMaltaStr(char *str);
 void Input(char ch);
 
 void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output);
-void bfifo_putStr(bounded_fifo* bfifo, uint32_t c);
+void bfifo_putStr(bounded_fifo* bfifo, char *ch);
 uint8_t bfifo_get(bounded_fifo* bfifo);
 void bfifo_flush(bounded_fifo* bfifo);
 

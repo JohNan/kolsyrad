@@ -41,7 +41,7 @@ void kexception() {
 
   registers_t* reg;
   cause_reg_t cause;
-  pcb *p, *q;
+  pcb *p;
   /* Make sure that we are here because of a timer interrupt. */
   cause.reg = kget_cause();
 
@@ -91,14 +91,14 @@ void kexception() {
     //DputStr("Tick!");
 
 	/* count down all sleepers */
-    p = waiting->first;
-    while(p != waiting->first->prev) {
+    p = waitingQ.first;
+    while(p != waitingQ.first->prev) {
 		if(p->time > 0 && p->time != -1) {
 			//DputStr("Tock!");
 			if((--(p->time)) == 0) {
 				//DputStr("Wake up!");
-				removePcb(waiting, p);
-				insertPcb(ready, p);
+				removePcb(&waitingQ, p);
+				insertPcb(&readyQ, p);
 			}
 		}
 		p = p->next;

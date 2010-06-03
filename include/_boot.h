@@ -8,7 +8,6 @@ void syscall_putMalta(uint32_t word);
 void syscall_putMaltaStr(char *str);
 void syscall_putStr(bounded_fifo* bfifo, char* ch);
 void syscall_putC(bounded_fifo* bfifo, char ch);
-uint8_t syscall_getC();
 char *syscall_getS();
 void syscall_flush(bounded_fifo* bfifo);
 void syscall_newp(int pibsNr, int prio, uint32_t args);

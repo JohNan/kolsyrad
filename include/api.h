@@ -86,12 +86,12 @@ void printP();
  */
 void sleep( int ms );
 
-/* wait()
+/* block()
  * TYPES: void -> void
  * PRE: none
  * POST: none
  * SIDE-EFFECT: puts the current process to wait until another reactivates it
  */
-void wait();
+void block();
 
 #endif

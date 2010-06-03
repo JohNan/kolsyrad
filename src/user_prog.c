@@ -17,7 +17,7 @@ void mscroll() {
     for(i = 0;i < 7;i++)
       str[i] = str[i+1];
     str[7] = c;
-    S_stop_ms(10,NULL);
+    sleep(10);
   }
 }
 

@@ -15,7 +15,6 @@
 
 		.data
 
-# Pointer to the register block in current PCB
 excn_regs:  .word	0
 cause_reg:  .word	0
 	
@@ -59,7 +58,6 @@ excn_stack:
 	.globl	syscall_putMaltaStr
 	.globl	syscall_putStr
 	.globl	syscall_putC
-	.globl	syscall_getC
 	.globl	syscall_getS
 	.globl	syscall_flush
 	.globl 	ksyscall_handler
@@ -264,7 +262,7 @@ syscall_newp:
 	jr ra
 
 syscall_exec:
-	la v0,set_pcb_image
+	la v0,knewP #TODO: Do we need this syscall?
 	syscall
 	jr ra
 	
@@ -284,7 +282,7 @@ syscall_get_pid:
 	jr ra
 	
 syscall_exit:
-	la v0,S_remove_active
+	la v0,kexit
 	syscall
 	jr ra
 
@@ -305,11 +303,6 @@ syscall_putStr:
 
 syscall_putC:
 	la v0,bfifo_put
-	syscall
-	jr ra
-
-syscall_getC:
-	la v0,kgetCh
 	syscall
 	jr ra
 
