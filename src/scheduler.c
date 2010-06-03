@@ -17,6 +17,12 @@ void SP_add_before( pcb * toAdd, pcb * before ){
  * Public functions
  */
 void S_schedule(){
+/*	DputStr("----Schedule-RUN---");
+	printPid(runningPcb);
+
+	DputStr("----Schedule-NEXT---");
+	printPid(nextPcb);
+*/
 	runningPcb = nextPcb;
 	if(nextPcb->next->priority < nextPcb->priority){
 		nextPcb = readyQ.first;
@@ -33,6 +39,7 @@ void insertPcb( queue *q, pcb *newPcb ) {
 		q->first = newPcb;
 		newPcb->next = newPcb;
 		newPcb->prev = newPcb;
+		nextPcb = newPcb;
 	} else if (newPcb->priority > q->first->priority) {
 		SP_add_before(newPcb, q->first);
 		q->first = newPcb;
@@ -50,6 +57,8 @@ void insertPcb( queue *q, pcb *newPcb ) {
 			currentInLoop = currentInLoop->next;
 		}
 	}
+	DputStr("----InserPcb-Added---");
+	printPid(newPcb);
 }
 
 void removePcb( queue *q, pcb *remPcb ) {

@@ -265,7 +265,7 @@ void Input(char ch) {
 	} else if(ch == '\r'){
 
 	} else if(ch == UPARROW) {
-		bfifo_putStr(&bfifoOut,(uint32_t)prevCmd);
+		bfifo_putStr(&bfifoOut,prevCmd);
 		strcpy(current->fifoIn.buf,prevCmd);
 		current->fifoIn.length = strlen(current->fifoIn.buf);
 	}
