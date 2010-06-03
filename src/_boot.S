@@ -15,6 +15,7 @@
 
 		.data
 
+# Pointer to the register block in current PCB
 excn_regs:  .word	0
 cause_reg:  .word	0
 	

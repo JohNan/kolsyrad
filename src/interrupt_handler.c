@@ -108,8 +108,8 @@ void kexception() {
 
     //DputStr("Schedule!");
 	  /* lets schedule! */
-	  S_schedule();
-
+	  //S_schedule();
+  
   } else if(cause.field.exc == 8) { /* Syscall exception */
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();

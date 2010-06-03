@@ -18,7 +18,8 @@ void S_schedule(){
 		kset_registers( &S_pcbQ->ready->registers );
 		S_pcbQ->ready = S_pcbQ->ready->next;
 	}
-
+	DputStr("Scheduler now running:");
+	DputStr(S_pcbQ->ready->prev->progid->pname);
 	kload_timer(10 * timer_msec);
 }
 
@@ -138,6 +139,7 @@ void move_to_ready(pcb *who) {
   S_add_new_pcb(who);
   //DputStr("go!");
 //  DputStr(getCurrent()->progid->pname);
+  S_schedule();
 }
 
 void unlink_pcb(pcb *who) {

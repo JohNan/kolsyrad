@@ -13,8 +13,14 @@ Device d_malta = { 2, -1, NULL };
 
 // Assignes a name to a connected devices memory allocation.
 
+/* IO_device(d)
+ * TYPE: Device -> int
+ * PRE: -
+ * POST: 0 if d is already claimed by another process, 1 otherwise
+ * SIDE-EFFECT: sets the owner in d if it is free when called
+ */
 int IO_device(Device *d){
-	if(d->owner == -1 ) {
+	if((d->owner == -1) || (d->owner == getCurrent()->pid) ) {
 		d->owner = getCurrent()->pid;
 		return 1;
 	} else {
@@ -22,12 +28,25 @@ int IO_device(Device *d){
 	}
 }
 
+/* printPid(p)
+ * TYPE: pcb& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints the pid of p to the console
+ */
 void printPid(pcb * p){
 	char tmp[8];
 	tmp[7] = '\0';
 	itoa(p->pid,tmp,10);
 	DputStr(tmp);
 }
+
+/* printPrio(p)
+ * TYPE: pcb& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints the priority of p to the console
+ */
 void printPrio(pcb * p){
 	char tmp[8];
 	tmp[7] = '\0';
@@ -35,6 +54,10 @@ void printPrio(pcb * p){
 	DputStr(tmp);
 }
 
+/* getCh
+ * TYPE: void -> uint8
+ * PRE: -
+ * POST: the next character to be read from the console
 uint8_t getCh(){
 	return syscall_getC();
 }
@@ -46,11 +69,14 @@ uint8_t kgetCh(){
 	}
 	return NULL;
 }
+*/
 
-char *getStr(){
-	return syscall_getS();
-}
-
+/* kgetStr
+ * TYPE: void -> char&
+ * PRE: -
+ * POST: a string read from the console
+ * SIDE-EFFECT: puts the current process to sleep and calls schedule()
+ */
 char *kgetStr(){
 	pcb *current = getCurrent();
 	if(ioqueue.current == NULL){
@@ -72,6 +98,12 @@ char *kgetStr(){
 	return NULL;
 }
 
+/* flush
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: resets the input buffer so it's ready to read a new line
+ */
 void flush() {
 	syscall_flush(&bfifoIn);
 }
@@ -81,15 +113,32 @@ void flush() {
  * Using syscall
  */
 
+/* putMalta(word)
+ * TYPE: uint32 -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints word to the Malta LED-display
+ */
 void putMalta(uint32_t word){
 	syscall_putMalta(word);
 }
 
+/* putMaltaStr(str)
+ * TYPE: char& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints word to the Malta LED-display
+ */
 void putMaltaStr(char *str) {
   syscall_putMaltaStr(str);
 }
 
-
+/* putCh(ch)
+ * TYPE: char -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints ch to the console
+ */
 void putCh(char c) {
 	syscall_putC(&getCurrent()->fifoOut,c);
 	if (c == '\n') {
@@ -97,6 +146,12 @@ void putCh(char c) {
 	}
 }
 
+/* putStr(str)
+ * TYPE: char& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints str to the console
+ */
 void putStr(char* text) {
 	syscall_putStr(&getCurrent()->fifoOut, text);
 }
@@ -122,6 +177,12 @@ void putStr(char* text) {
  * Debug prints.
  * Polled
  */
+/* DputMalta(word)
+ * TYPE: uint32 -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints word to the Malta LED-display
+ */
 void DputMalta(uint32_t word){
   int i;
   malta->ledbar.reg = 0xFF;
@@ -131,6 +192,12 @@ void DputMalta(uint32_t word){
   }
 }
 
+/* putMaltaStr(word)
+ * TYPE: char& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints word to the Malta LED-display
+ */
 void DputMaltaStr(char *str) {
   int i;
   malta->ledbar.reg = 0xFF;
@@ -140,6 +207,12 @@ void DputMaltaStr(char *str) {
 }
 
 /* Polled output to tty */
+/* DputCh(ch)
+ * TYPE: char -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints ch to the console using polled IO
+ */
 void DputCh(char c) {
 	while ( !tty-> lsr.thre ) {}
 	tty->thr = c;
@@ -150,6 +223,12 @@ void DputCh(char c) {
 }
 
 /* Outputs a string on tty, polled */
+/* DputStr(str)
+ * TYPE: char& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints str to the console using polled IO
+ */
 void DputStr(char* text) {
 	while (*text != '\0') {
 		DputCh(*text);
@@ -159,6 +238,13 @@ void DputStr(char* text) {
 }
 
 uint8_t prevCmd[FIFO_SIZE] = "";
+/* Input(ch)
+ * TYPE: char -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: adds ch to the IO buffer of the buffer of a waiting process
+ *              and wakes the process if a newline is read
+ */
 void Input(char ch) {
 	pcb *current = ioqueue.current;
 
@@ -209,6 +295,13 @@ void Input(char ch) {
 
 
 /* bfifo_put: Inserts a character at the end of the queue. */
+/* bfifo_put(bf, ch, out)
+ * TYPE: bounded_fifo& * uint8 * uint8 -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: stores ch in the buffer of bf and outputs one
+ *              to the console if output matches the ready register
+ */
 void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output) {
 	/* Make sure the 'bfifo' pointer is not 0. */
 
@@ -226,8 +319,13 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output) {
 }
 
 /* bfifo_put: Inserts a character at the end of the queue. */
-void bfifo_putStr(bounded_fifo* bfifo, uint32_t c) {
-	char* ch = (char*)c;
+/* bfifo_putStr(bf, str)
+ * TYPE: bounded_fifo& * char& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints str to the console using bf
+ */
+void bfifo_putStr(bounded_fifo* bfifo, char *ch) {
 	  while( ch[0] != '\0' ){
 		  bfifo_put( bfifo,ch[0],1);
 		if( ch[0] == '\n' ) {
@@ -238,6 +336,12 @@ void bfifo_putStr(bounded_fifo* bfifo, uint32_t c) {
 }
 
 /* bfifo_get: Returns a character removed from the front of the queue. */
+/* bfifo_get(bf)
+ * TYPE: bounded_fifo -> uint8
+ * PRE: -
+ * POST: the first character available in bf
+ * SIDE-EFFECT: shifts the buffer of bf
+ */ 
 uint8_t bfifo_get(bounded_fifo* bfifo) {
   int i;
   uint8_t ch;
@@ -257,11 +361,23 @@ uint8_t bfifo_get(bounded_fifo* bfifo) {
 }
 
 //Resets the buffer
+/* bfifo_flush(bf)
+ * TYPE: bounded_fifo& -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: empties the buffer of bf
+ */
 void bfifo_flush(bounded_fifo* bfifo) {
 	bfifo->length = 0;
 	bfifo->buf[bfifo->length] = '\0';
 }
 
+/* init_devices
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: initializes all device related structs
+ */
 void init_devices(){
 
 	status_reg_t and, or;
