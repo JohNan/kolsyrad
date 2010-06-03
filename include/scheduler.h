@@ -24,7 +24,7 @@ void S_schedule();
  * POST: none
  * SIDE-EFFECT: Adds toAdd to the running process queue
  */
-void S_add_new_pcb(pcb *toAdd );
+void insertPcb(queue *q, pcb *newPcb);
 
 /* S_remove_active()
  * TYPES: void -> void
@@ -32,30 +32,21 @@ void S_add_new_pcb(pcb *toAdd );
  * POST: none
  * SIDE-EFFECT: removes the active process
  */
-void S_remove_active();
+void removePcb(queue *q, pcb *remPcb);
 
-/* S_activate_pcb( toActivate )
- * TYPES: pcb * -> void
- * PRE: has to be an inactive process
- * POST: none
- * SIDE-EFFECT: move an inactivated process to running queue
- */
-void S_activate_pcb( pcb * toActivate );
+
+pcb* getCurrent();
+pcb* getNext();
+
+
+void ksleep( int32_t ms, pcb * q);
+void kunblock( pcb * q );
 
 /* init_scheduler( p1, p2 )
  * TYPE: pcb_queue *, free_pcb * -> void
  *
  */
-void init_scheduler(pcb_queues * p1, free_pcb * p2 );
-
-pcb* getCurrent();
-
-void move_to_ready(pcb *p);
-void move_to_int(pcb *p);
-void move_to_sleep(pcb *p);
-void unlink_pcb(pcb *);
-void S_stop_ms( int32_t ms, pcb * q);
-void S_start( pcb * q );
+void init_scheduler();
 
 #endif
 

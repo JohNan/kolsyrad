@@ -89,18 +89,19 @@ void kexception() {
 	  	  kset_cause(~0x1000, 0);
   } else if(cause.field.exc == 0){ /* Timer interrupt */
     //DputStr("Tick!");
-    /* count down all sleepers */
-    p = pcbq.waiting.pcbTimer;
-    while(p != NULL) {
-    	q = p->next;
-		if(p->time > 0) {
+
+	/* count down all sleepers */
+    p = waiting->first;
+    while(p != waiting->first->prev) {
+		if(p->time > 0 && p->time != -1) {
 			//DputStr("Tock!");
 			if((--(p->time)) == 0) {
 				//DputStr("Wake up!");
-				move_to_ready(p);
+				removePcb(waiting, p);
+				insertPcb(ready, p);
 			}
 		}
-		p = q;
+		p = p->next;
     }
 
 	  /* Icrease the number on the Malta display. */
@@ -108,8 +109,8 @@ void kexception() {
 
     //DputStr("Schedule!");
 	  /* lets schedule! */
-	  //S_schedule();
-  
+	  S_schedule();
+
   } else if(cause.field.exc == 8) { /* Syscall exception */
 	  /* Get pointer to stored registers. */
 	  reg = kget_registers();
