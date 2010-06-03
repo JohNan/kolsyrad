@@ -1,5 +1,11 @@
 #include "init.h"
 
+/* bootscr
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints the world's coolest splash screen
+ */
 void bootscr(){
 	DputStr("                                   ooo ");
 	DputStr("                                  o   o");
@@ -56,6 +62,12 @@ void bootscr(){
 	DputStr("");
 }
 
+/* init
+ * TYPE: void -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: initializes all kernel subsystems
+ */
 void init() {
 	int i;
 
