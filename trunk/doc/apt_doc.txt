@@ -2,30 +2,55 @@ Documentation API.
 
 PrintN(int x)
 prints a integer
+usage:
+PrintN(35);
+PrintN(34);
+-> 3534
 
 --------------------
 printC(char x)
 prints a char
-
+usage:
+PrintC('a');
+PrintC('b');
+-> ab
 --------------------
 printS(char *s)
 prints a string
-
- -------------------
+usage:
+PrintS("hello");
+PrintS(" world");
+-> hello world
+--------------------
 PrintNln(int x)
 prints a integer and new line
-
+usage:
+PrintNln(35);
+PrintNln(34);
+-> 35
+-> 34
 --------------------
 printCln(char x)
 prints a char and new line
+usage:
+PrintCln('a');
+PrintCln('b');
+-> a
+-> b
 
 --------------------
 printSln(char *s)
 prints a string and new line
-
+usage:
+PrintSln("hello");
+PrintSln("world");
+-> hello
+-> world
 --------------------
 printP()
 prints a list of active processes
+usage:
+printP();
 
 --------------------
 sleep(int ms)
