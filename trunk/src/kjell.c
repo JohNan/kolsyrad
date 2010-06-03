@@ -65,7 +65,7 @@ void parser( char * str ){
 	if( strcmp( ret.com, "malta_scroll" ) ){
 		newP( 1, 15, NULL );
 	} else if( strcmp( ret.com, "kjell") ){
-		newP( 2, 2, NULL );
+		newP( 2, 30, NULL );
 	} else if( strcmp( ret.com, "increment" ) ){
 		newP( 3, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){

@@ -110,12 +110,15 @@ void kexception() {
 
 	/* count down all sleepers */
     if(waitingQ.first != NULL){
-		p = waitingQ.first;
-		while(p != waitingQ.first->prev) {
+		p = waitingQ.first->next;
+		while(p != waitingQ.first) {
+
 			if(p->time > 0 && p->time != -1) {
 				//DputStr("Tock!");
-				if((--(p->time)) == 0) {
-					//DputStr("Wake up!");
+				printPid( p );
+				p->time--;
+				if( p->time == 0) {
+
 					removePcb(&waitingQ, p);
 					insertPcb(&readyQ, p);
 				}
