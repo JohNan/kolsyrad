@@ -157,7 +157,7 @@ void ksleep( int32_t ms, pcb * q){
 	if(q == NULL) {
 		q = getCurrent();
 	}
-
+	q->state = PS_SLEEP;
 	q->time = ms;
 	//DputStr("Time to sleep!");
 	//printPid(q);
@@ -187,6 +187,7 @@ void kexit(){
 void kunblock( pcb * q ){
 	removePcb(&waitingQ,q);
 	insertPcb(&readyQ,q);
+	q->state = PS_READY;
 }
 
 /* init_scheduler

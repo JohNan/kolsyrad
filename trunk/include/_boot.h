@@ -16,5 +16,6 @@ pcb *syscall_fork();
 void syscall_set_prio(pcb *who, int prio);
 pcb *syscall_get_pid();
 void syscall_exit();
+void syscall_kill(int pid);
 
 #endif

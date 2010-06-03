@@ -33,7 +33,7 @@ void parser( char * str ){
 	for( i = 0; str[i] != '\0'; i++ ){
 		switch( s ){
 		case parsing_command:
-			if( str[i] == ' ' ){
+			if( str[i] == ' '){
 				ret.com[ret.indexC] = '\0';
 				s = parsing_args;
 			} else {
@@ -56,7 +56,7 @@ void parser( char * str ){
 			break;
 		}
 	}
-
+	ret.com[ret.indexC] = '\0';
 	ret.s = s;
 	/*if( strcmp( ret.com, "increment" ) == 1 )
 		newp( 3, 25, atoi(ret.args) );
@@ -71,6 +71,8 @@ void parser( char * str ){
 		pid = newP( 4, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "printp" ) ){
 		pid = newP( 5, 15, NULL );
+	}else if( strcmp( ret.com, "kill" ) ){
+		pid = newP( 5, 15, atoi( ret.args ) );
 	}else {
 		printSln(ret.com);
 		printS( " Error: Command not recognized\n");

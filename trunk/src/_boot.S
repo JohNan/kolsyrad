@@ -54,6 +54,7 @@ excn_stack:
 	.globl	syscall_set_prio
 	.globl	syscall_get_pid
 	.globl 	syscall_exit
+	.globl	syscall_kill
 	.globl 	syscall_putMalta
 	.globl	syscall_putMaltaStr
 	.globl	syscall_putStr
@@ -291,6 +292,11 @@ syscall_get_pid:
 	
 syscall_exit:
 	la v0,kexit
+	syscall
+	jr ra
+
+syscall_kill:
+	la v0,kkill
 	syscall
 	jr ra
 
