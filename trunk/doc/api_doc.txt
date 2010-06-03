@@ -64,6 +64,21 @@ usage:
 printP();
 
 --------------------
+char strCmp(char *a,char *b)
+returns 1 if a=b else 0
+usage:
+char a = "hello";
+char b = "hello";
+char c = "world";
+char i;
+
+i = strCmp(a,b);
+-> i = 1;
+i = strCmp(a,c);
+-> i = 0;
+
+
+--------------------
 sleep(int ms, pid p)
 sets the calling function in waiting mode for ms milliseconds
 
