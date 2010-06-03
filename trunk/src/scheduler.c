@@ -29,12 +29,7 @@ void SP_add_before( pcb * toAdd, pcb * before ){
  * SIDE-EFFECT: switches to next process
  */
 void S_schedule(){
-/*	DputStr("----Schedule-RUN---");
-	printPid(runningPcb);
 
-	DputStr("----Schedule-NEXT---");
-	printPid(nextPcb);
-*/
 	runningPcb = nextPcb;
 	if(nextPcb->next->priority < nextPcb->priority){
 		nextPcb = readyQ.first;
@@ -44,6 +39,13 @@ void S_schedule(){
 
 	kset_registers(&runningPcb->registers);
 	kload_timer(1 * timer_msec);
+
+/*		DputStr("----Schedule-RUN---");
+		printPid(runningPcb);
+
+		DputStr("----Schedule-NEXT---");
+		printPid(nextPcb);
+*/
 }
 
 /* insertPcb(q,p)
@@ -57,7 +59,9 @@ void insertPcb( queue *q, pcb *newPcb ) {
 		q->first = newPcb;
 		newPcb->next = newPcb;
 		newPcb->prev = newPcb;
-		nextPcb = newPcb;
+		if(q == &readyQ){
+			nextPcb = newPcb;
+		}
 	} else if (newPcb->priority > q->first->priority) {
 		SP_add_before(newPcb, q->first);
 		q->first = newPcb;
@@ -75,8 +79,9 @@ void insertPcb( queue *q, pcb *newPcb ) {
 			currentInLoop = currentInLoop->next;
 		}
 	}
-	DputStr("----InserPcb-Added---");
+/*	DputStr("----InserPcb-Added---");
 	printPid(newPcb);
+*/
 }
 
 /* removePcb(q,p)
@@ -86,20 +91,35 @@ void insertPcb( queue *q, pcb *newPcb ) {
  * SIDE-EFFECT: removes p from q
  */
 void removePcb( queue *q, pcb *remPcb ) {
+/*		if(nextPcb != NULL){
+		DputStr("----removePcb-nextPcb---");
+		printPid(nextPcb);
+		}
+*/
 	if(q->first == remPcb){
 		if(q->first->next == remPcb){ //Only one Pcb in queue;
 			q->first = NULL;
 			q->last = NULL;
 		} else {
+			if(nextPcb == remPcb) {
+				nextPcb = remPcb->next;
+			}
 			remPcb->prev->next = remPcb->next;
 			remPcb->next->prev = remPcb->prev;
 			q->first = q->first->next;
 			q->first->prev = remPcb->prev;
 		}
 	} else {
+		if(nextPcb == remPcb) {
+			nextPcb = remPcb->next;
+		}
 		remPcb->prev->next = remPcb->next;
 		remPcb->next->prev = remPcb->prev;
 	}
+/*	if(nextPcb != NULL){
+	DputStr("----removePcb-nextPcb-END---");
+	printPid(nextPcb);
+	} */
 }
 
 /* getCurrent

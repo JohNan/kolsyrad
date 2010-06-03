@@ -116,7 +116,7 @@ void init() {
 		}
 
 
-*/
+
 	char tmp[8];
 	tmp[8] = '\0';
 
@@ -138,16 +138,17 @@ void init() {
 		printPrio(&pcbs[i]);
 		DputStr("---end---");
 	}
-/*
-	DputStr("---First ready---");
-	printPid(pcbq.first_ready);
-	DputStr("---Ready---");
-	printPid(pcbq.ready);
+
+	DputStr("---First---");
+	printPid(readyQ.first);
+	DputStr("---Next---");
+	printPid(readyQ.first->next);
 */
+
 	// now we just wait for an exception to occur and start scheduling
 
 //	DputStr("Init done.");
-//	bootscr();
+	bootscr();
 	enableTimer();
 
   while (1) {};

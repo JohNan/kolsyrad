@@ -73,6 +73,14 @@ void init_poc() {
   //DputStr("Process init done");
 }
 
+//creates an PCB for a new process returns -1 if fail else pidx
+// note that the returned PCB is completely unlinked
+pcb *get_pcb(void) {
+        pcb *p = freeQ.first;
+        removePcb(&freeQ,p);
+        return p;
+}
+
 
 //marks the given PCB as free and adds it to the free list
 //the given PCB must be unlinked
