@@ -14,13 +14,15 @@ usage:
 PrintC('a');
 PrintC('b');
 -> ab
+
 --------------------
 printS(char *s)
 prints a string
 usage:
 PrintS("hello");
-PrintS(" world");
--> hello world
+PrintS("world");
+-> helloworld
+
 --------------------
 PrintNln(int x)
 prints a integer and new line
@@ -29,6 +31,7 @@ PrintNln(35);
 PrintNln(34);
 -> 35
 -> 34
+
 --------------------
 printCln(char x)
 prints a char and new line
@@ -46,28 +49,33 @@ PrintSln("hello");
 PrintSln("world");
 -> hello
 -> world
+
+--------------------
+char *getStr()
+reads a string to buffer.
+usage:
+char *input;
+input = getStr();
+
 --------------------
 printP()
-prints a list of active processes
+prints a list of all active and waiting processes
 usage:
 printP();
 
 --------------------
-sleep(int ms)
-sets the calling function in sleep for ms milliseconds
+sleep(int ms, pid p)
+sets the calling function in waiting mode for ms milliseconds
 
 --------------------
-wait()
+block(pid p)
 sets the caling function in wait mode until released.
 
 --------------------
-activate(pid p)
+unblock(pid p)
 reenables a waiting process with pid p
 
 --------------------
 
-
-
-
-
+functions in other/stdlib are standard c and well documented already. 
 
