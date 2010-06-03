@@ -73,21 +73,6 @@ void init_poc() {
   //DputStr("Process init done");
 }
 
-//updates the process table (PID is the index of array and the data is a pointer to PCB)
-void set_pcb_image(pib *newPIB) {
- // (pcbq.ready) -> progid = newPIB -> progid;
-  /*__inline__ __asm__ {
-	  sw ra,newPIB->start_ptr
-	  }*/
-  /* need some inline asm code here to mess about with the stack frame
-     so that when we return, execution continues at the starting point of
-     new new program */
-  /* stack frame should look something like:
-     sp ----> empty
-     sp-4 --> return addr
-  */
-}
-
 // creates a new process with the same PIB
 /*
 int fork() {
@@ -101,28 +86,17 @@ int fork() {
 //creates an PCB for a new process returns -1 if fail else pidx
 // note that the returned PCB is completely unlinked
 pcb *get_pcb(void) {
-  pcb *p;
-
- /* if(free_pcb_q.first == NULL)
-    return -1; */
-  p = free_pcb_q.first;
-  p->state = PS_START;
-  free_pcb_q.first = p -> next;
-  p->prev = p->next = NULL;
-  return p;
+	pcb *p = free->first;
+	removePcb(free,p);
+	return p;
 }
 
 //marks the given PCB as free and adds it to the free list
 //the given PCB must be unlinked
 void p_free_pcb(pcb *p) {
-  if(free_pcb_q.last == NULL)
-    free_pcb_q.first = free_pcb_q.last = p;
-  else {
-    p->prev = free_pcb_q.last;
-    free_pcb_q.last = p->prev->next = p;
-  }
-  p->progid = NULL;
-  p->state = PS_FREE;
+	insertPcb(free,p);
+	p->progid = NULL;
+	p->state = PS_FREE;
 }
 
 //terminates process either normaly or abnormaly
@@ -131,23 +105,6 @@ void exit() {
 	syscall_exit();
   while(1){}
 }
-
-// unblocks a process
-/*
-void unblock(pcb *who) {
-  if(pcbq.waiting == who)
-    pcbq.waiting = who->next;
-
-  // unlink
-  if(who->prev != NULL)
-    who->prev->next = who->next;
-  if(who->next != NULL)
-    who->next->prev = who->prev;
-  who->prev = who->next = NULL;
-
-  // TODO: call the scheduler to insert it at the right place in ready Q
-}
-*/
 
 // sets priority on processes
 void set_priority(pcb *who, int p) {
@@ -158,9 +115,9 @@ void set_priority(pcb *who, int p) {
 pcb *list_queue(int what) {
   switch(what) {
   case PL_READY:
-    return pcbq.ready;
+    return ready;
   case PL_SLEEP:
-    return pcbq.waiting.pcbInt;
+    return waiting;
   }
   return NULL;
 }
@@ -178,7 +135,7 @@ int make_process( int pibsNr, int prio, uint32_t args ){
 	newPcb->fifoIn.length = 0;
 	newPcb->nextIO = 0;
 	newPcb->next = newPcb->prev = NULL;
-	S_add_new_pcb( newPcb );
+	insertPcb(ready,newPcb);
 //	S_schedule();
 	return newPcb->pid;
 }
@@ -199,7 +156,7 @@ void knewP( int pibsNr, int prio, uint32_t args){
 	newPcb->fifoIn.length = 0;
 	newPcb->nextIO = 0;
 	newPcb->next = newPcb->prev = NULL;
-	S_add_new_pcb( newPcb );
+	insertPcb(ready,newPcb);
 	S_schedule();
 }
 

@@ -59,7 +59,16 @@ typedef struct io_queue{
 
 io_queue ioqueue;
 
+typedef struct queue {
+	pcb * first;
+	pcb * last;
+} queue;
 
+queue ready;
+queue wating;
+queue free;
+
+/*
 typedef struct pcb_waiting{
 	pcb *pcbTimer;
 	pcb *pcbInt;
@@ -75,7 +84,7 @@ typedef struct free_pcb{
 	pcb * first;
 	pcb * last;
 } free_pcb;
-
+*/
 extern pcb_queues pcbq;
 extern free_pcb free_pcb_q;
 
