@@ -28,12 +28,12 @@ void parser( char * str ){
 	ret.indexC = 0;
 
 	int s = parsing_command;
-	int pid = 0;
+
 	int i;
 	for( i = 0; str[i] != '\0'; i++ ){
 		switch( s ){
 		case parsing_command:
-			if( str[i] == ' '){
+			if( str[i] == ' ' ){
 				ret.com[ret.indexC] = '\0';
 				s = parsing_args;
 			} else {
@@ -57,27 +57,28 @@ void parser( char * str ){
 		}
 	}
 	ret.com[ret.indexC] = '\0';
+
 	ret.s = s;
 	/*if( strcmp( ret.com, "increment" ) == 1 )
 		newp( 3, 25, atoi(ret.args) );
 	else if( strcmp( ret.com, ""))*/
 	if( strcmp( ret.com, "malta_scroll" ) ){
-		pid = newP( 1, 15, NULL );
+		newP( 1, 15, NULL );
 	} else if( strcmp( ret.com, "kjell") ){
-		pid = newP( 2, 2, NULL );
+		newP( 2, 2, NULL );
 	} else if( strcmp( ret.com, "increment" ) ){
-		pid = newP( 3, 15, atoi( ret.args ) );
+		newP( 3, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){
-		pid = newP( 4, 15, atoi( ret.args ) );
+		newP( 4, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "printp" ) ){
-		pid = newP( 5, 15, NULL );
-	}else if( strcmp( ret.com, "kill" ) ){
-		pid = newP( 5, 15, atoi( ret.args ) );
-	}else {
-		printSln(ret.com);
-		printS( " Error: Command not recognized\n");
+		newP( 5, 15, NULL );
+	} else if( strcmp(ret.com, "idle" ) ){
+		newP( 0, 1, NULL );
+	} else if( strcmp(ret.com, "kill" ) ){
+		kill( atoi( ret.args ) );
+	} else {
+		printS( "	Error: Command not recognized\n" );
 	}
-
 }
 
 /* kjell
@@ -92,16 +93,12 @@ void kjell(){
 	while(1){
 		printS("kolsyrad>");
 		inString = getStr();
-	/*	if( strcmp( inString, "increment" ) ){
+		/*if( strcmp( inString, "increment" ) ){
 			DputStr("START");
 			newP( 3, 15, 5 );
 		} else {
-			char tmp[9];
-				tmp[8] = '\0';
-				itoa((int)inString,tmp,10);
-				DputStr(tmp);
-			DputStr(inString);
-		} */
+			DputStr("ERROR!");
+		}*/
 		parser(inString);
 	}
 }

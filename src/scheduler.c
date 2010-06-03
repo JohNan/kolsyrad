@@ -31,7 +31,14 @@ void SP_add_before( pcb * toAdd, pcb * before ){
 void S_schedule(){
 
 	runningPcb = nextPcb;
-	if(nextPcb->next->priority < nextPcb->priority){
+	if( readyQ.first == NULL ){
+		DputStr("########################\n");
+		DputStr("#      PINK SCREEN     #\n");
+		DputStr("########################\n");
+		while(1){
+			__asm( "nop" );
+		}
+	}else if (nextPcb->next->priority < nextPcb->priority){
 		nextPcb = readyQ.first;
 	} else {
 		nextPcb = nextPcb->next;
@@ -153,11 +160,10 @@ pcb* getNext(){
  *              S_schedule
  */
 void ksleep( int32_t ms, pcb * q){
-	int t;
 	if(q == NULL) {
 		q = getCurrent();
 	}
-	q->state = PS_SLEEP;
+	q->state = 3;
 	q->time = ms;
 	//DputStr("Time to sleep!");
 	//printPid(q);
@@ -187,7 +193,7 @@ void kexit(){
 void kunblock( pcb * q ){
 	removePcb(&waitingQ,q);
 	insertPcb(&readyQ,q);
-	q->state = PS_READY;
+	q->state = 2;
 }
 
 /* init_scheduler

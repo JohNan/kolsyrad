@@ -7,6 +7,22 @@
 #include "other/types.h"
 #include "structs.h"
 
+/* setPrio( pid, prio )
+ * TYPES: int, int -> void
+ * PRE: pid has to be valid.
+ * POST: none
+ * SIDE-EFFECT: changes pids prio
+ */
+void setPrio( int pid, int prio );
+
+/* kill( pid )
+ * TYPES: int -> void
+ * PRE: pid has to be a valid one
+ * POST: none
+ * SIDE-EFFECT: kills the pid
+ */
+void kill(int pid);
+
 /* newP(int,int,uin32_t)
  * TYPES: int -> void
  * PRE: pibsNr must be valid pib

@@ -191,10 +191,10 @@ int knewP( int pibsNr, int prio, uint32_t args){
 }
 
 void kkill(int pid){
-	if(pcbs[pid].state == PS_READY){
+	if(pcbs[pid].state == 2){
 		removePcb(&readyQ, &pcbs[pid]);
 		p_free_pcb(&pcbs[pid]);
-	} else if(pcbs[pid].state == PS_SLEEP){
+	} else if(pcbs[pid].state == 3){
 		removePcb(&waitingQ, &pcbs[pid]);
 		p_free_pcb(&pcbs[pid]);
 	}
