@@ -7,6 +7,7 @@
 
 #include "structs/registers.h"
 
+#include "process_handler.h"
 #include "device_handler.h"
 #include "structs.h"
 

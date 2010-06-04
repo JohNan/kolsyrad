@@ -6,7 +6,6 @@
 
 void idle();
 void goodbye();
-void smile();
 
 void mscroll();
 void increment(int);

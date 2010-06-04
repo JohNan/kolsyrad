@@ -154,7 +154,12 @@ void DputStr(char* text) {
 		DputCh(*text);
 		++text;
 	}
-	DputCh('\n');
+}
+
+void DputN(int num) {
+	char temp[13];
+	itoa( num, temp, 10 );
+	DputStr(temp);
 }
 
 uint8_t prevCmd[FIFO_SIZE] = "";
@@ -199,7 +204,7 @@ void Input(char ch) {
 				bfifo_put(&bfifoOut, '\b',1);
 				current->fifoIn.length--;
 			}
-		} else if(ch == '\r'){
+		} else if(ch == '\r' || ch == '\t'){
 
 		} else {
 			bfifo_put(&bfifoOut, ch, 1);

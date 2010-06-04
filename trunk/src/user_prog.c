@@ -56,15 +56,6 @@ void goodbye(){
 	putStr("G: Counting done.\n");
 }
 
-/* smile
- * TYPE: void -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: prints all current processes
- */
-void smile(){
-	printP();
-}
 // increments i and prints it to a new line.
 // pre max > 0
 

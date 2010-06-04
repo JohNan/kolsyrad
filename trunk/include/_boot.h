@@ -19,6 +19,7 @@ void syscall_exit();
 void syscall_kill(int pid);
 void syscall_sleep(int ms, pcb *q);
 void syscall_block(int32_t ms, pcb *q);
+void syscall_ps();
 
 uint8_t syscall_getPriority(uint8_t p);
 uint8_t syscall_getState(uint8_t p);

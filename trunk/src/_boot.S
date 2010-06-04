@@ -57,6 +57,7 @@ excn_stack:
 	.globl	syscall_kill
 	.globl	syscall_sleep
 	.globl	syscall_block
+	.globl	syscall_ps
 	.globl 	syscall_putMalta
 	.globl	syscall_putMaltaStr
 	.globl	syscall_putStr
@@ -270,6 +271,11 @@ exception_handler:
 	#   A user mode interface to the kernel mode function
 	#   'kmy_system_call'.
 	#
+syscall_ps:
+	la v0,kps
+	syscall
+	jr ra
+
 syscall_newp:
 	la v0,knewP
 	syscall
