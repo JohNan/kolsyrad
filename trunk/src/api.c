@@ -31,7 +31,8 @@ void printS( char * str ){
 void printNln( int num ){
 	char temp[13];
 	itoa( num, temp, 10 );
-	printSln( temp );
+	printS( temp );
+	printC( '\n' );
 }
 
 void printCln( char ch ){
@@ -40,15 +41,8 @@ void printCln( char ch ){
 }
 
 void printSln( char * str ){
-	int i;
-	char *temp = str;
-	for( i = 0; str[i] != '\0'; i++ ){
-
-	}
-	temp[i+1] = '\0';
-	temp[i] = '\n';
-
-	putStr( temp );
+	putStr( str );
+	printC( '\n' );
 }
 
 void printP(){

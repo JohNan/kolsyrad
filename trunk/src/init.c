@@ -94,7 +94,7 @@ void init() {
 	//Start kjell
 	i = make_process(2,2,0);
 	//Start malta scroll
-	i = make_process(1,25,0);
+	//i = make_process(1,25,0);
 
 /*
 		i = make_process(3,30,20);
