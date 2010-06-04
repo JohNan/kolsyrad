@@ -6,8 +6,7 @@ pib pibs[MAX_PROGRAM] = {
   {1, "malta_scroll", (int)&mscroll},
   {2, "kjell", (int)&kjell},
   {3, "increment", (int)&increment},
-  {4, "fibonacci", (int)&fibonacci},
-  {5, "printp", (int)&smile}
+  {4, "fibonacci", (int)&fibonacci}
 };
 
 uint8_t pstack[MAX_PROCESS][STACK_SIZE];
@@ -91,6 +90,7 @@ pcb *get_pcb(void) {
  */
 void p_free_pcb(pcb *p) {
 	insertPcb(&freeQ,p);
+	p->priority = NULL;
 	p->progid = NULL;
 	p->state = PS_FREE;
 }
@@ -232,5 +232,64 @@ void kkill(int pid){
 	} else if(pcbs[pid].state == 3){
 		removePcb(&waitingQ, &pcbs[pid]);
 		p_free_pcb(&pcbs[pid]);
+	}
+}
+
+void kps() {
+pcb *temp = list_queue( 1 );
+	if( temp != NULL ){
+		DputStr( "Active processes" );
+		DputStr( "----------------\n" );
+		DputStr( "PID      Pname      Priority      State\n" );
+		DputN( temp->pid );
+		DputStr( "        ");
+		DputStr( temp->progid->pname );
+		DputStr( "          ");
+		DputN( temp->priority );
+		DputStr( "          ");
+		DputN( temp->state );
+		DputStr( "\n");
+
+		for( temp=temp->next; temp != list_queue( 1 ); temp=temp->next ){
+
+			DputN( temp->pid );
+			DputStr( "        ");
+			DputStr( temp->progid->pname );
+			DputStr( "          ");
+			DputN( temp->priority );
+			DputStr( "          ");
+			DputN( temp->state );
+			DputStr( "\n");
+		}
+		DputStr( "End of active processes" );
+		DputStr( "----------------\n" );
+	}
+	temp = list_queue( 2 );
+
+	if( temp != NULL ){
+		DputStr( "Waiting processes\n" );
+		DputStr( "----------------\n" );
+		DputStr( "PID      Pname      Priority      State\n" );
+		DputN( temp->pid );
+		DputStr( "        ");
+		DputStr( temp->progid->pname );
+		DputStr( "          ");
+		DputN( temp->priority );
+		DputStr( "          ");
+		DputN( temp->state );
+		DputStr( "\n");
+
+		for( temp=temp->next; temp != list_queue( 2 ); temp=temp->next ){
+			DputN( temp->pid );
+			DputStr( "        ");
+			DputStr( temp->progid->pname );
+			DputStr( "          ");
+			DputN( temp->priority );
+			DputStr( "          ");
+			DputN( temp->state );
+			DputStr( "\n");
+		}
+		DputStr( "------------------------" );
+		DputStr( "End of waiting processes\n" );
 	}
 }

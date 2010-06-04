@@ -80,13 +80,13 @@ void printCln( char ch );
  */
 void printSln( char * str );
 
-/* printP
+/* ps
  * TYPE: void -> void
  * PRE: console must be initialized
  * POST: -
  * SIDE-EFFECT: prints all processes to the console
  */
-void printP();
+void ps();
 
 /* sleep(ms)
  * TYPE: int -> void

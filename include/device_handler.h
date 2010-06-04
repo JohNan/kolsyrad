@@ -175,6 +175,14 @@ void DputCh(char c);
  */
 void DputStr(char* text);
 
+/* Outputs a int on tty, polled */
+/* DputN(num)
+ * TYPE: int -> void
+ * PRE: -
+ * POST: -
+ * SIDE-EFFECT: prints num to the console using polled IO
+ */
+void DputN(int num);
 /* DputMalta(word)
  * TYPE: uint32 -> void
  * PRE: -

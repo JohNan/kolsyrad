@@ -45,77 +45,8 @@ void printSln( char * str ){
 	printC( '\n' );
 }
 
-void printP(){
-	pcb *temp = list_queue( 1 );
-
-	if( temp != NULL ){
-		printS( "Active processes" );
-		printS( "----------------\n" );
-		printS( "PID      Pname      Priority      State\n" );
-		printN( temp->pid );
-		printS( "      ");
-		printS( "\t" );
-		printS( temp->progid->pname );
-		printS( "      ");
-		printS( "\t" );
-		printN( temp->priority );
-		printS( "      ");
-		printS( "\t" );
-		printN( temp->state );
-		printS( "\n");
-
-		for( temp=temp->next; temp != list_queue( 1 ); temp=temp->next ){
-
-			printN( temp->pid );
-			printS( "      ");
-			printS( "\t" );
-			printS( temp->progid->pname );
-			printS( "      ");
-			printS( "\t" );
-			printN( temp->priority );
-			printS( "      ");
-			printS( "\t" );
-			printN( temp->state );
-			printS( "\n");
-		}
-
-		printS( "-----------------------" );
-		printS( "End of active processes\n" );
-	}
-	temp = list_queue( 2 );
-
-	if( temp != NULL ){
-		printS( "Waiting processes\n" );
-		printS( "----------------\n" );
-		printS( "PID      Pname      Priority      State\n" );
-		printN( temp->pid );
-		printS( "      ");
-		printS( "\t" );
-		printS( temp->progid->pname );
-		printS( "      ");
-		printS( "\t" );
-		printN( temp->priority );
-		printS( "      ");
-		printS( "\t" );
-		printN( temp->state );
-		printS( "\n");
-
-		for( temp=temp->next; temp != list_queue( 2 ); temp=temp->next ){
-			printN( temp->pid );
-			printS( "      ");
-			printS( "\t" );
-			printS( temp->progid->pname );
-			printS( "      ");
-			printS( "\t" );
-			printN( temp->priority );
-			printS( "      ");
-			printS( "\t" );
-			printN( temp->state );
-			printS( "\n");
-		}
-		printS( "\n------------------------" );
-		printS( "End of waiting processes" );
-	}
+void ps(){
+	syscall_ps();
 }
 
 void sleep( int ms ){

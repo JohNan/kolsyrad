@@ -81,8 +81,8 @@ void parser( char * str ){
 		} else {
 			printS("Need a number. Try again.\n");
 		}
-	} else if( strcmp( ret.com, "printp" ) ){
-		newP( 5, 15, NULL );
+	} else if( strcmp( ret.com, "ps" ) ){
+		ps();
 	} else if( strcmp(ret.com, "idle" ) ){
 		newP( 0, 1, NULL );
 	} else if( strcmp(ret.com, "kill" ) ){

@@ -183,7 +183,7 @@ void ksleep( int32_t ms, pcb * q){
 void kexit(){
 	pcb *delPcb = getCurrent();
 	removePcb(&readyQ,delPcb);
-	insertPcb(&freeQ,delPcb);
+	p_free_pcb(delPcb);
 
 	pcb *current = ioqueue.current;
 	pcb *prev = NULL;
