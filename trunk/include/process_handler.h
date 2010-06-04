@@ -44,7 +44,7 @@ void exit();
 void unblock(pcb *);
 
 // sets priority on processes
-void set_priority(pcb *,int);
+void kset_priority( int pid, uint8_t p );
 
 // Returns a list of processes in any queue. Argument will decide what queues to return.
 pcb *list_queue(int);

@@ -115,8 +115,18 @@ void exit() {
  * POST: -
  * SIDE-EFFECT: sets the priority of who to prio
  */
-void set_priority(pcb *who, int p) {
-  who->priority = p;
+void kset_priority(int pid, uint8_t p) {
+	if( pcb_exists( pid ) ){
+		if( pcbs[pid].state == 3 ){
+			removePcb( &waitingQ, &pcbs[pid] );
+			pcbs[pid].priority = p;
+			insertPcb( &waitingQ, &pcbs[pid] );
+		} else {
+			removePcb( &readyQ, &pcbs[pid] );
+			pcbs[pid].priority = p;
+			insertPcb( &readyQ, &pcbs[pid] );
+		}
+	}
 }
 
 uint8_t pcb_exists(uint8_t p){
