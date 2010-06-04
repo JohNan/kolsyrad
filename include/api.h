@@ -112,4 +112,26 @@ void block();
  */
 char *getStr();
 
+/* getPriority
+ * TYPE:
+ * POST: -
+ * SIDE-EFFECTS: returns the priority of process p.
+ */
+uint8_t getPriority(uint8_t p);
+
+/* getState
+ * TYPE
+ * POST:
+ * SIDE-EFFECTS: Returns the current state of the process with pid p
+ */
+uint8_t getState(uint8_t p);
+
+/*getName
+ * TYPE:
+ * POST:
+ * SIDE-EFFECTS: Returns the name of the program using the process
+ */
+
+char *getName(uint8_t p);
+
 #endif

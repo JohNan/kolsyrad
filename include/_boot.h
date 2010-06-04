@@ -18,4 +18,8 @@ pcb *syscall_get_pid();
 void syscall_exit();
 void syscall_kill(int pid);
 
+uint8_t syscall_getPriority(uint8_t p);
+uint8_t syscall_getState(uint8_t p);
+char *syscall_getName(uint8_t p);
+
 #endif

@@ -133,3 +133,15 @@ void block(){
 	//TODO: Add syscall
 	ksleep( -1, getCurrent() );
 }
+
+uint8_t getPriority(uint8_t p){
+	return syscall_getPriority(p);
+}
+
+uint8_t getState(uint8_t p){
+	return syscall_getState(p);
+}
+
+char *getName(uint8_t p){
+	return syscall_getName(p);
+}

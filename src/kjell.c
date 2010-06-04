@@ -73,6 +73,8 @@ void parser( char * str ){
 		} else {
 			printS("Need a number. Try again.\n");
 		}
+	} else if(strcmp(ret.com, "prio") ){
+		newP( 4, 15, atoi( ret.args ) );
 	} else if( strcmp( ret.com, "fibonacci" ) ){
 		if(ret.indexA != NULL) {
 			newP( 4, 15, atoi( ret.args ) );
