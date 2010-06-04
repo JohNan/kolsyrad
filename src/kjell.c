@@ -65,7 +65,7 @@ void parser( char * str ){
 	if( strcmp( ret.com, "malta_scroll" ) ){
 		newP( 1, 25, NULL );
 	} else if( strcmp( ret.com, "kjell") ){
-		printC( '\n' );
+		printS( "\n" );
 		newP( 2, 2, NULL );
 	} else if( strcmp( ret.com, "increment" ) ){
 		if(ret.indexA1 != 0) {
