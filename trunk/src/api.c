@@ -125,13 +125,11 @@ void printP(){
 }
 
 void sleep( int ms ){
-	//TODO: Add syscall
-	ksleep( ms, getCurrent() );
+	syscall_sleep(ms, NULL);
 }
 
 void block(){
-	//TODO: Add syscall
-	ksleep( -1, getCurrent() );
+	syscall_block(-1, NULL);
 }
 
 uint8_t getPriority(uint8_t p){

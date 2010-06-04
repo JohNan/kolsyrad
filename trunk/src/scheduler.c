@@ -169,8 +169,7 @@ void ksleep( int32_t ms, pcb * q){
 	}
 	q->state = 3;
 	q->time = ms;
-	//DputStr("Time to sleep!");
-	//printPid(q);
+
 	removePcb(&readyQ,q);
 	insertPcb(&waitingQ,q);
 }
