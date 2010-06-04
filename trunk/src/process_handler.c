@@ -20,7 +20,6 @@ uint8_t pstack[MAX_PROCESS][STACK_SIZE];
  */
 void init_poc() {
   int i;
-
 	readyQ.first =
 	readyQ.last =
 		freeQ.first =
@@ -121,15 +120,16 @@ void set_priority(pcb *who, int p) {
 }
 
 uint8_t pcb_exists(uint8_t p){
-	if(pcbs[p].state != PS_FREE)
+	if(pcbs[p].state != 0){
 		return 1;
-	else
+	} else {
 		return 0;
+	}
 }
 
 //returns the priority of process with pib p
 uint8_t kgetPriority(uint8_t p){
-	uint8_t ret = -1;
+	int8_t ret = -1;
 	if (pcb_exists(p)){
 		ret = pcbs[p].priority;
 	}
@@ -138,7 +138,7 @@ uint8_t kgetPriority(uint8_t p){
 }
 //returns the state of process with pib p
 uint8_t kgetState(uint8_t p){
-	uint8_t ret = -1;
+	int8_t ret = -1;
 	if (pcb_exists(p)){
 		ret = pcbs[p].state;
 	}
@@ -147,11 +147,11 @@ uint8_t kgetState(uint8_t p){
 }
 //returns the name of process with pib p
 char *kgetName(uint8_t p){
-	uint8_t ret = -1;
+	char * ret = NULL;
 	if (pcb_exists(p)){
 		ret = pcbs[p].progid->pname;
 	}
-	kget_registers()->v_reg[0] = (int) ret;
+	kget_registers()->v_reg[0] = (int)ret;
 	return NULL;
 }
 
@@ -234,5 +234,3 @@ void kkill(int pid){
 		p_free_pcb(&pcbs[pid]);
 	}
 }
-
-
