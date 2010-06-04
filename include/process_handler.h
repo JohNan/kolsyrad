@@ -70,6 +70,3 @@ uint8_t pcb_exists( uint8_t p );
 #define PL_SLEEP 2
 
 #endif
-
-
-
