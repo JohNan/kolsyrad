@@ -108,10 +108,12 @@ void removePcb( queue *q, pcb *remPcb ) {
 		}
 	} else {
 		if(q == &readyQ){
-						if(nextPcb == remPcb) {
-							nextPcb = remPcb->next;
-						}
-					}
+			if(getNext() == remPcb) {
+				nextPcb = remPcb->next;
+			} else if( getCurrent() == remPcb ){
+				S_schedule();
+			}
+		}
 		remPcb->prev->next = remPcb->next;
 		remPcb->next->prev = remPcb->prev;
 	}
@@ -144,10 +146,14 @@ pcb* getNext(){
  *              current process sleeps. if the current process sleeps, call
  *              S_schedule
  */
-void ksleep( int32_t ms, pcb * q){
-	if(q == NULL) {
+void ksleep( int32_t ms, uint8_t p){
+	pcb * q;
+	if(p == 255) {
 		q = getCurrent();
+	}else if( pcb_exists(p) ){
+		q = &pcbs[p];
 	}
+
 	q->state = 3;
 	q->time = ms;
 
@@ -191,7 +197,12 @@ void kexit(){
  * POST: -
  * SIDE-EFFECT: moves who from waiting queue to ready queue
  */
-void kunblock( pcb * q ){
+void kunblock( uint8_t p ){
+	pcb * q;
+	if( pcb_exists(p) ){
+		q = &pcbs[p];
+	}
+
 	removePcb(&waitingQ,q);
 	insertPcb(&readyQ,q);
 	q->state = 2;

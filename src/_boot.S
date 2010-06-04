@@ -56,6 +56,7 @@ excn_stack:
 	.globl	syscall_kill
 	.globl	syscall_sleep
 	.globl	syscall_block
+	.globl	syscall_unblock
 	.globl	syscall_ps
 	.globl 	syscall_putMalta
 	.globl	syscall_putMaltaStr
@@ -311,6 +312,11 @@ syscall_sleep:
 
 syscall_block:
 	la v0,ksleep
+	syscall
+	jr ra
+
+syscall_unblock:
+	la v0, kunblock
 	syscall
 	jr ra
 

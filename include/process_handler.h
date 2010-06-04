@@ -40,9 +40,6 @@ void p_free_pcb(pcb *);
 //terminates process either normaly or abnormaly
 void exit();
 
-// unblocks a process
-void unblock(pcb *);
-
 // sets priority on processes
 void kset_priority( int pid, uint8_t p );
 

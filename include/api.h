@@ -95,6 +95,12 @@ void ps();
  * SIDE-EFFECT: puts current process to sleep for ms milliseconds
  */
 void sleep( int ms );
+/* sleep_pid( p, ms )
+ * PRE: none
+ * POST: none
+ * SIDE-EFFECT: puts process with pid p to sleep ms milliseconds
+ */
+void sleep_pid( uint8_t p, int ms );
 
 /* block
  * TYPE: void -> void
@@ -103,6 +109,22 @@ void sleep( int ms );
  * SIDE-EFFECT: puts current process to sleep until woken by another process
  */
 void block();
+
+/* block_pid( p )
+ * TYPE: uint8_t -> void
+ * PRE: none
+ * POST: none
+ * SIDE-EFFECT: blocks a process whit pid p
+ */
+void block_pid( uint8_t p );
+
+/* unblock( pid )
+ * TYPE: uint8_t -> null
+ * PRE: none
+ * POST: none
+ * SIDE-EFFECTS: unblocks a blocked process.
+ */
+void unblock( uint8_t p );
 
 /* getStr
  * TYPE: void -> char&
