@@ -106,7 +106,7 @@ void p_free_pcb(pcb *p) {
  */
 void exit() {
 	syscall_exit();
-  while(1){}
+	while(1){}
 }
 
 // sets priority on processes
@@ -121,8 +121,10 @@ void set_priority(pcb *who, int p) {
 }
 
 char pcb_exists(uint8_t p){
-
-	return 1;
+	if(pcbs[p].state != PS_FREE)
+		return 1;
+	else
+		return 0;
 }
 
 //returns the priority of process with pib p
