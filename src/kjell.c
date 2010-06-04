@@ -95,7 +95,12 @@ void parser( char * str ){
 		printN( getState( atoi( ret.args ) ) );
 		printC( '\n' );
 	} else if( strcmp( ret.com, "name" ) ){
-		printS( getName( atoi( ret.args ) ) );
+		char * na = getName( atoi( ret.args ) );
+		if( na == NULL ){
+			printS( "Not found" );
+		} else {
+			printS( na );
+		}
 		printC( '\n' );
 	} else {
 		printS( "	Error: Command not recognized\n" );
