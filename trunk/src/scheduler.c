@@ -185,6 +185,23 @@ void kexit(){
 	pcb *delPcb = getCurrent();
 	removePcb(&readyQ,delPcb);
 	insertPcb(&freeQ,delPcb);
+
+	pcb *current = ioqueue.current;
+	pcb *prev = NULL;
+	while(current != NULL){
+		if(delPcb == current){
+			if(prev == NULL)
+				delPcb->nextIO = ioqueue.current;
+			else
+				prev->nextIO = delPcb->nextIO;
+			break;
+
+		} else{
+			prev = current;
+			current = current->nextIO;
+		}
+	}
+
 	S_schedule();
 }
 
