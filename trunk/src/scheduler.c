@@ -32,7 +32,7 @@ void S_schedule(){
 
 	runningPcb = nextPcb;
 	if( readyQ.first == NULL ){
-		DputStr("########################\n");
+		DputStr("\n########################\n");
 		DputStr("#      PINK SCREEN     #\n");
 		DputStr("########################\n");
 		while(1){

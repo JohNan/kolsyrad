@@ -17,7 +17,10 @@ void printN( int num ){
 }
 
 void printC( char ch ){
-	putCh( ch );
+	char c[2];
+	c[0] = ch;
+	c[1] = '\0';
+	printS( c );
 }
 
 char *getStr(){
@@ -36,8 +39,8 @@ void printNln( int num ){
 }
 
 void printCln( char ch ){
-	putCh( ch );
-	putCh( '\n' );
+	printC( ch );
+	printC( '\n' );
 }
 
 void printSln( char * str ){
