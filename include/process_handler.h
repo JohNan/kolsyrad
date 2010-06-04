@@ -64,6 +64,8 @@ uint8_t kgetState(uint8_t p);
 //returns the name of process with pib p
 char *kgetName(uint8_t p);
 
+uint8_t pcb_exists( uint8_t p );
+
 #define PL_READY 1
 #define PL_SLEEP 2
 

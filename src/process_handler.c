@@ -120,7 +120,7 @@ void set_priority(pcb *who, int p) {
   who->priority = p;
 }
 
-char pcb_exists(uint8_t p){
+uint8_t pcb_exists(uint8_t p){
 	if(pcbs[p].state != PS_FREE)
 		return 1;
 	else
@@ -130,7 +130,7 @@ char pcb_exists(uint8_t p){
 //returns the priority of process with pib p
 uint8_t kgetPriority(uint8_t p){
 	uint8_t ret = -1;
-	if (pcb_exists(p) == 1){
+	if (pcb_exists(p)){
 		ret = pcbs[p].priority;
 	}
 	kget_registers()->v_reg[0] = (int) ret;
@@ -149,7 +149,7 @@ uint8_t kgetState(uint8_t p){
 char *kgetName(uint8_t p){
 	uint8_t ret = -1;
 	if (pcb_exists(p)){
-		ret = pcbs[p].state;
+		ret = pcbs[p].progid->pname;
 	}
 	kget_registers()->v_reg[0] = (int) ret;
 	return NULL;
