@@ -10,8 +10,6 @@ static registers_t regs;
 void enableTimer(){
         /* Initialise timer to interrupt in 100 ms (simulated time). */
         kload_timer(100 * timer_msec);
-
-        //DputStr("Interrupt enabled.");
 }
 
 /* init_exc
@@ -26,7 +24,6 @@ void init_exc() {
 	kset_registers(&regs);
 
 	/* Update the status register to enable timer interrupts. */
-	//kset_sr(0xFFBF00E8, 0x10008001);
 
 	and.reg = 0xFFFFFFFF;
 	and.field.exl = 0; // Normal level (not exception)
@@ -63,16 +60,6 @@ void kexception() {
   /* Make sure that we are here because of a timer interrupt. */
   cause.reg = kget_cause();
 
-  /*
-   * DEBUG
-   */
-  /*
-  tmp = cause.field.exc;
-  putWord(tmp);
-  */
-
-  //kdebug_assert(cause.field.exc == 0);    /* External interrupt */
-
   if (cause.field.ip & 4) { /* Hardware interrupt (tty) */
 	  uint8_t ch;
 	   /* UART interrupt */
@@ -106,26 +93,21 @@ void kexception() {
 	  	  /* Acknowledge UART interrupt. */
 	  	  kset_cause(~0x1000, 0);
   } else if(cause.field.exc == 0){ /* Timer interrupt */
-    //DputStr("Tick!");
 
 	/* count down all sleepers */
     if(waitingQ.first != NULL){
 		p = waitingQ.first;
 		while(p != waitingQ.first->prev) {
 			if(p->time > 0 ) {
-				//DputStr("Tock!");
 				p->time--;
 				if( p->time == 0) {
-					//DputStr("Tock!");
 					pcb *q = p;
 					p = q->next;
 					removePcb(&waitingQ, q);
 					insertPcb(&readyQ, q);
-					//S_schedule();
 				}
 				else {
 					p = p->next;
-					//DputStr("Tick!");
 				}
 			} else {
 				p = p->next;
@@ -133,9 +115,7 @@ void kexception() {
 		}
     }
 	  /* Icrease the number on the Malta display. */
-	  // DputMalta(++i);
 
-    //DputStr("Schedule!");
 	  /* lets schedule! */
 	  S_schedule();
 

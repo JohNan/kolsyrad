@@ -49,7 +49,6 @@ excn_stack:
 	.globl  kexception
 	.globl	kdebug_magic_break
 	.globl	syscall_newp
-	.globl	syscall_exec
 	.globl	syscall_fork
 	.globl	syscall_set_prio
 	.globl	syscall_get_pid
@@ -63,7 +62,6 @@ excn_stack:
 	.globl	syscall_putStr
 	.globl	syscall_putC
 	.globl	syscall_getS
-	.globl	syscall_flush
 	.globl 	ksyscall_handler
 	.globl  syscall_getPriority
 	.globl  syscall_getName
@@ -280,11 +278,6 @@ syscall_newp:
 	la v0,knewP
 	syscall
 	jr ra
-
-syscall_exec:
-	la v0,knewP #TODO: Do we need this syscall?
-	syscall
-	jr ra
 	
 syscall_fork:
 	la v0,get_pcb
@@ -358,11 +351,6 @@ syscall_getState:
 
 syscall_getName:
 	la v0, kgetName
-	syscall
-	jr ra
-
-syscall_flush:
-	la v0,bfifo_flush
 	syscall
 	jr ra
 

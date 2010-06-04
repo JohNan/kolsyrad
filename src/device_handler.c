@@ -36,23 +36,6 @@ void printPrio(pcb * p){
 	DputStr(tmp);
 }
 
-/* getCh
- * TYPE: void -> uint8
- * PRE: -
- * POST: the next character to be read from the console
-uint8_t getCh(){
-	return syscall_getC();
-}
-
-
-uint8_t kgetCh(){
-	if(bfifoIn.length > 0){
-		kget_registers()->v_reg[0] = bfifoIn.buf[bfifoIn.length-1];
-	}
-	return NULL;
-}
-*/
-
 char *kgetStr(){
 	pcb *current = getCurrent();
 	if(ioqueue.current == NULL){
@@ -70,10 +53,6 @@ char *kgetStr(){
 	S_schedule();
 
 	return NULL;
-}
-
-void flush() {
-	syscall_flush(&bfifoIn);
 }
 
 /*
@@ -287,12 +266,6 @@ uint8_t bfifo_get(bounded_fifo* bfifo) {
     bfifo->buf[i] = bfifo->buf[i+1];
   }
   return ch;
-}
-
-//Resets the buffer
-void bfifo_flush(bounded_fifo* bfifo) {
-	bfifo->length = 0;
-	bfifo->buf[bfifo->length] = '\0';
 }
 
 void init_devices(){

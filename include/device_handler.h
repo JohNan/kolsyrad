@@ -67,14 +67,6 @@ char *getStr();
  */
 char *kgetStr();
 
-/* flush
- * TYPE: void -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: resets the input buffer so it's ready to read a new line
- */
-void flush();
-
 /* putCh(ch)
  * TYPE: char -> void
  * PRE: -
@@ -143,14 +135,6 @@ void bfifo_putStr(bounded_fifo* bfifo, char *ch);
  * SIDE-EFFECT: shifts the buffer of bf
  */
 uint8_t bfifo_get(bounded_fifo* bfifo);
-
-/* bfifo_flush(bf)
- * TYPE: bounded_fifo& -> void
- * PRE: -
- * POST: -
- * SIDE-EFFECT: empties the buffer of bf
- */
-void bfifo_flush(bounded_fifo* bfifo);
 
 /*
  * Debug print functions
