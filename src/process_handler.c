@@ -240,24 +240,24 @@ pcb *temp = list_queue( 1 );
 	if( temp != NULL ){
 		DputStr( "Active processes" );
 		DputStr( "----------------\n" );
-		DputStr( "PID      Pname      Priority      State\n" );
+		DputStr( "PID\tPname\tPriority\tState\n" );
 		DputN( temp->pid );
-		DputStr( "        ");
+		DputStr( "\t");
 		DputStr( temp->progid->pname );
-		DputStr( "          ");
+		DputStr( "\t");
 		DputN( temp->priority );
-		DputStr( "          ");
+		DputStr( "\t");
 		DputN( temp->state );
 		DputStr( "\n");
 
 		for( temp=temp->next; temp != list_queue( 1 ); temp=temp->next ){
 
 			DputN( temp->pid );
-			DputStr( "        ");
+			DputStr( "\t");
 			DputStr( temp->progid->pname );
-			DputStr( "          ");
+			DputStr( "\t");
 			DputN( temp->priority );
-			DputStr( "          ");
+			DputStr( "\t");
 			DputN( temp->state );
 			DputStr( "\n");
 		}
@@ -269,27 +269,28 @@ pcb *temp = list_queue( 1 );
 	if( temp != NULL ){
 		DputStr( "Waiting processes\n" );
 		DputStr( "----------------\n" );
-		DputStr( "PID      Pname      Priority      State\n" );
+		DputStr( "PID\tPname\tPriority\tState\n" );
 		DputN( temp->pid );
-		DputStr( "        ");
+		DputStr( "\t");
 		DputStr( temp->progid->pname );
-		DputStr( "          ");
+		DputStr( "\t");
 		DputN( temp->priority );
-		DputStr( "          ");
+		DputStr( "\t");
 		DputN( temp->state );
 		DputStr( "\n");
 
 		for( temp=temp->next; temp != list_queue( 2 ); temp=temp->next ){
 			DputN( temp->pid );
-			DputStr( "        ");
+			DputStr( "\t");
 			DputStr( temp->progid->pname );
-			DputStr( "          ");
+			DputStr( "\t");
 			DputN( temp->priority );
-			DputStr( "          ");
+			DputStr( "\t");
 			DputN( temp->state );
 			DputStr( "\n");
 		}
-		DputStr( "------------------------" );
-		DputStr( "End of waiting processes\n" );
+
+		DputStr( "End of waiting processes" );
+		DputStr( "----------------\n" );
 	}
 }
