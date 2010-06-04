@@ -11,7 +11,7 @@ void syscall_putC(bounded_fifo* bfifo, char ch);
 char *syscall_getS();
 int syscall_newp(int pibsNr, int prio, uint32_t args);
 pcb *syscall_fork();
-void syscall_set_prio(pcb *who, int prio);
+void syscall_set_prio( int pid, uint8_t p );
 pcb *syscall_get_pid();
 void syscall_exit();
 void syscall_kill(int pid);

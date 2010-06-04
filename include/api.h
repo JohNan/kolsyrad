@@ -134,4 +134,12 @@ uint8_t getState(uint8_t p);
 
 char *getName(uint8_t p);
 
+/*set_priority
+ * TYPE: int, uint8_t -> void
+ * PRE: none
+ * POST: none
+ * SIDE-EFFECT: changes the priority of a pib
+ */
+void set_priority( int pib, uint8_t p );
+
 #endif

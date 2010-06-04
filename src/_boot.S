@@ -285,7 +285,7 @@ syscall_fork:
 	jr ra
 	
 syscall_set_prio:
-	la v0,set_priority
+	la v0,kset_priority
 	syscall
 	jr ra
 	

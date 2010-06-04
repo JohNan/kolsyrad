@@ -102,6 +102,11 @@ void parser( char * str ){
 			printS( na );
 		}
 		printC( '\n' );
+	} else if( strcmp( ret.com, "setPrio" ) ){
+		set_priority( atoi( ret.args ), 10 );
+		printS( "changed the priority of pid: " );
+		printS( ret.com );
+		printS( " to 10!\n" );
 	} else {
 		printS( "	Error: Command not recognized\n" );
 	}

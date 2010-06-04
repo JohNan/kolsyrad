@@ -68,3 +68,7 @@ uint8_t getState(uint8_t p){
 char *getName(uint8_t p){
 	return syscall_getName(p);
 }
+
+void set_priority( int pib, uint8_t p ){
+	syscall_set_prio( pib, p );
+}
