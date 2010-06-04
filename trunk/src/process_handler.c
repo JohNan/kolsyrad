@@ -10,7 +10,7 @@ pib pibs[MAX_PROGRAM] = {
   {5, "printp", (int)&smile}
 };
 
-uint8_t pstack[MAX_PROCESS+1][STACK_SIZE];
+uint8_t pstack[MAX_PROCESS][STACK_SIZE];
 
 /* init_poc()
  * TYPE: void -> void
@@ -38,7 +38,7 @@ void init_poc() {
   pcbs[0].flags = 0;
   /* registers do not need init */
   // except for SP
-  pcbs[0].registers.sp_reg = (uint32_t) &pstack[1];
+  pcbs[0].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS];
   pcbs[0].next = &pcbs[1];
   pcbs[0].prev = &pcbs[MAX_PROCESS - 1];
   pcbs[0].time = 0;
@@ -50,7 +50,7 @@ void init_poc() {
   pcbs[MAX_PROCESS - 1].state = PS_FREE;
   pcbs[MAX_PROCESS - 1].flags = 0;
   /* registers do not need init */
-  pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[MAX_PROCESS];
+  pcbs[MAX_PROCESS - 1].registers.sp_reg = (uint32_t) &pstack[1];
   pcbs[MAX_PROCESS - 1].next = &pcbs[0];
   pcbs[MAX_PROCESS - 1].prev = &pcbs[MAX_PROCESS - 2];
   pcbs[MAX_PROCESS - 1].time = 0;
@@ -63,7 +63,7 @@ void init_poc() {
     pcbs[i].state = PS_FREE;
     pcbs[i].flags = 0;
     /* registers do not need init */
-    pcbs[i].registers.sp_reg = (uint32_t) &pstack[i+1];
+    pcbs[i].registers.sp_reg = (uint32_t) &pstack[i];
     pcbs[i].next = &pcbs[i + 1];
     pcbs[i].prev = &pcbs[i - 1];
     pcbs[i].time = 0;
