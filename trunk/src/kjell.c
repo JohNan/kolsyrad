@@ -119,12 +119,6 @@ void kjell(){
 	while(1){
 		printS("kolsyrad>");
 		inString = getStr();
-		/*if( strcmp( inString, "increment" ) ){
-			DputStr("START");
-			newP( 3, 15, 5 );
-		} else {
-			DputStr("ERROR!");
-		}*/
 		parser(inString);
 	}
 }

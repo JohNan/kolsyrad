@@ -46,13 +46,6 @@ void S_schedule(){
 
 	kset_registers(&runningPcb->registers);
 	kload_timer(1 * timer_msec);
-
-/*		DputStr("----Schedule-RUN---");
-		printPid(runningPcb);
-
-		DputStr("----Schedule-NEXT---");
-		printPid(nextPcb);
-*/
 }
 
 /* insertPcb(q,p)
@@ -89,9 +82,6 @@ void insertPcb( queue *q, pcb *newPcb ) {
 			currentInLoop = currentInLoop->next;
 		}
 	}
-/*	DputStr("----InserPcb-Added---");
-	printPid(newPcb);
-*/
 }
 
 /* removePcb(q,p)
@@ -101,11 +91,6 @@ void insertPcb( queue *q, pcb *newPcb ) {
  * SIDE-EFFECT: removes p from q
  */
 void removePcb( queue *q, pcb *remPcb ) {
-/*		if(nextPcb != NULL){
-		DputStr("----removePcb-nextPcb---");
-		printPid(nextPcb);
-		}
-*/
 	if(q->first == remPcb){
 		if(q->first->next == remPcb){ //Only one Pcb in queue;
 			q->first = NULL;
@@ -130,10 +115,6 @@ void removePcb( queue *q, pcb *remPcb ) {
 		remPcb->prev->next = remPcb->next;
 		remPcb->next->prev = remPcb->prev;
 	}
-/*	if(nextPcb != NULL){
-	DputStr("----removePcb-nextPcb-END---");
-	printPid(nextPcb);
-	} */
 }
 
 /* getCurrent
