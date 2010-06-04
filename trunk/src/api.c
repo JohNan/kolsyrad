@@ -50,11 +50,23 @@ void ps(){
 }
 
 void sleep( int ms ){
-	syscall_sleep(ms, NULL);
+	syscall_sleep(ms, 255);
+}
+
+void sleep_pid( uint8_t p, int ms ){
+	syscall_sleep( ms, p );
 }
 
 void block(){
-	syscall_block(-1, NULL);
+	syscall_block(-1, 255);
+}
+
+void block_pid( uint8_t p ){
+	syscall_block( -1, p );
+}
+
+void unblock( uint8_t p ){
+	syscall_unblock( p );
 }
 
 uint8_t getPriority(uint8_t p){

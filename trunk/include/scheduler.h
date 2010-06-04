@@ -40,8 +40,8 @@ pcb* getCurrent();
 pcb* getNext();
 
 
-void ksleep( int32_t ms, pcb * q);
-void kunblock( pcb * q );
+void ksleep( int32_t ms, uint8_t p );
+void kunblock( uint8_t p );
 
 /* init_scheduler( p1, p2 )
  * TYPE: pcb_queue *, free_pcb * -> void

@@ -46,7 +46,7 @@ char *kgetStr(){
 		ioqueue.last = current;
 	}
 
-	ksleep(-1,current);
+	ksleep(-1,current->pid);
 
 	kget_registers()->v_reg[0] = (int)current->fifoIn.buf;
 
@@ -80,23 +80,6 @@ void putStr(char* text) {
 	syscall_putStr(&getCurrent()->fifoOut, text);
 }
 
-/*
-void putStr(char* text) {
-  if(d_tty.owner == -1){
- // is the tty free?
-		if(IO_device(&d_tty)){
-			syscall_putStr(&getCurrent()->fifoOut, text);
-			d_tty.owner = -1;
-		}
-	} else {
-		while(d_tty.owner != -1){}
-		if(IO_device(&d_tty)){
-			syscall_putStr(&getCurrent()->fifoOut, text);
-			d_tty.owner = -1;
-		}
-	}
-}
-*/
 /*
  * Debug prints.
  * Polled
@@ -219,7 +202,7 @@ void Input(char ch) {
 		current->fifoIn.buf[current->fifoIn.length] = '\0';
 		current->fifoIn.length = 0;
 
-		kunblock(current);
+		kunblock(current->pid);
 		S_schedule();
 	}
 }
@@ -241,8 +224,8 @@ void bfifo_put(bounded_fifo* bfifo, uint8_t ch, uint8_t output) {
 }
 
 void bfifo_putStr(bounded_fifo* bfifo, char *ch) {
-	  while( ch[0] != '\0' ){
-		  bfifo_put( bfifo,ch[0],1);
+	while( ch[0] != '\0' ){
+		bfifo_put( bfifo,ch[0],1);
 		if( ch[0] == '\n' ) {
 			bfifo_put( bfifo,'\r',1);
 		}
