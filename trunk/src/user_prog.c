@@ -32,6 +32,10 @@ void mscroll() {
     sleep(10);
   }
 }
+void prio(){
+	printN((int)getPriority(0));
+
+}
 
 /* goodbye
  * TYPE: void -> void

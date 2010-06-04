@@ -57,6 +57,13 @@ int knewP( int pibsNr, int prio, uint32_t args);
 
 void kkill(int pid);
 
+//returns the priority of process with pib p
+uint8_t kgetPriority(uint8_t p);
+//returns the state of process with pib p
+uint8_t kgetState(uint8_t p);
+//returns the name of process with pib p
+char *kgetName(uint8_t p);
+
 #define PL_READY 1
 #define PL_SLEEP 2
 

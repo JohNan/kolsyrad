@@ -62,6 +62,9 @@ excn_stack:
 	.globl	syscall_getS
 	.globl	syscall_flush
 	.globl 	ksyscall_handler
+	.globl  syscall_getPriority
+	.globl  syscall_getName
+	.globl  syscall_getState
 
 # -------------------------------------------------------------------------
 # Set cpu status register
@@ -322,6 +325,21 @@ syscall_putC:
 
 syscall_getS:
 	la v0,kgetStr
+	syscall
+	jr ra
+
+syscall_getPriority:
+	la v0, kgetPriority
+	syscall
+	jr ra
+
+syscall_getState:
+	la v0, kgetState
+	syscall
+	jr ra
+
+syscall_getName:
+	la v0, kgetName
 	syscall
 	jr ra
 

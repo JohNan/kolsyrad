@@ -120,6 +120,29 @@ void set_priority(pcb *who, int p) {
   who->priority = p;
 }
 
+char pcb_exists(uint8_t p){
+
+	return 1;
+}
+
+//returns the priority of process with pib p
+uint8_t kgetPriority(uint8_t p){
+	uint8_t ret = -1;
+	if (pcb_exists(p) == 1){
+		ret = pcbs[p].priority;
+	}
+	kget_registers()->v_reg[0] = (int) ret;
+	return NULL;
+}
+//returns the state of process with pib p
+uint8_t kgetState(uint8_t p){
+	return NULL;
+}
+//returns the name of process with pib p
+char *kgetName(uint8_t p){
+	return NULL;
+}
+
 // Returns a list of processes in any queue. Argument will decide what queues to return.
 /* list_queue(what)
  * TYPE: int -> pcb&
@@ -199,3 +222,5 @@ void kkill(int pid){
 		p_free_pcb(&pcbs[pid]);
 	}
 }
+
+
