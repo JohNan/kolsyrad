@@ -57,6 +57,7 @@ void parser( char * str ){
 		}
 	}
 	ret.com[ret.indexC] = '\0';
+	ret.args[ret.indexA] = '\0';
 
 	ret.s = s;
 	/*if( strcmp( ret.com, "increment" ) == 1 )
@@ -67,19 +68,27 @@ void parser( char * str ){
 	} else if( strcmp( ret.com, "kjell") ){
 		newP( 2, 2, NULL );
 	} else if( strcmp( ret.com, "increment" ) ){
-		newP( 3, 15, atoi( ret.args ) );
+		if(ret.indexA != NULL) {
+			newP( 3, 15, atoi( ret.args ) );
+		} else {
+			printS("Need a number. Try again.\n");
+		}
 	} else if( strcmp( ret.com, "fibonacci" ) ){
 		if(ret.indexA != NULL) {
 			newP( 4, 15, atoi( ret.args ) );
 		} else {
-			printS("Need argument. Try again.\n");
+			printS("Need a number. Try again.\n");
 		}
 	} else if( strcmp( ret.com, "printp" ) ){
 		newP( 5, 15, NULL );
 	} else if( strcmp(ret.com, "idle" ) ){
 		newP( 0, 1, NULL );
 	} else if( strcmp(ret.com, "kill" ) ){
-		kill( atoi( ret.args ) );
+		if(ret.indexA != NULL) {
+			kill( atoi( ret.args ) );
+		} else {
+			printS("Need a PID. Try again.\n");
+		}
 	} else {
 		printS( "	Error: Command not recognized\n" );
 	}
@@ -95,7 +104,7 @@ void parser( char * str ){
 void kjell(){
 	char *inString;
 	while(1){
-		printS("kolsyrad>");
+		printS("\nkolsyrad>");
 		inString = getStr();
 		/*if( strcmp( inString, "increment" ) ){
 			DputStr("START");

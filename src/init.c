@@ -89,20 +89,13 @@ void init() {
 //	i = make_process(2,2,0);
 
 
-
+	//Start idle process
 	i = make_process(0,1,0);
-	if(i != -1){
-		DputStr("First process created.");
-		}
+	//Start kjell
 	i = make_process(2,2,0);
-		if(i != -1){
-		DputStr("Second process created.");
-		}
+	//Start malta scroll
 	i = make_process(1,25,0);
-		if(i != -1){
-		DputStr("Third process created.");
 
-	}
 /*
 		i = make_process(3,30,20);
 		if(i != -1){
