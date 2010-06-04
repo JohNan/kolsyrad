@@ -136,10 +136,20 @@ uint8_t kgetPriority(uint8_t p){
 }
 //returns the state of process with pib p
 uint8_t kgetState(uint8_t p){
+	uint8_t ret = -1;
+	if (pcb_exists(p)){
+		ret = pcbs[p].state;
+	}
+	kget_registers()->v_reg[0] = (int) ret;
 	return NULL;
 }
 //returns the name of process with pib p
 char *kgetName(uint8_t p){
+	uint8_t ret = -1;
+	if (pcb_exists(p)){
+		ret = pcbs[p].state;
+	}
+	kget_registers()->v_reg[0] = (int) ret;
 	return NULL;
 }
 
